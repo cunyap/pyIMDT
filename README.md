@@ -1,71 +1,52 @@
+## Scope of the inertial mass determination module
 
-##main function
+Calculation of the mass from txt and tdms data files
 
-#get intial frequency shift
-BeforeCell = initial(txt_file1)
-AfterCell = initial(txt_file2)
+## Minimal needed functions
 
-fb = fitting(BeforeCell)
-fa = fitting(AfterCell)
+### Import functions
 
-#Now choose either discrete (sweeps) or continous measurement (phase locked loops) that was done
+```python
+def read_initial_frequency_shift(file):
+# get intial frequency shift
+# beforeCell = initial(txt_file1)
+# afterCell = initial(txt_file2)
 
-faa=Sweeps(tmds-file)
+return [frequency, phase]
+```
 
-#OR
+```python
+def read_tdms_data(file):
 
-faa=PLL(tdms-file)
+if sweep_mode:
+# faa = Sweeps(tmds_file)
+else:
+# faa = PLL(tdms_file)
+return data_frame
+```
 
-mass=mass(fb,fa,faa)
+### Analysis functions
+```python
+def calculate_function_fit(frequency, phase):
+# fb = fitting(beforeCell)
+# fa = fitting(afterCell)
+return resonance_frequency_array
+```
 
-plot(mass)
+```python
+def calculate_mass(fa, fb, ffa):
+# mass as a function of frequency
+return mass   
+```
 
-##initial
-#read the txt file, give the Phase(frequceny) [the phase as function of frequency]
+```python
+def calculate_resonance_frequencies(tdms_data):
+# loops over fitting (calculate_function_fit)
+return [resonance_frequency_array] 
+```
 
-
-def initial(txt-files):
-
-
-return [Frequency,Phase]
-
-
-
-## fitting
-# Function to fit Phase als Funktion von Frequency  via S5 from :https://media.nature.com/original/nature-assets/nature/journal/v550/n7677/extref/nature24288-s1.pdf
-
-def fitting(Frequency, Phase):
-
-
-return resonance
-
-
-
-## mass
-#Function to calculate mass from this according to S1 from same pdf. 
-
-def mass(initial frequency, frequencies after cell pickup , following frequencies)
-
-
-return []   #mass as a function of frequency
-
-
-##Sweeps
-#Function to extract the subsquent resonance frequencies from following sweeps
-#open tdms file, extract the data on third tab, loop over it using the fitting function, return a list of resonance frequencies.
-def sweeps (tdms file):
-    
-#extract freq and phase    
-#loops over fitting
-
-return [list of resonance frequencies] 
-
-##PLL
-def pll (tdms file)
-
-#extract frequency shifts
-
-return [list of resonance frequencies]
-    
-##Plot
-#Function to plot mass over time
+### Ploting functions
+```python
+def plot_mass(fa, fb, faa):
+# mass = mass(fb,fa,faa)
+```
