@@ -45,11 +45,11 @@ def plot_mass(calculated_cell_mass):
 
     x = list(range(0, len(calculated_cell_mass)))
     data = concat([DataFrame(x, columns=['Time [iteration]']), DataFrame(calculated_cell_mass,
-                                                                         columns=['Mass [fl]'])], axis=1)
+                                                                         columns=['Mass [pg]'])], axis=1)
     col_names = list(data)
 
     # Plot data
     p = ggplot(aes(x=col_names[0], y=col_names[1]), data=data) + \
-        geom_point() + \
+        geom_point(alpha=0.1) + \
         theme_bw()
     return p
