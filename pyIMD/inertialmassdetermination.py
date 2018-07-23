@@ -1,6 +1,7 @@
 import os
 import logging
 from tqdm import trange
+import numpy as np
 from pyIMD.file_io.defaults import SPRING_CONSTANT, CONVERSION_FACTOR_DEG_TO_RAD, CONVERSION_FACTOR_HZ_TO_KHZ, \
     DEFAULT_FIGURE_NAME_PRE_START_NO_CELL, DEFAULT_FIGURE_NAME_PRE_START_WITH_CELL, DEFAULT_FIGURE_MEASURED
 from pyIMD.file_io.read_from_disk import read_from_text
@@ -71,11 +72,11 @@ class InertialMassDetermination:
         """
 
         # Read data
-
         self.data_pre_start_no_cell = read_from_text(self.file_path1, self.delimiter, self.read_from_row)
         self.data_pre_start_with_cell = read_from_text(self.file_path2, self.delimiter, self.read_from_row)
         self.data_measured = read_from_tdms(self.file_path3)
         self.logger.info('Done reading all files')
+
         # Convert data to the correct units
         self.convert_data()
         self.logger.info('Done converting units')
@@ -83,7 +84,6 @@ class InertialMassDetermination:
         # Calc resonance frequency for pre start data without cell attached to cantilever
         self.resonance_freq_pre_start_no_cell, self.fit_param_pre_start_no_cell = calculate_resonance_frequencies(
             self.data_pre_start_no_cell.iloc[:, 0], self.data_pre_start_no_cell.iloc[:, 2])
-        # self.fit_param_pre_start_no_cell.append(param)
 
         self.figure_pre_start_no_cell = plot_fitting(self.data_pre_start_no_cell.iloc[:, 0],
                                                      self.data_pre_start_no_cell.iloc[:, 2],
@@ -97,15 +97,12 @@ class InertialMassDetermination:
         # Calc resonance frequency for pre start data with cell attached to cantilever
         self.resonance_freq_pre_start_with_cell, self.fit_param_pre_start_with_cell = calculate_resonance_frequencies(
             self.data_pre_start_with_cell.iloc[:, 0], self.data_pre_start_with_cell.iloc[:, 2])
-        # self.fit_param_pre_start_with_cell.append(param)
 
         self.figure_pre_start_with_cell = plot_fitting(self.data_pre_start_with_cell.iloc[:, 0],
                                                        self.data_pre_start_with_cell.iloc[:, 2],
                                                        self.resonance_freq_pre_start_with_cell,
                                                        self.fit_param_pre_start_with_cell)
 
-        # self.figure_pre_start_with_cell.save(filename='{}.pdf'.format(self.result_folder + os.sep +
-        #                                                              DEFAULT_FIGURE_NAME_PRE_START_WITH_CELL))
         write_to_pdf(self.figure_pre_start_with_cell, '{}'.format(self.result_folder + os.sep +
                                                                   DEFAULT_FIGURE_NAME_PRE_START_WITH_CELL))
         self.logger.info('Done with pre start with cell resonance frequency calculation')
@@ -114,8 +111,8 @@ class InertialMassDetermination:
             # The continuous sweep mode
             for iSweep in trange(0, len(self.data_measured), 3):
                 # Calc resonance frequency and function fit for the ith sweep (iSweep)
-                res_freq, param = calculate_resonance_frequencies(self.data_measured.iloc[iSweep + 1, 0:255],
-                                                                  self.data_measured.iloc[iSweep + 2, 0:255])
+                res_freq, param = calculate_resonance_frequencies(self.data_measured.iloc[iSweep + 2, 0:255],
+                                                                  self.data_measured.iloc[iSweep + 1, 0:255])
                 # Calculate the mass for the ith sweep (iSweep)
                 # @todo append self.resonance_freq_pre_start_with_cell to the list self.calculated_cell_mass first!
                 mass = calculate_mass(SPRING_CONSTANT, res_freq, self.resonance_freq_pre_start_no_cell)
@@ -123,6 +120,11 @@ class InertialMassDetermination:
                 self.resonance_freq_measured.append(res_freq)
                 self.fit_param_measured.append(param)
                 self.calculated_cell_mass.append(mass)
+
+                if np.remainder(iSweep, 300) == 0:
+                    fig = plot_fitting(self.data_measured.iloc[iSweep + 2, 0:255],
+                                       self.data_measured.iloc[iSweep + 1, 0:255], res_freq, param)
+                    write_to_pdf(fig, '{}'.format(self.result_folder + os.sep + 'ResFreqSweep_' + str(iSweep)))
 
             self.figure_cell_mass = plot_mass(self.calculated_cell_mass)
             write_to_pdf(self.figure_cell_mass, '{}'.format(self.result_folder + os.sep + DEFAULT_FIGURE_MEASURED))
