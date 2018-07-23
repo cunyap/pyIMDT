@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(name='pyIMD',
       version='0.0.1',
-      author='Andreas P. Cuny <andreas.cuny@bsse.ethz.ch>, Gotthold Fläschner <gotthold.flaeschler@bsse.ethz.ch>',
+      author='Andreas P. Cuny <andreas.cuny@bsse.ethz.ch>, Gotthold Flï¿½schner <gotthold.flaeschler@bsse.ethz.ch>',
       url='https://git.bsse.ethz.ch/cunya/pyIMD',
       download_url='https://git.bsse.ethz.ch/cunya/pyIMD',
       description='Inertial mass determination',
@@ -30,5 +30,5 @@ setup(name='pyIMD',
                    'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
                    'Topic :: Scientific/Engineering'
                    ],
-      install_requires=['pandas', 'numpy', 'nptdms', 'ggplot', 'scipy', 'os', 'tqmd']
+      install_requires=['pandas', 'numpy', 'nptdms', 'ggplot', 'scipy', 'os', 'tqdm']
       )
