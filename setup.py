@@ -11,6 +11,7 @@ def extract_version():
                 exec(line.strip(), ns)
                 return ns['__version__']
 
+
 setup(name='pyIMD',
       version=extract_version(),
       author='Andreas P. Cuny <andreas.cuny@bsse.ethz.ch>, Gotthold Fl�schner <gotthold.flaeschler@bsse.ethz.ch>',
