@@ -14,7 +14,7 @@ def extract_version():
 
 setup(name='pyIMD',
       version=extract_version(),
-      author='Andreas P. Cuny <andreas.cuny@bsse.ethz.ch>, Gotthold Fl�schner <gotthold.flaeschler@bsse.ethz.ch>',
+      author='Andreas P. Cuny <andreas.cuny@bsse.ethz.ch>, Gotthold Flaeschner <gotthold.flaeschler@bsse.ethz.ch>',
       author_email="andreas.cuny@bsse.ethz.ch",
       url='https://git.bsse.ethz.ch/cunya/pyIMD',
       download_url='https://git.bsse.ethz.ch/cunya/pyIMD',
