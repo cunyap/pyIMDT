@@ -1,8 +1,20 @@
 from setuptools import setup
 
+
+def extract_version():
+    """Return pyIMD.__version__ from pyIMD/__init__.py
+    """
+    with open('pyIMD/__init__.py') as fd:
+        ns = {}
+        for line in fd:
+            if line.startswith('__version__'):
+                exec(line.strip(), ns)
+                return ns['__version__']
+
 setup(name='pyIMD',
-      version='0.0.1',
+      version=extract_version(),
       author='Andreas P. Cuny <andreas.cuny@bsse.ethz.ch>, Gotthold Fl�schner <gotthold.flaeschler@bsse.ethz.ch>',
+      author_email="andreas.cuny@bsse.ethz.ch",
       url='https://git.bsse.ethz.ch/cunya/pyIMD',
       download_url='https://git.bsse.ethz.ch/cunya/pyIMD',
       description='Inertial mass determination',
