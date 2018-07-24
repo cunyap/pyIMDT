@@ -30,7 +30,6 @@ setup(name='pyIMD',
                    'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
                    'Topic :: Scientific/Engineering'
                    ],
-      install_requires=['pandas==0.23.3', 'numpy==1.14.5', 'nptdms==0.12.0', 'ggplot==0.11.5', 'scipy==1.1.0', 'os',
-                        'tqdm==4.23.4'],
-      dependency_links=['git+ssh://git@github.com/cunyap/ggpy.git@0.11.5']
+      install_requires=['pandas==0.23.3', 'numpy==1.14.5', 'scipy==1.1.0', 'nptdms==0.12.0', 'tqdm==4.23.4', 'ggplot'],
+      dependency_links=['git+https://git@github.com/cunyap/ggpy.git#egg+ggplot-0.11.5']
       )
