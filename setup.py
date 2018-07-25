@@ -44,6 +44,6 @@ setup(name='pyIMD',
                    'Topic :: Scientific/Engineering'
                    ],
       install_requires=['pandas==0.23.3', 'numpy==1.14.5', 'scipy==1.1.0', 'nptdms==0.12.0', 'tqdm==4.23.4',
-                        'ggplot'],
-      dependency_links=['git+https://git@github.com/cunyap/ggpy.git#egg+ggplot-0.11.6']
+                        'plotnine==0.3.0'],
+
       )
