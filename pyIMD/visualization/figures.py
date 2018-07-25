@@ -1,8 +1,11 @@
+import warnings
 from pandas import concat, DataFrame
 from pyIMD.analysis.curve_fit import fit_function
-from ggplot import ggplot, geom_line, aes, geom_point, theme_bw
+from plotnine import ggplot, aes, geom_line, geom_point, theme_bw
 
 __author__ = 'Andreas P. Cuny'
+
+warnings.filterwarnings("ignore")
 
 
 def plot_fitting(x, y, resonance_frequency, parameter):
@@ -27,7 +30,7 @@ def plot_fitting(x, y, resonance_frequency, parameter):
     # Plot data
     p = ggplot(aes(x=col_names[0], y=col_names[1]), data=data) + \
         geom_point() + \
-        geom_line(aes(x=col_names[0], y=col_names[2], colour="red", size=2)) + \
+        geom_line(aes(x=col_names[0], y=col_names[2]),  color='red', size=0.5) + \
         theme_bw()
     return p
 
