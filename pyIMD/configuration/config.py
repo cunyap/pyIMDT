@@ -31,7 +31,7 @@ class Settings(object):
     @FIGURE_WIDTH.setter
     def FIGURE_WIDTH(self, width):
         if not (type(width) == float or (type(width) == int)):
-            raise Exception("Figure width should be float")
+            raise Exception("Figure width should be float or int")
         self._FIGURE_WIDTH = width
 
     FIGURE_HEIGHT = property(operator.attrgetter('_FIGURE_HEIGHT'))
@@ -39,7 +39,7 @@ class Settings(object):
     @FIGURE_HEIGHT.setter
     def FIGURE_HEIGHT(self, height):
         if not (type(height) == float or (type(height) == int)):
-            raise Exception("Figure height should be of type float")
+            raise Exception("Figure height should be of type float or int")
         self._FIGURE_HEIGHT = height
 
     FIGURE_UNITS = property(operator.attrgetter('_FIGURE_UNITS'))
@@ -88,22 +88,22 @@ class Settings(object):
 
     @CONVERSION_FACTOR_HZ_TO_KHZ.setter
     def CONVERSION_FACTOR_HZ_TO_KHZ(self, factor):
-        if not (type(factor) == float):
-            raise Exception("Conversion factor should be a of type float.")
+        if not (type(factor) == float or (type(factor) == int)):
+            raise Exception("Conversion factor should be a of type float or int.")
         self._CONVERSION_FACTOR_HZ_TO_KHZ = factor
 
     CONVERSION_FACTOR_DEG_TO_RAD = property(operator.attrgetter('_CONVERSION_FACTOR_DEG_TO_RAD'))
 
     @CONVERSION_FACTOR_DEG_TO_RAD.setter
     def CONVERSION_FACTOR_DEG_TO_RAD(self, factor):
-        if not (type(factor) == float):
-            raise Exception("Conversion factor should be a of type float.")
+        if not (type(factor) == float or (type(factor) == int)):
+            raise Exception("Conversion factor should be a of type float or int.")
         self._CONVERSION_FACTOR_DEG_TO_RAD = factor
 
     SPRING_CONSTANT = property(operator.attrgetter('_SPRING_CONSTANT'))
 
     @SPRING_CONSTANT.setter
     def SPRING_CONSTANT(self, spring_constant):
-        if not (type(spring_constant) == float):
-            raise Exception("Spring constant should be a of type float.")
+        if not (type(spring_constant) == float or (type(spring_constant) == int)):
+            raise Exception("Spring constant should be a of type float or int.")
         self._SPRING_CONSTANT = spring_constant
