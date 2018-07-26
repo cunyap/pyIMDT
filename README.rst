@@ -24,6 +24,11 @@ To use this module, simply do::
     >>> obj = InertialMassDetermination(file_path1, file_path2, file_path3, '\t', 23, 0)
     >>> obj.run_intertial_mass_determination()
 
+
+List default settings for calculation::
+
+    >>> obj.settings.__dict__
+
 Change settings for calculation and figure output the following way before calling run_intertial_mass_determination()::
 
     >>> obj.settings.SPRING_CONSTANT = 4
