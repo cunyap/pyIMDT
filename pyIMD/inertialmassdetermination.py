@@ -83,7 +83,9 @@ class InertialMassDetermination:
 
         # Calc resonance frequency for pre start data without cell attached to cantilever
         self.resonance_freq_pre_start_no_cell, self.fit_param_pre_start_no_cell = calculate_resonance_frequencies(
-            self.data_pre_start_no_cell.iloc[:, 0], self.data_pre_start_no_cell.iloc[:, 2])
+            self.data_pre_start_no_cell.iloc[:, 0], self.data_pre_start_no_cell.iloc[:, 2],
+            self.settings.INITIAL_PARAMETER_GUESS, self.settings.LOWER_PARAMETER_BOUNDS,
+            self.settings.UPPER_PARAMETER_BOUNDS)
 
         self.figure_pre_start_no_cell = plot_fitting(self.data_pre_start_no_cell.iloc[:, 0],
                                                      self.data_pre_start_no_cell.iloc[:, 2],
@@ -94,12 +96,14 @@ class InertialMassDetermination:
                      'units': self.settings.FIGURE_UNITS,
                      'resolution': self.settings.FIGURE_RESOLUTION_DPI}
         write_to_disk_as(self.settings.FIGURE_FORMAT, self.figure_pre_start_no_cell, '{}'.format(self.result_folder +
-                                                                                                 os.sep + self.settings.FIGURE_NAME_PRE_START_NO_CELL), **optional_fig_param)
+                         os.sep + self.settings.FIGURE_NAME_PRE_START_NO_CELL), **optional_fig_param)
         self.logger.info('Done with pre start no cell resonance frequency calculation')
 
         # Calc resonance frequency for pre start data with cell attached to cantilever
         self.resonance_freq_pre_start_with_cell, self.fit_param_pre_start_with_cell = calculate_resonance_frequencies(
-            self.data_pre_start_with_cell.iloc[:, 0], self.data_pre_start_with_cell.iloc[:, 2])
+            self.data_pre_start_with_cell.iloc[:, 0], self.data_pre_start_with_cell.iloc[:, 2],
+            self.settings.INITIAL_PARAMETER_GUESS, self.settings.LOWER_PARAMETER_BOUNDS,
+            self.settings.UPPER_PARAMETER_BOUNDS)
 
         self.figure_pre_start_with_cell = plot_fitting(self.data_pre_start_with_cell.iloc[:, 0],
                                                        self.data_pre_start_with_cell.iloc[:, 2],
@@ -116,7 +120,10 @@ class InertialMassDetermination:
             for iSweep in trange(0, len(self.data_measured), 3):
                 # Calc resonance frequency and function fit for the ith sweep (iSweep)
                 res_freq, param = calculate_resonance_frequencies(self.data_measured.iloc[iSweep + 2, 0:255],
-                                                                  self.data_measured.iloc[iSweep + 1, 0:255])
+                                                                  self.data_measured.iloc[iSweep + 1, 0:255],
+                                                                  self.settings.INITIAL_PARAMETER_GUESS,
+                                                                  self.settings.LOWER_PARAMETER_BOUNDS,
+                                                                  self.settings.UPPER_PARAMETER_BOUNDS)
                 # Calculate the mass for the ith sweep (iSweep)
                 # @todo append self.resonance_freq_pre_start_with_cell to the list self.calculated_cell_mass first!
                 mass = calculate_mass(self.settings.SPRING_CONSTANT, res_freq, self.resonance_freq_pre_start_no_cell)
