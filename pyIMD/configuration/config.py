@@ -17,6 +17,9 @@ class Settings(object):
         self.CONVERSION_FACTOR_HZ_TO_KHZ = CONVERSION_FACTOR_HZ_TO_KHZ
         self.CONVERSION_FACTOR_DEG_TO_RAD = CONVERSION_FACTOR_DEG_TO_RAD
         self.SPRING_CONSTANT = SPRING_CONSTANT
+        self.INITIAL_PARAMETER_GUESS = INITIAL_PARAMETER_GUESS
+        self.LOWER_PARAMETER_BOUNDS = LOWER_PARAMETER_BOUNDS
+        self.UPPER_PARAMETER_BOUNDS = UPPER_PARAMETER_BOUNDS
 
     FIGURE_FORMAT = property(operator.attrgetter('_FIGURE_FORMAT'))
 
@@ -107,3 +110,27 @@ class Settings(object):
         if not (type(spring_constant) == float or type(spring_constant) == int):
             raise Exception("Spring constant should be a of type float or int.")
         self._SPRING_CONSTANT = spring_constant
+
+    INITIAL_PARAMETER_GUESS = property(operator.attrgetter('_INITIAL_PARAMETER_GUESS'))
+
+    @INITIAL_PARAMETER_GUESS.setter
+    def INITIAL_PARAMETER_GUESS(self, array):
+        if not (array.__len__() == 4 and all(isinstance(n, int) or isinstance(n, float) for n in array)):
+            raise Exception("Spring constant should be a of type float or int.")
+        self._INITIAL_PARAMETER_GUESS = array
+
+    LOWER_PARAMETER_BOUNDS = property(operator.attrgetter('_LOWER_PARAMETER_BOUNDS'))
+
+    @LOWER_PARAMETER_BOUNDS.setter
+    def LOWER_PARAMETER_BOUNDS(self, array):
+        if not (array.__len__() == 4 and all(isinstance(n, int) or isinstance(n, float) for n in array)):
+            raise Exception("Spring constant should be a of type float or int.")
+        self._LOWER_PARAMETER_BOUNDS = array
+
+    UPPER_PARAMETER_BOUNDS = property(operator.attrgetter('_UPPER_PARAMETER_BOUNDS'))
+
+    @UPPER_PARAMETER_BOUNDS.setter
+    def UPPER_PARAMETER_BOUNDS(self, array):
+        if not (array.__len__() == 4 and all(isinstance(n, int) or isinstance(n, float) for n in array)):
+            raise Exception("Spring constant should be a of type float or int.")
+        self._UPPER_PARAMETER_BOUNDS = array
