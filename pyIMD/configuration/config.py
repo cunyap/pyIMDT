@@ -13,13 +13,39 @@ class Settings(object):
         self.FIGURE_RESOLUTION_DPI = FIGURE_RESOLUTION_DPI
         self.FIGURE_NAME_PRE_START_NO_CELL = FIGURE_NAME_PRE_START_NO_CELL
         self.FIGURE_NAME_PRE_START_WITH_CELL = FIGURE_NAME_PRE_START_WITH_CELL
-        self.FIGURE_NAME_MEASURED = FIGURE_NAME_MEASURED
+        self.FIGURE_NAME_MEASURED_DATA = FIGURE_NAME_MEASURED_DATA
         self.CONVERSION_FACTOR_HZ_TO_KHZ = CONVERSION_FACTOR_HZ_TO_KHZ
         self.CONVERSION_FACTOR_DEG_TO_RAD = CONVERSION_FACTOR_DEG_TO_RAD
         self.SPRING_CONSTANT = SPRING_CONSTANT
         self.INITIAL_PARAMETER_GUESS = INITIAL_PARAMETER_GUESS
         self.LOWER_PARAMETER_BOUNDS = LOWER_PARAMETER_BOUNDS
         self.UPPER_PARAMETER_BOUNDS = UPPER_PARAMETER_BOUNDS
+        self.READ_TEXT_DATA_FROM_LINE = READ_TEXT_DATA_FROM_LINE
+        self.TEXT_DATA_DELIMITER = TEXT_DATA_DELIMITER
+
+    def __repr__(self):
+        """
+        Settings representation.
+        :return: string
+        """
+        return "pyIMD Setting: \n\tFIGURE_WIDTH: %s (%s) \n\tFIGURE_HEIGHT: %s (%s) \n\tFIGURE_UNITS: %s (%s) " \
+               "\n\tFIGURE_FORMAT: %s (%s) \n\tFIGURE_RESOLUTION_DPI: %s (%s) " \
+               "\n\tFIGURE_NAME_PRE_START_NO_CELL: %s (%s) \n\tFIGURE_NAME_PRE_START_WITH_CELL: %s (%s)" \
+               "\n\tFIGURE_NAME_MEASURED_DATA: %s(%s) \n\tCONVERSION_FACTOR_HZ_TO_KHZ: %s (%s) " \
+               "\n\tCONVERSION_FACTOR_DEG_TO_RAD: %s (%s) \n\tSPRING_CONSTANT: %s (%s) " \
+               "\n\tINITIAL_PARAMETER_GUESS: %s (%s) \n\tLOWER_PARAMETER_BOUNDS: %s (%s) " \
+               "\n\tUPPER_PARAMETER_BOUNDS: %s (%s) \n\tREAD_TEXT_DATA_FROM_LINE: %s (%s) " \
+               "\n\tTEXT_DATA_DELIMITER: %s (%s)" % (
+            self.FIGURE_WIDTH, type(self.FIGURE_WIDTH), self.FIGURE_HEIGHT, type(self.FIGURE_HEIGHT), self.FIGURE_UNITS,
+            type(self.FIGURE_UNITS), self.FIGURE_FORMAT, type(self.FIGURE_FORMAT), self.FIGURE_RESOLUTION_DPI,
+            type(self.FIGURE_RESOLUTION_DPI), self.FIGURE_NAME_PRE_START_NO_CELL, type(self.FIGURE_NAME_PRE_START_NO_CELL),
+            self.FIGURE_NAME_PRE_START_WITH_CELL, type(self.FIGURE_NAME_PRE_START_WITH_CELL),  self.FIGURE_NAME_MEASURED_DATA,
+            type(self.FIGURE_NAME_MEASURED_DATA), self.CONVERSION_FACTOR_HZ_TO_KHZ, type(self.CONVERSION_FACTOR_HZ_TO_KHZ),
+            self.CONVERSION_FACTOR_DEG_TO_RAD, type(self.CONVERSION_FACTOR_DEG_TO_RAD), self.SPRING_CONSTANT,
+            type(self.SPRING_CONSTANT), self.INITIAL_PARAMETER_GUESS, type(self.INITIAL_PARAMETER_GUESS),
+            self.LOWER_PARAMETER_BOUNDS, type(self.LOWER_PARAMETER_BOUNDS), self.UPPER_PARAMETER_BOUNDS,
+            type(self.UPPER_PARAMETER_BOUNDS), self.READ_TEXT_DATA_FROM_LINE, type(self.READ_TEXT_DATA_FROM_LINE),
+            self.TEXT_DATA_DELIMITER, type(self.TEXT_DATA_DELIMITER))
 
     FIGURE_FORMAT = property(operator.attrgetter('_FIGURE_FORMAT'))
 
@@ -79,13 +105,13 @@ class Settings(object):
             raise Exception("Figure name should be a of type string.")
         self._FIGURE_NAME_PRE_START_WITH_CELL = name
 
-    FIGURE_NAME_MEASURED = property(operator.attrgetter('_FIGURE_NAME_MEASURED'))
+    FIGURE_NAME_MEASURED_DATA = property(operator.attrgetter('_FIGURE_NAME_MEASURED_DATA'))
 
-    @FIGURE_NAME_MEASURED.setter
-    def FIGURE_NAME_MEASURED(self, name):
+    @FIGURE_NAME_MEASURED_DATA.setter
+    def FIGURE_NAME_MEASURED_DATA(self, name):
         if not (type(name) == str):
-            raise Exception("Figure name should be a of type string.")
-        self._FIGURE_NAME_MEASURED = name
+            raise Exception("Figure name of measured data should be a of type string.")
+        self._FIGURE_NAME_MEASURED_DATA = name
 
     CONVERSION_FACTOR_HZ_TO_KHZ = property(operator.attrgetter('_CONVERSION_FACTOR_HZ_TO_KHZ'))
 
@@ -116,7 +142,7 @@ class Settings(object):
     @INITIAL_PARAMETER_GUESS.setter
     def INITIAL_PARAMETER_GUESS(self, array):
         if not (array.__len__() == 4 and all(isinstance(n, int) or isinstance(n, float) for n in array)):
-            raise Exception("Spring constant should be a of type float or int.")
+            raise Exception("Initial parameter guess list should be a of type list.")
         self._INITIAL_PARAMETER_GUESS = array
 
     LOWER_PARAMETER_BOUNDS = property(operator.attrgetter('_LOWER_PARAMETER_BOUNDS'))
@@ -124,7 +150,7 @@ class Settings(object):
     @LOWER_PARAMETER_BOUNDS.setter
     def LOWER_PARAMETER_BOUNDS(self, array):
         if not (array.__len__() == 4 and all(isinstance(n, int) or isinstance(n, float) for n in array)):
-            raise Exception("Spring constant should be a of type float or int.")
+            raise Exception("Lower parameter bounds list should be a of type list.")
         self._LOWER_PARAMETER_BOUNDS = array
 
     UPPER_PARAMETER_BOUNDS = property(operator.attrgetter('_UPPER_PARAMETER_BOUNDS'))
@@ -132,5 +158,21 @@ class Settings(object):
     @UPPER_PARAMETER_BOUNDS.setter
     def UPPER_PARAMETER_BOUNDS(self, array):
         if not (array.__len__() == 4 and all(isinstance(n, int) or isinstance(n, float) for n in array)):
-            raise Exception("Spring constant should be a of type float or int.")
+            raise Exception("Upper parameter bounds list should be a of type list.")
         self._UPPER_PARAMETER_BOUNDS = array
+
+    READ_TEXT_DATA_FROM_LINE = property(operator.attrgetter('_READ_TEXT_DATA_FROM_LINE'))
+
+    @READ_TEXT_DATA_FROM_LINE.setter
+    def READ_TEXT_DATA_FROM_LINE(self, line_number):
+        if not (type(line_number) == float or type(line_number) == int):
+            raise Exception("Line number should be a of type float or int.")
+        self._READ_TEXT_DATA_FROM_LINE = line_number
+
+    TEXT_DATA_DELIMITER = property(operator.attrgetter('_TEXT_DATA_DELIMITER'))
+
+    @TEXT_DATA_DELIMITER.setter
+    def TEXT_DATA_DELIMITER(self, delimiter):
+        if not (type(delimiter) == str):
+            raise Exception("Data text delimiter should be a of type string.")
+        self._TEXT_DATA_DELIMITER = delimiter
