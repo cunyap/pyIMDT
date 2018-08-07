@@ -1,10 +1,3 @@
-import os
-import logging
-from pathlib import Path
-from tqdm import trange
-import numpy as np
-import matplotlib
-matplotlib.use('Qt5Agg')
 from pandas import concat, DataFrame
 from pyIMD.configuration.config import Settings
 from pyIMD.file_io.read_from_disk import read_from_text
@@ -14,6 +7,13 @@ from pyIMD.analysis.calculations import calculate_mass
 from pyIMD.analysis.calculations import calculate_resonance_frequencies
 from pyIMD.visualization.figures import plot_fitting
 from pyIMD.visualization.figures import plot_mass
+import os
+import logging
+from pathlib import Path
+from tqdm import trange
+import numpy as np
+import matplotlib
+matplotlib.use('Qt5Agg')
 
 __author__ = 'Andreas P. Cuny'
 
