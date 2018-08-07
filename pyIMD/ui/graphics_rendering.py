@@ -60,16 +60,12 @@ class GraphicScene(QGraphicsScene):
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.__prevMousePos = event.scenePos()
-            print('clicked')
-            print(self.__prevMousePos)
         else:
             super(GraphicScene, self).mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.LeftButton:
             offset = self.__prevMousePos - event.scenePos()
-            print('move')
-            print(offset)
             self.signalMoveOffset.emit(offset)
         else:
             super(GraphicScene, self).mouseMoveEvent(event)
