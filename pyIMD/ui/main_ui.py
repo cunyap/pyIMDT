@@ -138,7 +138,7 @@ class IMDWindow(QtWidgets.QMainWindow):
         self.file_system_watcher.directoryChanged.connect(self.on_folder_change)
 
         self.batchFileListWidget.setSelectionMode(QListWidget.MultiSelection)
-        # self.tabWidget.setTabEnabled(2, False)
+        self.tabWidget.setTabEnabled(2, False)
         self.tabWidget.setCurrentIndex(0)
 
         self.scene = GraphicScene()
