@@ -42,8 +42,12 @@ class IMDWindow(QtWidgets.QMainWindow):
         self.setWindowTitle('pyIMD: Inertial mass determination [build: v%s %s]' % (__version__, __operating_system__))
         self.setWindowIcon(QtGui.QIcon(resource_path(os.path.join(os.path.join("ui", "icons",
                                                                                "pyimd_logo2_01_FNf_icon.ico")))))
-        app_id = u'ethz.csb.pyIMD.v0_0_1'
-        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
+
+        # Add AppUserModelID for windows systems
+        if sys.platform == 'win32':
+            app_id = u'ethz.csb.pyIMD.v0_0_1'
+            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
+
         self.settings_dialog = None
         self.about_window = None
         self.file_viewer = None
