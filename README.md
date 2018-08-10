@@ -50,3 +50,5 @@ return [resonance_frequency_array]
 def plot_mass(fa, fb, faa):
 # mass = mass(fb,fa,faa)
 ```
+
+test
