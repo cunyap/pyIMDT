@@ -1,8 +1,10 @@
+import os
 from PyQt5 import uic
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSignal, QRegExp
 from PyQt5.Qt import QValidator, QDoubleValidator, QRegExpValidator, QStyle, QDialog
 from pyIMD.configuration.defaults import *
+from pyIMD.ui.resource_path import resource_path
 
 __author__ = 'Andreas P. Cuny'
 
@@ -17,7 +19,7 @@ class Settings(QDialog):
         Constructor.
         """
         super(Settings, self).__init__()
-        uic.loadUi('setting_dialog.ui', self)
+        uic.loadUi(resource_path(os.path.join('ui', 'setting_dialog.ui')), self)
         # self.setupUi(self)
         self.setWindowTitle('pyIMD :: Settings')
         self.settingsIcon = QIcon()

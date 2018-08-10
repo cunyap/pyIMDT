@@ -23,7 +23,6 @@ class GraphicScene(QGraphicsScene):
         """
         Zoom the scene in
         """
-        print('zoom in called')
         f = float(zoom_in_factor)
         self.views()[0].scale(f, f)
 
@@ -32,7 +31,6 @@ class GraphicScene(QGraphicsScene):
         """
         Zoom the scene out
         """
-
         f = 1.0 / float(zoom_out_factor)
         self.views()[0].scale(f, f)
 

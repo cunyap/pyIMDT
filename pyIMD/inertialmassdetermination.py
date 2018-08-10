@@ -1,19 +1,19 @@
 from pandas import concat, DataFrame
 from pyIMD.configuration.config import Settings
-from pyIMD.file_io.read_from_disk import read_from_text
-from pyIMD.file_io.read_from_disk import read_from_tdms
-from pyIMD.file_io.write_to_disk import write_to_disk_as
+from pyIMD.io.read_from_disk import read_from_text
+from pyIMD.io.read_from_disk import read_from_tdms
+from pyIMD.io.write_to_disk import write_to_disk_as
 from pyIMD.analysis.calculations import calculate_mass
 from pyIMD.analysis.calculations import calculate_resonance_frequencies
-from pyIMD.visualization.figures import plot_fitting
-from pyIMD.visualization.figures import plot_mass
+import matplotlib
+matplotlib.use('Qt5Agg')
+from pyIMD.plotting.figures import plot_fitting
+from pyIMD.plotting.figures import plot_mass
 import os
 import logging
 from pathlib import Path
 from tqdm import trange
 import numpy as np
-import matplotlib
-matplotlib.use('Qt5Agg')
 
 __author__ = 'Andreas P. Cuny'
 
@@ -140,20 +140,22 @@ class InertialMassDetermination:
                                                                                               os.sep + 'ResFreqSweep_'
                                                                                               + str(iSweep)))
 
-            calculated_cell_mass = concat([(self.data_measured.iloc[0:int(len(self.data_measured)) / 3, 256] -
+            calculated_cell_mass = concat([(self.data_measured.iloc[0:int(((len(self.data_measured)) / 3)-1), 256] -
                                             self.data_measured.iloc[0, 256]) / 3600, DataFrame(self.calculated_cell_mass
                                                                                                , columns=['Mass [ng]'])]
                                           , axis=1)
-
+            calculated_cell_mass['Mean mass [ng]'] = calculated_cell_mass['Mass [ng]'].rolling(window=100).mean()
+            self.calculated_cell_mass = calculated_cell_mass
             figure_cell_mass = plot_mass(calculated_cell_mass)
             self.logger.info('Start writing figure to disk')
             write_to_disk_as(self.settings.FIGURE_FORMAT, figure_cell_mass, '{}'.format(self.result_folder +
                              os.sep + self.settings.FIGURE_NAME_MEASURED_DATA), **optional_fig_param)
-            # Export results to csv
-            calculated_cell_mass.to_csv(self.result_folder + os.sep + self.settings.FIGURE_NAME_MEASURED_DATA,
-                                        sep=self.settings.TEXT_DATA_DELIMITER, index=False)
-            self.calculated_cell_mass = calculated_cell_mass
             self.logger.info('Done writing figure to disk')
+            self.logger.info('Start writing data to disk')
+            calculated_cell_mass.to_csv(self.result_folder + os.sep + self.settings.FIGURE_NAME_MEASURED_DATA,
+                                        index=False, na_rep="nan")
+            self.calculated_cell_mass = calculated_cell_mass
+            self.logger.info('Done writing data to disk')
 
         else:
             # The PLL mode
@@ -170,15 +172,17 @@ class InertialMassDetermination:
             calculated_cell_mass = concat([(self.data_measured.iloc[:, 0] - self.data_measured.iloc[1, 0]) / 3600,
                                            DataFrame(self.calculated_cell_mass, columns=['Mass [ng]'])], axis=1)
             calculated_cell_mass['Mean mass [ng]'] = calculated_cell_mass['Mass [ng]'].rolling(window=10000).mean()
+            self.calculated_cell_mass = calculated_cell_mass
             figure_cell_mass = plot_mass(calculated_cell_mass)
             self.logger.info('Start writing figure to disk')
             write_to_disk_as(self.settings.FIGURE_FORMAT, figure_cell_mass, '{}'.format(self.result_folder +
                              os.sep + self.settings.FIGURE_NAME_MEASURED_DATA), **optional_fig_param)
-            # Export results to csv
-            calculated_cell_mass.to_csv(self.result_folder + os.sep + self.settings.FIGURE_NAME_MEASURED_DATA,
-                                        sep=self.settings.TEXT_DATA_DELIMITER, index=False)
-            self.calculated_cell_mass = calculated_cell_mass
             self.logger.info('Done writing figure to disk')
+            self.logger.info('Start writing data to disk')
+            calculated_cell_mass.to_csv(self.result_folder + os.sep + self.settings.FIGURE_NAME_MEASURED_DATA,
+                                        index=False, na_rep="nan")
+            self.logger.info('Done writing data to disk')
+
         self.logger.info('Done with all calculations')
 
     def convert_data(self):
