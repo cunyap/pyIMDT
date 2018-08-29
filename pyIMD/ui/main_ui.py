@@ -81,6 +81,8 @@ class IMDWindow(QtWidgets.QMainWindow):
                            "conversion_factor_hz_to_khz": CONVERSION_FACTOR_HZ_TO_KHZ,
                            "conversion_factor_deg_to_rad": CONVERSION_FACTOR_DEG_TO_RAD,
                            "spring_constant": SPRING_CONSTANT,
+                           "cantilever_length": CANTILEVER_LENGTH,
+                           "cell_position": CELL_POSITION,
                            "initial_parameter_guess": INITIAL_PARAMETER_GUESS,
                            "lower_parameter_bounds": LOWER_PARAMETER_BOUNDS,
                            "upper_parameter_bounds": UPPER_PARAMETER_BOUNDS,
@@ -287,7 +289,8 @@ class IMDWindow(QtWidgets.QMainWindow):
         Select data files.
         """
         try:
-            filter_ext = "All files (*.*);; Txt (*.txt);; TDMS (*.tdms);;"
+            filter_ext = "All files (*.*);; Txt (*.txt);; TDMS (*.tdms);; All files " \
+                         "without file endings (*)"
             file_name = QFileDialog()
             file_name.setFileMode(QFileDialog.ExistingFiles)
             ret = file_name.getOpenFileNames(self, "Pick relevant data files",
@@ -515,6 +518,8 @@ class IMDWindow(QtWidgets.QMainWindow):
                 conversion_factor_hz_to_khz = etree.SubElement(general_settings, 'conversion_factor_hz_to_khz')
                 conversion_factor_deg_to_rad = etree.SubElement(general_settings, 'conversion_factor_deg_to_rad')
                 spring_constant = etree.SubElement(general_settings, 'spring_constant')
+                cantilever_length = etree.SubElement(general_settings, 'cantilever_length')
+                cell_position = etree.SubElement(general_settings, 'cell_position')
                 initial_parameter_guess = etree.SubElement(general_settings, 'initial_parameter_guess')
                 lower_parameter_bounds = etree.SubElement(general_settings, 'lower_parameter_bounds')
                 upper_parameter_bounds = etree.SubElement(general_settings, 'upper_parameter_bounds')
@@ -539,6 +544,8 @@ class IMDWindow(QtWidgets.QMainWindow):
                 conversion_factor_hz_to_khz.text = str(self.__settings["conversion_factor_hz_to_khz"])
                 conversion_factor_deg_to_rad.text = str(self.__settings["conversion_factor_deg_to_rad"])
                 spring_constant.text = str(self.__settings["spring_constant"])
+                cantilever_length.text = str(self.__settings["cantilever_length"])
+                cell_position.text = str(self.__settings["cell_position"])
                 initial_parameter_guess.text = str(self.__settings["initial_parameter_guess"])
                 lower_parameter_bounds.text = str(self.__settings["lower_parameter_bounds"])
                 upper_parameter_bounds.text = str(self.__settings["upper_parameter_bounds"])
@@ -667,6 +674,8 @@ class IMDWindow(QtWidgets.QMainWindow):
             self.obj.settings.CONVERSION_FACTOR_HZ_TO_KHZ = float(self.__settings["conversion_factor_hz_to_khz"])
             self.obj.settings.CONVERSION_FACTOR_DEG_TO_RAD = float(self.__settings["conversion_factor_deg_to_rad"])
             self.obj.settings.SPRING_CONSTANT = float(self.__settings["spring_constant"])
+            self.obj.settings.CANTILEVER_LENGTH = float(self.__settings["cantilever_length"])
+            self.obj.settings.CELL_POSITION = float(self.__settings["cell_position"])
             self.obj.settings.INITIAL_PARAMETER_GUESS = literal_eval(self.__settings["initial_parameter_guess"])
             self.obj.settings.LOWER_PARAMETER_BOUNDS = literal_eval(self.__settings["lower_parameter_bounds"])
             self.obj.settings.UPPER_PARAMETER_BOUNDS = literal_eval(self.__settings["upper_parameter_bounds"])

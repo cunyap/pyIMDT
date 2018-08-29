@@ -47,6 +47,10 @@ class Settings(QDialog):
         self.conversion_factor_deg_edit.textChanged.connect(self.check_state)
         self.spring_constant_edit.setValidator(double_validator)
         self.spring_constant_edit.textChanged.connect(self.check_state)
+        self.cantilever_length_edit.setValidator(double_validator)
+        self.cantilever_length_edit.textChanged.connect(self.check_state)
+        self.cell_position_edit.setValidator(double_validator)
+        self.cell_position_edit.textChanged.connect(self.check_state)
         self.read_text_data_from_line_edit.setValidator(double_validator)
         self.read_text_data_from_line_edit.textChanged.connect(self.check_state)
 
@@ -96,6 +100,8 @@ class Settings(QDialog):
         self.conversion_factor_hz_edit.setText(str(CONVERSION_FACTOR_HZ_TO_KHZ))
         self.conversion_factor_deg_edit.setText(str(CONVERSION_FACTOR_DEG_TO_RAD))
         self.spring_constant_edit.setText(str(SPRING_CONSTANT))
+        self.cantilever_length_edit.setText(str(CANTILEVER_LENGTH))
+        self.cell_position_edit.setText(str(CELL_POSITION))
         self.intial_param_guess_edit.setText(str(INITIAL_PARAMETER_GUESS))
         self.lower_param_bound_edit.setText(str(LOWER_PARAMETER_BOUNDS))
         self.upper_param_bound_edit.setText(str(UPPER_PARAMETER_BOUNDS))
@@ -118,6 +124,8 @@ class Settings(QDialog):
         self.conversion_factor_hz_edit.setText(str(self.settings_dictionary['conversion_factor_hz_to_khz']))
         self.conversion_factor_deg_edit.setText(str(self.settings_dictionary['conversion_factor_deg_to_rad']))
         self.spring_constant_edit.setText(str(self.settings_dictionary['spring_constant']))
+        self.cantilever_length_edit.setText(str(self.settings_dictionary['cantilever_length']))
+        self.cell_position_edit.setText(str(self.settings_dictionary['cell_position']))
         self.intial_param_guess_edit.setText(str(self.settings_dictionary['initial_parameter_guess']))
         self.lower_param_bound_edit.setText(str(self.settings_dictionary['lower_parameter_bounds']))
         self.upper_param_bound_edit.setText(str(self.settings_dictionary['upper_parameter_bounds']))
@@ -186,6 +194,16 @@ class Settings(QDialog):
         spring_constant = float(self.spring_constant_edit.text())
         if not self.settings_dictionary["spring_constant"] == spring_constant:
             self.settings_dictionary["spring_constant"] = spring_constant
+            has_changed = True
+
+        cantilever_length = float(self.cantilever_length_edit.text())
+        if not self.settings_dictionary["cantilever_length"] == cantilever_length:
+            self.settings_dictionary["cantilever_length"] = cantilever_length
+            has_changed = True
+
+        cell_position = float(self.cell_position_edit.text())
+        if not self.settings_dictionary["cell_position"] == cell_position:
+            self.settings_dictionary["cell_position"] = cell_position
             has_changed = True
 
         initial_guess = str(self.intial_param_guess_edit.text())

@@ -49,7 +49,8 @@ def calculate_resonance_frequencies(frequency_array, phase_array, initial_param_
     resonance_frequency = params[0]
     return resonance_frequency, params[1:]
 
-def calculate_position_correction(cell_position,cantilever_length):
+
+def calculate_position_correction(cell_position, cantilever_length):
 
     """calculate_position_correction calculates the correction factor with which the measured mass needs to be
     multiplied to get all the mass present on the cantilever. This is needed as the cantilever is differently sensitive

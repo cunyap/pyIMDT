@@ -5,6 +5,7 @@ from pyIMD.io.read_from_disk import read_from_tdms
 from pyIMD.io.write_to_disk import write_to_disk_as
 from pyIMD.analysis.calculations import calculate_mass
 from pyIMD.analysis.calculations import calculate_resonance_frequencies
+from pyIMD.analysis.calculations import calculate_position_correction
 import matplotlib
 matplotlib.use('Qt5Agg')
 from pyIMD.plotting.figures import plot_fitting
@@ -56,6 +57,7 @@ class InertialMassDetermination:
         self.fit_param_pre_start_with_cell = []
         self.fit_param_measured = []
         self.calculated_cell_mass = []
+        self.position_correction_factor = []
 
         self.result_folder = os.path.dirname(os.path.abspath(file_path3))
         self.settings = Settings()
@@ -100,6 +102,11 @@ class InertialMassDetermination:
                          os.sep + self.settings.FIGURE_NAME_PRE_START_NO_CELL), **optional_fig_param)
         self.logger.info('Done with pre start no cell resonance frequency calculation')
 
+
+        # Calc position correction for cell attached to cantilever
+        self.position_correction_factor = calculate_position_correction(self.settings.CELL_POSITION,self.settings.CANTILEVER_LENGTH)
+
+
         # Calc resonance frequency for pre start data with cell attached to cantilever
         self.resonance_freq_pre_start_with_cell, self.fit_param_pre_start_with_cell = calculate_resonance_frequencies(
             self.data_pre_start_with_cell.iloc[:, 0], self.data_pre_start_with_cell.iloc[:, 2],
@@ -131,7 +138,7 @@ class InertialMassDetermination:
                 # Store results in a list
                 self.resonance_freq_measured.append(res_freq)
                 self.fit_param_measured.append(param)
-                self.calculated_cell_mass.append(mass)
+                self.calculated_cell_mass.append(mass * self.position_correction_factor)
 
                 if np.remainder(iSweep, 300) == 0:
                     figure_i_sweep = plot_fitting(self.data_measured.iloc[iSweep + 2, 0:255],
@@ -152,7 +159,7 @@ class InertialMassDetermination:
                              os.sep + self.settings.FIGURE_NAME_MEASURED_DATA), **optional_fig_param)
             self.logger.info('Done writing figure to disk')
             self.logger.info('Start writing data to disk')
-            calculated_cell_mass.to_csv(self.result_folder + os.sep + self.settings.FIGURE_NAME_MEASURED_DATA,
+            calculated_cell_mass.to_csv(self.result_folder + os.sep + self.settings.FIGURE_NAME_MEASURED_DATA + '.csv',
                                         index=False, na_rep="nan")
             self.calculated_cell_mass = calculated_cell_mass
             self.logger.info('Done writing data to disk')
@@ -167,7 +174,7 @@ class InertialMassDetermination:
                                       self.resonance_freq_pre_start_with_cell,
                                       self.resonance_freq_pre_start_no_cell)
 
-                self.calculated_cell_mass.append(mass)
+                self.calculated_cell_mass.append(mass * self.position_correction_factor)
 
             calculated_cell_mass = concat([(self.data_measured.iloc[:, 0] - self.data_measured.iloc[1, 0]) / 3600,
                                            DataFrame(self.calculated_cell_mass, columns=['Mass [ng]'])], axis=1)
@@ -179,7 +186,7 @@ class InertialMassDetermination:
                              os.sep + self.settings.FIGURE_NAME_MEASURED_DATA), **optional_fig_param)
             self.logger.info('Done writing figure to disk')
             self.logger.info('Start writing data to disk')
-            calculated_cell_mass.to_csv(self.result_folder + os.sep + self.settings.FIGURE_NAME_MEASURED_DATA,
+            calculated_cell_mass.to_csv(self.result_folder + os.sep + self.settings.FIGURE_NAME_MEASURED_DATA + '.csv',
                                         index=False, na_rep="nan")
             self.logger.info('Done writing data to disk')
 
