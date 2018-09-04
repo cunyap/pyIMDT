@@ -1,3 +1,4 @@
+import numpy as np
 from math import pi
 from scipy import optimize
 from pyIMD.analysis.curve_fit import fit_function
@@ -64,10 +65,13 @@ def calculate_position_correction(cell_position, cantilever_length):
     :return correction_factor:           returns a double which is the correction factor.
     """
 
-    kL=1.875
-    cantilever_length=cantilever_length/1e6
-    cell_position=cell_position/1e6
-    k=kL/L
-    return (1/(0.5*((np.cos(k*(cantilever_length-cell_position))-np.cosh(k*(cantilever_length-cell_position)))-
-                    (np.cos(k*cantilever_length)+np.cosh(k*cantilever_length))/(np.sin(k*cantilever_length)+np.sinh(k*cantilever_length))*
-                    (np.sin(k*(cantilever_length-cell_position))-np.sinh(k*(cantilever_length-cell_position)))))**2)
+    kL = 1.875
+    cantilever_length = cantilever_length/1e6
+    cell_position = cell_position/1e6
+    k = kL / cantilever_length
+    return (1/(0.5*((np.cos(k * (cantilever_length - cell_position)) - np.cosh(k * (cantilever_length - cell_position)))
+                    - (np.cos(k * cantilever_length) + np.cosh(k*cantilever_length)) / (np.sin(k * cantilever_length) +
+                                                                                        np.sinh(k * cantilever_length))
+                    * (np.sin(k * (cantilever_length - cell_position)) - np.sinh(k *
+                                                                                 (cantilever_length-cell_position)))))
+            ** 2)
