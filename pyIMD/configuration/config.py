@@ -21,6 +21,8 @@ class Settings(object):
         self.LOWER_PARAMETER_BOUNDS = LOWER_PARAMETER_BOUNDS
         self.UPPER_PARAMETER_BOUNDS = UPPER_PARAMETER_BOUNDS
         self.READ_TEXT_DATA_FROM_LINE = READ_TEXT_DATA_FROM_LINE
+        self.CANTILEVER_LENGTH = CANTILEVER_LENGTH
+        self.CELL_POSITION = CELL_POSITION
         self.TEXT_DATA_DELIMITER = TEXT_DATA_DELIMITER
 
     def __repr__(self):
@@ -35,6 +37,7 @@ class Settings(object):
                "\n\tCONVERSION_FACTOR_DEG_TO_RAD: %s (%s) \n\tSPRING_CONSTANT: %s (%s) " \
                "\n\tINITIAL_PARAMETER_GUESS: %s (%s) \n\tLOWER_PARAMETER_BOUNDS: %s (%s) " \
                "\n\tUPPER_PARAMETER_BOUNDS: %s (%s) \n\tREAD_TEXT_DATA_FROM_LINE: %s (%s) " \
+               "\n\tCANTILEVER_LENGTH: %s (%s) \n\tCELL_POSITION: %s (%s) " \
                "\n\tTEXT_DATA_DELIMITER: %s (%s)" % (
             self.FIGURE_WIDTH, type(self.FIGURE_WIDTH), self.FIGURE_HEIGHT, type(self.FIGURE_HEIGHT), self.FIGURE_UNITS,
             type(self.FIGURE_UNITS), self.FIGURE_FORMAT, type(self.FIGURE_FORMAT), self.FIGURE_RESOLUTION_DPI,
@@ -45,6 +48,7 @@ class Settings(object):
             type(self.SPRING_CONSTANT), self.INITIAL_PARAMETER_GUESS, type(self.INITIAL_PARAMETER_GUESS),
             self.LOWER_PARAMETER_BOUNDS, type(self.LOWER_PARAMETER_BOUNDS), self.UPPER_PARAMETER_BOUNDS,
             type(self.UPPER_PARAMETER_BOUNDS), self.READ_TEXT_DATA_FROM_LINE, type(self.READ_TEXT_DATA_FROM_LINE),
+            self.CANTILEVER_LENGTH, type(self.CANTILEVER_LENGTH),self.CELL_POSITION, type(self.CELL_POSITION),
             self.TEXT_DATA_DELIMITER, type(self.TEXT_DATA_DELIMITER))
 
     FIGURE_FORMAT = property(operator.attrgetter('_FIGURE_FORMAT'))
@@ -168,6 +172,22 @@ class Settings(object):
         if not (type(line_number) == float or type(line_number) == int):
             raise Exception("Line number should be a of type float or int.")
         self._READ_TEXT_DATA_FROM_LINE = line_number
+
+    CANTILEVER_LENGTH = property(operator.attrgetter('_CANTILEVER_LENGTH'))
+
+    @CANTILEVER_LENGTH.setter
+    def CANTILEVER_LENGTH(self, cantilever_length):
+        if not (type(cantilever_length) == float or type(cantilever_length) == int):
+            raise Exception("Data text delimiter should be a of float or int.")
+        self._CANTILEVER_LENGTH = cantilever_length
+
+    CELL_POSITION = property(operator.attrgetter('_CELL_POSITION'))
+
+    @CELL_POSITION.setter
+    def CELL_POSITION(self, cell_position):
+        if not (type(cell_position) == float or type(cell_position) == int):
+            raise Exception("Data text delimiter should be a of float or int.")
+        self._CELL_POSITION = cell_position
 
     TEXT_DATA_DELIMITER = property(operator.attrgetter('_TEXT_DATA_DELIMITER'))
 
