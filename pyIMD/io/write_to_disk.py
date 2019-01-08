@@ -4,20 +4,20 @@ __author__ = 'Andreas P. Cuny'
 
 
 def write_to_png(plot_object, file, **kwargs):
-    """write_to_png  Writes figure in png format to current directory
+    """Method to write figures in png format to current directory
 
     Args:
-    :param plot_object:       ggplot object
-    :param file:              File path + File name [String] for figure to save
+        plot_object (`ggplot obj`):   ggplot object
+        file (`str`):                 File path + File name [String] for figure to save
 
-    Kwargs:
-    :keyword width:             Figure width (optional)
-    :keyword height:            Figure height (optional)
-    :keyword units:             Figure units (optional) 'in', 'mm' or 'cm'
-    :keyword resolution:        Figure resolution in dots per inch [dpi] (optional)
+    Keyword Args:
+         width (`int`):               Figure width (optional)
+         height (`int`):              Figure height (optional)
+         units (`str`):               Figure units (optional) 'in', 'mm' or 'cm'
+         resolution (`int`):          Figure resolution in dots per inch [dpi] (optional)
 
     Returns:
-    :return:                   Writes figure to disk
+            (`.png`)                  Writes figure to disk
     """
     if 'width' and 'height' and 'units' and 'resolution' in kwargs:
         width = kwargs.get('width')
@@ -32,20 +32,20 @@ def write_to_png(plot_object, file, **kwargs):
 
 
 def write_to_pdf(plot_object, file, **kwargs):
-    """write_to_pdf Writes figure in pdf format to current directory
+    """Method to write figures in pdf format to current directory
 
     Args:
-    :param plot_object:         ggplot object
-    :param file:                File path + File name [String] for figure to save
+        plot_object (`ggplot object`):  ggplot object
+        file (`str`):                   File path + File name [String] for figure to save
 
-    Kwargs:
-    :keyword width:             Figure width (optional)
-    :keyword height:            Figure height (optional)
-    :keyword units:             Figure units (optional) 'in', 'mm' or 'cm'
-    :keyword resolution:        Figure resolution in dots per inch [dpi] (optional)
+    Keyword Args:
+         width (`int`):                 Figure width (optional)
+         height (`int`):                Figure height (optional)
+         units ('str`):                 Figure units (optional) 'in', 'mm' or 'cm'
+         resolution (`int`):            Figure resolution in dots per inch [dpi] (optional)
 
     Returns:
-    :return:                    Writes figure to disk
+            (`.pdf`)                    Writes figure to disk
 
     """
     if 'width' and 'height' and 'units' and 'resolution' in kwargs:
@@ -61,6 +61,23 @@ def write_to_pdf(plot_object, file, **kwargs):
 
 
 def write_to_disk_as(file_format, plot_object, file, **kwargs):
+    """Method to write figures in various file formats
+
+    Args:
+        plot_object (`str`):            file format identifier i.e. png or pdf
+        plot_object (`ggplot object`):  ggplot object
+        file (`str`):                   File path + File name [String] for figure to save
+
+    Keyword Args:
+         width (`int`):                 Figure width (optional)
+         height (`int`):                Figure height (optional)
+         units ('str`):                 Figure units (optional) 'in', 'mm' or 'cm'
+         resolution (`int`):            Figure resolution in dots per inch [dpi] (optional)
+
+    Returns:
+                                        Writes figure to disk in the respective file format
+
+    """
     if file_format == 'pdf':
         write_to_pdf(plot_object, file, **kwargs)
     elif file_format == 'png':
