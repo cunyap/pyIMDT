@@ -10,9 +10,9 @@ def calculate_mass(spring_constant, res_freq_after_cell_load_array, res_freq_bef
     """calculate_mass Calculates the mass given freq 1 -3 in pandas data frame
 
     Args:
-    :param spring_constant:
-    :param res_freq_after_cell_load_array:
-    :param res_freq_before_cell_load_array:
+    :param spring_constant:                     Stiffness of the cantilever used [in N/m]
+    :param res_freq_after_cell_load_array:      Resonance frequency of the cantilever AFTER the cell is picked up [in kHz]
+    :param res_freq_before_cell_load_array:     Resonance frequency of the cantilever BEFORE the cell is picked up [in kHz]
 
     Returns:
     :return mass:           Returns data structured in a pandas data frame.
