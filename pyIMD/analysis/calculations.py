@@ -10,7 +10,7 @@ def calculate_mass(spring_constant, res_freq_after_cell_load_array, res_freq_bef
     """calculate_mass Calculates the mass given freq 1 -3 in pandas data frame
 
     Args:
-    :param spring_constant:                     Stiffness of the cantilever used [in N/m]
+    :param spring_constant:                     Stiffness of the cantilever [in N/m]
     :param res_freq_after_cell_load_array:      Resonance frequency of the cantilever AFTER the cell is picked up, at timepoint t [in kHz]
     :param res_freq_before_cell_load_array:     Resonance frequency of the cantilever BEFORE the cell is picked up [in kHz]
     
@@ -30,7 +30,8 @@ def calculate_mass(spring_constant, res_freq_after_cell_load_array, res_freq_bef
 def calculate_resonance_frequencies(frequency_array, phase_array, initial_param_guess, lower_param_bounds,
                                     upper_param_bounds):
     """calculate_resonance_frequencies calculates the resonance frequency
-       from input frequency and phase array. It does so via fitting the phase response of a harmonic oscillator (defined in pyIMD.analysis.curve_fit).
+       from input frequency and phase array. It does so via fitting the phase response of a harmonic oscillator (defined in pyIMD.analysis.curve_fit). 
+       The first fit parameter of the fit parameter array is the resonance frequency.
 
     Args:
     :param frequency_array:          Array of frequencies [in kHz]
