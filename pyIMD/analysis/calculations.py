@@ -7,15 +7,15 @@ __author__ = 'Andreas P. Cuny'
 
 
 def calculate_mass(spring_constant, res_freq_after_cell_load_array, res_freq_before_cell_load_array):
-    """calculate_mass Calculates the mass given freq 1 -3 in pandas data frame
+    """Calculates the mass given freq 1 -3 in pandas data frame
 
     Args:
-    :param spring_constant:
-    :param res_freq_after_cell_load_array:
-    :param res_freq_before_cell_load_array:
+         spring_constant (`float`):
+         res_freq_after_cell_load_array (`float`):
+         res_freq_before_cell_load_array (`float`):
 
     Returns:
-    :return mass:           Returns data structured in a pandas data frame.
+         mass (`panda data frame`):                      Returns data structured in a pandas data frame.
     """
     mass = (spring_constant / (4 * pi * pi) * (1 / (res_freq_after_cell_load_array*res_freq_after_cell_load_array) - 1 /
                                                (res_freq_before_cell_load_array*res_freq_before_cell_load_array))) * 1e6
@@ -25,22 +25,26 @@ def calculate_mass(spring_constant, res_freq_after_cell_load_array, res_freq_bef
 
 def calculate_resonance_frequencies(frequency_array, phase_array, initial_param_guess, lower_param_bounds,
                                     upper_param_bounds):
-    """calculate_resonance_frequencies Calculates the resonance frequency
-       from input frequency and phase array.
+    """Calculates the resonance frequency from input frequency and phase array.
 
     Args:
-    :param frequency_array:          Array of frequencies [in kHz]
-    :param phase_array:              Array of phase [in Rad]
-    :param initial_param_guess:      Initial parameter guess (1x4 array)
-    :param lower_param_bounds:       Lower bounds (1x4 array)
-    :param upper_param_bounds:      Upper bounds (1x4 array)
+        frequency_array (`float`):              Array of frequencies [in kHz]
+        phase_array (`float`):                  Array of phase [in Rad]
+        initial_param_guess (`float`):          Initial parameter guess (1x4 array)
+        lower_param_bounds (`float`):           Lower bounds (1x4 array)
+        upper_param_bounds (`float`):           Upper bounds (1x4 array)
 
     Returns:
-    :retrun resonance_frequency:     Resonance frequency [in kHz]
-    :retrun params:                  Curve fit parameters;
-                                     param[0] := Q factor (losses)
-                                     param[1] := Linear factor accounting for a linear background
-                                     param[2] := Offset of the background
+        resonance_frequency (`float`):          Resonance frequency [in kHz]
+    Returns:
+        curve_fit_parameter (`float array`):    Curve fit parameters
+                                                curve_fit_parameter[0] := Q factor (losses)
+
+                                                curve_fit_parameter[1] := Linear factor accounting for a linear \
+                                                background
+
+                                                curve_fit_parameter[2] := Offset of the background
+
 
     """
 
@@ -53,16 +57,16 @@ def calculate_resonance_frequencies(frequency_array, phase_array, initial_param_
 
 def calculate_position_correction(cell_position, cantilever_length):
 
-    """calculate_position_correction calculates the correction factor with which the measured mass needs to be
+    """Calculates the correction factor with which the measured mass needs to be
     multiplied to get all the mass present on the cantilever. This is needed as the cantilever is differently sensitive
     to mass, depending on the location where this mass is attached.
 
     Args:
-    :param cell_position:       Cell position from the free end of the cantilever [in micrometer]
-    :param cantilever_length:   Cantilever length [in micrometer]
+        cell_position (`float`):       Cell position from the free end of the cantilever [in micrometer]
+        cantilever_length (`float`):   Cantilever length [in micrometer]
 
     Returns:
-    :return correction_factor:           returns a double which is the correction factor.
+        correction_factor (`float`):   Returns a double which is the correction factor.
     """
 
     kL = 1.875

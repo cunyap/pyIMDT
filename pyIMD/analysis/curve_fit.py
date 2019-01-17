@@ -4,17 +4,17 @@ __author__ = 'Andreas P. Cuny'
 
 
 def fit_function(x, fn, q, a, b):
-    """fit_function Calculates the function fit
+    """Calculates the function fit
 
     Args:
-    :param x:              Frequency (the independent variable of that function)
-    :param fn:             Resonance frequency
-    :param q:              Q factor (losses)
-    :param a:              Linear factor accounting for a linear background
-    :param b:              Offset of the background
+         x (`float`):              Frequency (the independent variable of that function)
+         fn (`float`):             Resonance frequency
+         q (`float`):              Q factor (losses)
+         a (`float`):              Linear factor accounting for a linear background
+         b (`float`):              Offset of the background
 
     Returns:
-    :return fit:           Returns fit as panda data frame
+         fit (`float`):           Returns fit as panda data frame
     """
 
     fit = -arctan(q * (fn * fn - x * x)/(fn * x)) + a * x + b

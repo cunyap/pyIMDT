@@ -30,13 +30,13 @@ class InertialMassDetermination:
         enable the analysis of different experimental setups. Sweep mode [0] and PLL mode [1].
 
         Args:
-        :param file_path1:       File path + File name [String] of initial frequency \
+            file_path1:       File path + File name [String] of initial frequency \
                                  shift measurement before cell attachment (txt file).
-        :param file_path2:       File path + File name [String] of initial frequency \
+            file_path2:       File path + File name [String] of initial frequency \
                                  shift measurement after cell attachment (txt file).
-        :param file_path3:       File path + File name [String] of the actual \
+            file_path3:       File path + File name [String] of the actual \
                                  measurement (tdms file).
-        :param measurement_mode: Boolean, 0 := sweep mode, 1 := phase lock loops mode
+            measurement_mode: Boolean, 0 := sweep mode, 1 := phase lock loops mode
         """
         # InertialMassDetermination.__init__(self, file_path1, file_path2, file_path3, delimiter, read_from_row, \
         # measurement_mode)
@@ -67,11 +67,11 @@ class InertialMassDetermination:
         self.logger.info('Object constructed successfully')
 
     def run_intertial_mass_determination(self):
-        """run_intertial_mass_determination Calculates the intertial mass.
+        """Starts the intertial mass calculation
 
         Returns:
-        :return result:          Returns result structured in a pandas data frame and saves function fit plots as pdf
-                                 files.
+            result:          Returns result structured in a pandas data frame and saves function fit plots as pdf \
+                             files.
         """
 
         # Read data

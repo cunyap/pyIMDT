@@ -16,3 +16,16 @@ if __name__ == '__main__':
     app_event_filter.signal_zoom_in.connect(main.scene.zoom_in)
     app_event_filter.signal_zoom_out.connect(main.scene.zoom_out)
     sys.exit(app.exec_())
+
+
+def start_ui():
+    app = QApplication(sys.argv)
+    if sys.platform.startswith("linux"):
+        app.setStyle("fusion")
+    main = IMDWindow()
+    main.show()
+    app_event_filter = AppEventFilter()
+    app.installEventFilter(app_event_filter)
+    app_event_filter.signal_zoom_in.connect(main.scene.zoom_in)
+    app_event_filter.signal_zoom_out.connect(main.scene.zoom_out)
+    sys.exit(app.exec_())
