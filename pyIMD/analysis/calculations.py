@@ -6,59 +6,43 @@ from pyIMD.analysis.curve_fit import fit_function
 __author__ = 'Andreas P. Cuny'
 
 
-def calculate_mass(spring_constant, res_freq_after_cell_load_array, res_freq_before_cell_load_array):
-    """Calculates the mass given freq 1 -3 in pandas data frame
+def calculate_mass(spring_constant, res_freq_after_cell_load, res_freq_before_cell_load):
+    """Calculates the mass given the spring constant of the cantilever and the resonance frequency without and with \
+    cell attached to the cantilever.
 
     Args:
-<<<<<<< HEAD
-         spring_constant (`float`):
-         res_freq_after_cell_load_array (`float`):
-         res_freq_before_cell_load_array (`float`):
+
+    spring_constant (`float`):            Stiffness of the cantilever [in N/m]
+    res_freq_after_cell_load (`float`):   Resonance frequency of the cantilever AFTER the cell is picked up, at \
+                                                 time point t [in kHz]
+    res_freq_before_cell_load (`float`):  Resonance frequency of the cantilever BEFORE the cell is picked up \
+                                                 [in kHz]
+
 
     Returns:
-         mass (`panda data frame`):                      Returns data structured in a pandas data frame.
-=======
-    :param spring_constant:                     Stiffness of the cantilever [in N/m]
-    :param res_freq_after_cell_load_array:      Resonance frequency of the cantilever AFTER the cell is picked up, at timepoint t [in kHz]
-    :param res_freq_before_cell_load_array:     Resonance frequency of the cantilever BEFORE the cell is picked up [in kHz]
-    
-    // ARE THE TWO LAST ONES REALLY ARRAYS AS THE NAME SUGGESTS? PLEASE CHECK GF
+    mass (`float`):                        Returns data as float, which is the mass at time point t.
 
-    Returns:
-    :return mass:           Returns data structured in a pandas data frame, which is the mass at timepoint t.
-    
-    // IS THIS REALLY A STRUCT IN A DATAFRAME OR JUST A DOUBLE? PLEASE CHECK GF
->>>>>>> 464c4bfd865cfbda544467e988e82b2ad264a249
     """
-    mass = (spring_constant / (4 * pi * pi) * (1 / (res_freq_after_cell_load_array*res_freq_after_cell_load_array) - 1 /
-                                               (res_freq_before_cell_load_array*res_freq_before_cell_load_array))) * 1e6
+    mass = (spring_constant / (4 * pi * pi) * (1 / (res_freq_after_cell_load*res_freq_after_cell_load) - 1 /
+                                               (res_freq_before_cell_load*res_freq_before_cell_load))) * 1e6
 
     return mass
 
 
 def calculate_resonance_frequencies(frequency_array, phase_array, initial_param_guess, lower_param_bounds,
                                     upper_param_bounds):
-<<<<<<< HEAD
-    """Calculates the resonance frequency from input frequency and phase array.
+
+    """Calculate_resonance_frequencies calculates the resonance frequency
+       from input frequency and phase array. It does so via fitting the phase response of a harmonic oscillator \
+       (defined in pyIMD.analysis.curve_fit). The first fit parameter of the fit parameter array is the resonance \
+       frequency.
 
     Args:
-        frequency_array (`float`):              Array of frequencies [in kHz]
-        phase_array (`float`):                  Array of phase [in Rad]
+        frequency_array (`float array`):        Array of frequencies [in kHz]
+        phase_array (`float array`):            Array of phase [in Rad]
         initial_param_guess (`float`):          Initial parameter guess (1x4 array)
         lower_param_bounds (`float`):           Lower bounds (1x4 array)
         upper_param_bounds (`float`):           Upper bounds (1x4 array)
-=======
-    """calculate_resonance_frequencies calculates the resonance frequency
-       from input frequency and phase array. It does so via fitting the phase response of a harmonic oscillator (defined in pyIMD.analysis.curve_fit). 
-       The first fit parameter of the fit parameter array is the resonance frequency.
-
-    Args:
-    :param frequency_array:          Array of frequencies [in kHz]
-    :param phase_array:              Array of phase [in Rad]
-    :param initial_param_guess:      Initial parameter guess (1x4 array)
-    :param lower_param_bounds:       Lower bounds (1x4 array)
-    :param upper_param_bounds:       Upper bounds (1x4 array)
->>>>>>> 464c4bfd865cfbda544467e988e82b2ad264a249
 
     Returns:
         resonance_frequency (`float`):          Resonance frequency [in kHz]
@@ -70,8 +54,6 @@ def calculate_resonance_frequencies(frequency_array, phase_array, initial_param_
                                                 background
 
                                                 curve_fit_parameter[2] := Offset of the background
-
-
     """
 
     params, _ = optimize.curve_fit(fit_function, frequency_array.astype(float), phase_array.astype(float),
@@ -85,8 +67,9 @@ def calculate_position_correction(cell_position, cantilever_length):
 
     """Calculates the correction factor with which the measured mass needs to be
     multiplied to get all the mass present on the cantilever. This is needed as the cantilever is differently sensitive
-    to mass, depending on the location where this mass is attached. The measurements are performed with the first mode of vibration,
-    which is described by the factor kL = 1.875. For higher modes, different would be used (4.694 for the second , 7.855 for the third etc.)
+    to mass, depending on the location where this mass is attached. The measurements are performed with the first mode \
+    of vibration, which is described by the factor kL = 1.875. For higher modes, different would be used (4.694 for \
+    the second , 7.855 for the third etc.)
 
     Args:
         cell_position (`float`):       Cell position from the free end of the cantilever [in micrometer]
