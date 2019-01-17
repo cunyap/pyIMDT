@@ -11,7 +11,7 @@ def read_from_tdms(file):
         file (`str`):              File path + File name string.
 
     Returns:
-        data (`pandas dataframe`):  Returns data structured in a pandas data frame.
+        data (`pandas data frame`):  Returns data structured in a pandas data frame.
 
     """
     tdms_file = TdmsFile(file)
@@ -30,7 +30,7 @@ def read_from_text(file, delimiter, read_from_row):
                                     Frequency, Amplitude and Phase headers.
 
     Returns:
-        data (`pandas dataframe`):  Returns data structured in a pandas data frame.
+        data (`pandas data frame`):  Returns data structured in a pandas data frame.
 
     """
     data = read_csv(file, sep=delimiter, skiprows=read_from_row)

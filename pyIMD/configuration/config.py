@@ -28,7 +28,9 @@ class Settings(object):
     def __repr__(self):
         """
         Settings representation.
-        :return: string
+
+        Returns:
+                (`string`)      Settings representation as text
         """
         return "pyIMD Setting: \n\tFIGURE_WIDTH: %s (%s) \n\tFIGURE_HEIGHT: %s (%s) \n\tFIGURE_UNITS: %s (%s) " \
                "\n\tFIGURE_FORMAT: %s (%s) \n\tFIGURE_RESOLUTION_DPI: %s (%s) " \

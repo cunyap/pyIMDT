@@ -14,13 +14,13 @@ def plot_fitting(x, y, resonance_frequency, parameter):
     """ Plots the resonance frequency and the function fit
 
     Args:
-    :param x:                       X coordinates (frequency in kHz)
-    :param y:                       Y coordinates (phase in radians)
-    :param resonance_frequency:     Resonnance frequency of x,y
-    :param parameter:               Parameter of function fit
+        x (`float array`):                       X coordinates (frequency in kHz)
+        y (`float array`):                       Y coordinates (phase in radians)
+        resonance_frequency (`float array`):     Resonnance frequency of x, y
+        parameter (`float array`):               Parameter of function fit
 
     Returns:
-    :return: p:                     ggplot object
+        p (`ggplot object`):                     Returns a ggplot object
     """
 
     y_fit = fit_function(x, resonance_frequency, parameter[0], parameter[1], parameter[2])
@@ -41,11 +41,11 @@ def plot_fitting(x, y, resonance_frequency, parameter):
 def plot_mass(calculated_cell_mass):
     """ Plots the resulting mass
 
-    Args
-    :param calculated_cell_mass   Dataframe [Nx2] with time and calculated cell mass data
+    Args:
+        calculated_cell_mass (`pandas data frame`):  Pandas data frame [Nx2] with time and calculated cell mass data
 
-    Return
-    :return p:                    ggplot plot object
+    Returns:
+        p (`ggplot object`):                         Returns a ggplot plot object
 
     """
 
@@ -62,15 +62,20 @@ def plot_mass(calculated_cell_mass):
 
 
 def get_montage_array_size(size, image_row_count, image_col_count, frame_count):
-    """
+    """ Calculates the final size of a numpy array needed to hold a the number of specified image frames given the \
+    row and column count of the final array.
 
-    :param size: numpy array specifying the amount of images displayed in the montage per row and column.
-    If one argument is replaced with np.nan, the needed amount of rows or columns is calculated automatically. E. g.
-    [5, np.nan]
-    :param image_row_count: Number of rows per image
-    :param image_col_count: Number of columns per image
-    :param frame_count: Number of image frames in the stack
-    :return: montage_size: array with the number of rows and columns needed in the montage array for the images
+    Args:
+        size (`numpy array`):           Array specifying the amount of images displayed in the montage per row and \
+                                        column. If one argument is replaced with np.nan, the needed amount of rows or \
+                                        columns is calculated automatically. E. g. [5, np.nan]
+        image_row_count (`int`):        Number of rows per image
+        image_col_count (`int`):        Number of columns per image
+        frame_count (`int`):            Number of image frames in the stack
+
+    Returns:
+        montage_size (`numpy array`):   Array with the number of rows and columns needed in the montage array for the \
+                                        images
     """
 
     if len(size) == 0 or np.isnan(size).all():
@@ -98,11 +103,15 @@ def create_montage_array(img_stack, size):
     """
     Creates an image montage of a 3D numpy array with the shape [image frames, image row, image col] for the specified
     size.
-    :param img_stack: 3D numpy array [image frames, image row, image col]
-    :param size: numpy array specifying the amount of images displayed in the montage per row and column.
-    If one argument is replaced with np.nan, the needed amount of rows or columns is calculated automatically. E. g.
-    [5, np.nan]
-    :return: 2D numpy array with the image montage
+
+    Args:
+        img_stack (`3D numpy array`):       3D numpy image array [image row, image col, image frames].
+        size (`numpy array`):               Array specifying the amount of images displayed in the montage per row and \
+                                            column. If one argument is replaced with np.nan, the needed amount of rows \
+                                            or columns is calculated automatically. E. g. [5, np.nan]
+
+    Returns:
+        montage (`2D numpy array`):         2D numpy array with the image montage
     """
 
     image_row_count = img_stack.shape[1]
