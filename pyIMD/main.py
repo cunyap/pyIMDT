@@ -4,11 +4,8 @@ from pyIMD.ui.main_ui import IMDWindow
 from pyIMD.ui.appeventfilter import AppEventFilter
 
 
-if __name__ == '__main__':
-
+def show_ui():
     app = QApplication(sys.argv)
-    if sys.platform.startswith("linux"):
-        app.setStyle("fusion")
     main = IMDWindow()
     main.show()
     app_event_filter = AppEventFilter()
@@ -18,10 +15,9 @@ if __name__ == '__main__':
     sys.exit(app.exec_())
 
 
-def start_ui():
+if __name__ == '__main__':
+
     app = QApplication(sys.argv)
-    if sys.platform.startswith("linux"):
-        app.setStyle("fusion")
     main = IMDWindow()
     main.show()
     app_event_filter = AppEventFilter()
