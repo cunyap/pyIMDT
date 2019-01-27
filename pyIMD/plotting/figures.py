@@ -1,9 +1,10 @@
 import math
 import warnings
 import numpy as np
-from pandas import concat
+from pandas import concat, melt
 from pyIMD.analysis.curve_fit import fit_function
-from plotnine import ggplot, aes, geom_line, geom_point, theme_bw
+from plotnine import ggplot, aes, geom_line, geom_point, theme_bw, labs, xlab, ylab, theme, theme_seaborn, \
+    element_line, element_rect
 
 __author__ = 'Andreas P. Cuny'
 
@@ -16,7 +17,7 @@ def plot_fitting(x, y, resonance_frequency, parameter):
     Args:
         x (`float array`):                       X coordinates (frequency in kHz)
         y (`float array`):                       Y coordinates (phase in radians)
-        resonance_frequency (`float array`):     Resonnance frequency of x, y
+        resonance_frequency (`float array`):     Resonance frequency of x, y
         parameter (`float array`):               Parameter of function fit
 
     Returns:
@@ -34,7 +35,63 @@ def plot_fitting(x, y, resonance_frequency, parameter):
     p = ggplot(aes(x=col_names[0], y=col_names[1]), data=data) + \
         geom_point() + \
         geom_line(aes(x=col_names[0], y=col_names[2]),  color='red', size=0.5) + \
-        theme_bw()
+        theme_seaborn(style='ticks', context='talk', font_scale=0.75) + \
+        theme(figure_size=(15, 7),
+              strip_background=element_rect(fill='white'),
+              axis_line_x=element_line(color='black'),
+              axis_line_y=element_line(color='black'),
+              legend_key=element_rect(fill='white', color='white'))
+    return p
+
+
+def plot_frequency_shift(x, y, resonance_frequency_without, parameter_without, xx, yy, resonance_frequency_with,
+                         parameter):
+    """ Plots the resonance frequency shift of pre start data without and with cell attached to cantilever with the
+    respective function fit.
+
+    Args:
+        x (`float array`):                               X coordinates (frequency in kHz)
+        y (`float array`):                               Y coordinates (phase in radians)
+        xx (`float array`):                              X coordinates (frequency in kHz)
+        yy (`float array`):                              Y coordinates (phase in radians)
+        resonance_frequency_without (`float array`):     Resonance frequency of x, y
+        resonance_frequency_with (`float array`):        Resonance frequency of x, y
+        parameter (`float array`):                       Parameter of function fit
+        parameter_without (`float array`):               Parameter of function fit
+
+    Returns:
+        p (`ggplot object`):                             Returns a ggplot object
+    """
+
+    y_fit_without = fit_function(x, resonance_frequency_without, parameter_without[0], parameter_without[1],
+                                 parameter_without[2])
+    y_fit_with = fit_function(xx, resonance_frequency_with, parameter[0], parameter[1], parameter[2])
+    y_fit_without.name = 'Phase fit w/o cell att.'
+    y_fit_with.name = 'Phase fit w cell att.'
+    x.name = 'Frequency without [kHz]'
+    y.name = 'Raw phase w/o cell att.'
+    xx.name = 'Frequency with [kHz]'
+    yy.name = 'Raw phase w cell att.'
+    data = concat([x, y, y_fit_without, xx, yy, y_fit_with], axis=1)
+    df = melt(data, id_vars=['Frequency with [kHz]'], value_vars=['Phase fit w cell att.',
+                                                                  'Phase fit w/o cell att.'])
+    df.loc[df['variable'] == 'Phase fit w/o cell att.', 'Frequency with [kHz]'] = x.values
+    df2 = melt(data, id_vars=['Frequency with [kHz]'], value_vars=['Raw phase w cell att.',
+                                                                   'Raw phase w/o cell att.'])
+    df2.loc[df2['variable'] == 'Raw phase w/o cell att.', 'Frequency with [kHz]'] = x.values
+    # Plot data
+    p = ggplot(data=df) + \
+        geom_point(aes(x="Frequency with [kHz]", y='value', fill='variable'), data=df2, alpha=0.6) + \
+        geom_line(aes(x="Frequency with [kHz]", y='value', color='variable')) + \
+        xlab('Frequency [kHz]') + \
+        ylab('Phase [rad]') + \
+        labs(fill='Raw data', color='Function fits') + \
+        theme_seaborn(style='ticks', context='talk', font_scale=0.75) + \
+        theme(figure_size=(15, 7),
+            strip_background=element_rect(fill='white'),
+            axis_line_x=element_line(color='black'),
+            axis_line_y=element_line(color='black'),
+            legend_key=element_rect(fill='white', color='white'))
     return p
 
 
