@@ -57,7 +57,6 @@ def read_from_file(file, delimiter):
 
     # Check how many columns we have. For PLL we expect only 2 (minimal) or 7 (default TDMS file). For Cont.Sweep we
     # expect 256 columns. Reshape to correct format if needed.
-    print(data.shape[1])
     if data.shape[1] == 2:
         df = DataFrame(nan, index=range(data.shape[0]), columns=range(7))
         df.iloc[:, 0] = data.iloc[:, 0]
