@@ -4,14 +4,15 @@ import datetime
 import pathlib
 import ctypes
 import xmltodict
+import webbrowser
 from lxml import etree
 from ast import literal_eval
 from PyQt5 import uic, QtWidgets, QtCore, QtGui
 from PyQt5.Qt import QAction, QFileDialog, QScrollArea, QMessageBox, QApplication, QStyle, QTextCursor, QIcon, \
      QPushButton, QListWidget, QSize
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QFileSystemWatcher, QThreadPool
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, QFileSystemWatcher, QThreadPool, QSettings
 from PyQt5.QtWidgets import QGraphicsView
-from pyIMD.ui.settings import Settings
+from pyIMD.ui.settings import SettingsDialog
 from pyIMD.ui.file_viewer import FileViewer
 from pyIMD.configuration.defaults import *
 from pyIMD.inertialmassdetermination import InertialMassDetermination
@@ -19,6 +20,7 @@ from pyIMD.ui.table_view_model import PandasDataFrameModel
 from pyIMD.ui.graphics_rendering import GraphicScene
 from concurrent.futures import ThreadPoolExecutor
 from pyIMD.ui.resource_path import resource_path
+from pyIMD.ui.help import QuickInstructions, ChangeLog, About
 from pyIMD.__init__ import __version__, __operating_system__
 
 __author__ = 'Andreas P. Cuny'
@@ -45,8 +47,15 @@ class IMDWindow(QtWidgets.QMainWindow):
 
         # Add AppUserModelID for windows systems
         if sys.platform == 'win32':
-            app_id = u'ethz.csb.pyIMD.v0_0_1'
+            app_id = u'ethz.csb.pyCAME.v%s' % __version__
             ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
+
+        # Init QSettings and specify cross-platform temp file
+        self.settings = QSettings(QSettings.IniFormat, QSettings.SystemScope, '__CSB', '__pyIMD_settings')
+        self.settings.setFallbacksEnabled(False)
+        self.settings.setPath(QSettings.IniFormat, QSettings.SystemScope, './__pyIMD_settings.ini')
+        file_object = open(self.settings.fileName(), 'w')
+        file_object.write('[General]\ndisplay_on_startup=2')  # Create ui settings file for the first time
 
         self.settings_dialog = None
         self.about_window = None
@@ -78,6 +87,7 @@ class IMDWindow(QtWidgets.QMainWindow):
                            "figure_name_pre_start_no_cell": FIGURE_NAME_PRE_START_NO_CELL,
                            "figure_name_pre_start_with_cell": FIGURE_NAME_PRE_START_WITH_CELL,
                            "figure_name_measured_data": FIGURE_NAME_MEASURED_DATA,
+                           "figure_plot_every_nth_point": FIGURE_PLOT_EVERY_NTH_POINT,
                            "conversion_factor_hz_to_khz": CONVERSION_FACTOR_HZ_TO_KHZ,
                            "conversion_factor_deg_to_rad": CONVERSION_FACTOR_DEG_TO_RAD,
                            "spring_constant": SPRING_CONSTANT,
@@ -86,10 +96,12 @@ class IMDWindow(QtWidgets.QMainWindow):
                            "initial_parameter_guess": INITIAL_PARAMETER_GUESS,
                            "lower_parameter_bounds": LOWER_PARAMETER_BOUNDS,
                            "upper_parameter_bounds": UPPER_PARAMETER_BOUNDS,
+                           "rolling_window_size": ROLLING_WINDOW_SIZE,
+                           "frequency_offset": FREQUENCY_OFFSET,
                            "read_text_data_from_line": READ_TEXT_DATA_FROM_LINE,
                            "text_data_delimiter": repr(TEXT_DATA_DELIMITER).replace("'", "")}
 
-        self.settings_dialog = Settings(self.__settings)
+        self.settings_dialog = SettingsDialog(self.__settings)
         self.settings_dialog.set_values()
         self.setup_console_connection()
         self.selectDirBtn.clicked.connect(self.select_data_files)
@@ -133,10 +145,20 @@ class IMDWindow(QtWidgets.QMainWindow):
         self.actionSettings.setStatusTip('Configure pyIMD calculation settings')
         self.actionSettings.triggered.connect(self.show_settings_dialog)
 
-        about_action = QAction("About", self.menuBar)
-        about_action.setShortcut("Ctrl+A")
-        about_action.triggered.connect(self.show_about_dialog)
-        self.menuBar.addAction(about_action)
+        self.about_window = About()
+        self.actionAbout.setShortcut("Ctrl+A")
+        self.actionAbout.triggered.connect(self.on_about)
+
+        self.qi = QuickInstructions()
+        self.actionQuick_instructions.setStatusTip('Hints about how to use this program')
+        self.actionQuick_instructions.triggered.connect(self.on_quick_instructions)
+
+        self.change_log = ChangeLog()
+        self.actionChange_log.setStatusTip('See what change recently')
+        self.actionChange_log.triggered.connect(self.on_change_log)
+
+        self.actionRead_documentation.setStatusTip('Show online documentation')
+        self.actionRead_documentation.triggered.connect(self.on_read_documentation)
 
         sys.stderr = Stream(newText=self.on_update_text)
 
@@ -154,6 +176,25 @@ class IMDWindow(QtWidgets.QMainWindow):
             QGraphicsView.FullViewportUpdate)
         self.graphicsView.setDragMode(QGraphicsView.RubberBandDrag)
         self.graphicsView.setMouseTracking(True)
+
+        self.scene.display_image(resource_path(os.path.join(os.path.join("ui", "icons", "pyIMD_Logo-01.png"))))
+        self.scene.redraw()
+
+        if int(self.settings.value('display_on_startup')) == 2:
+            self.qi.show()
+
+    @staticmethod
+    def on_read_documentation():
+        webbrowser.open('file://' + os.path.realpath('docs/_build/html/index.html'))
+
+    def on_change_log(self):
+        self.change_log.show()
+
+    def on_quick_instructions(self):
+        self.qi.show()
+
+    def on_about(self):
+        self.about_window.show()
 
     def on_image_pan(self, offset):
         try:
@@ -348,46 +389,12 @@ class IMDWindow(QtWidgets.QMainWindow):
         """
         self.file_viewer.set_data([], self.file_list)
 
-    def show_about_dialog(self):
-        """
-        Show about message box.
-        """
-
-        msg_box = QMessageBox(self)
-        about_icon = QIcon()
-        about_icon.addPixmap(self.style().standardPixmap(QStyle.SP_FileDialogInfoView))
-        msg_box.setWindowIcon(about_icon)
-        msg_box.setIcon(QMessageBox.Information)
-        msg_box.setWindowTitle('pyIMD :: About')
-        msg_box.setText('pyIMD: Inertial mass determination.\n[build: v%s %s]\n\nWritten by Andreas P. '
-                        'Cuny' % (__version__, __operating_system__))
-        msg_box.setInformativeText("(c) Copyright Andreas P. Cuny \n2018. All rights reserved."
-                                   "\nAndreas P. Cuny \nETHZ CSB Laboratory\nMattenstrasse 26 \n4058 Basel")
-        msg_box.addButton(QMessageBox.Close)
-        msg_box.setIconPixmap(QtGui.QPixmap(resource_path(os.path.join("icons", "pyIMD_Logo2-01.png"))))
-        msg_box.show()
-
-    def show_change_log_dialog(self):
-        """
-        Show change log message box.
-        """
-        change_log = '- 0.0.3 \n' \
-                     '           - New feature: Added image montage generator to pyIMD.plotting.figures \n' \
-                     '           - New feature: Batch project calculation \n' \
-                     '           - Fixed Bug: Reading project xml file did not recognize file delimiter properly. \n' \
-                     '- 0.0.2 \n' \
-                     '           - Fixed Bug: Opening multiple projects in a row did not update drop down menus.\n' \
-                     '- 0.0.1 \n' \
-                     '           - Alpha Pre release. \n'
-
-        self.change_log_text.setText(change_log)
-
     def show_settings_dialog(self):
         """
         Show the settings dialog.
         """
         if self.settings_dialog is None:
-            self.settings_dialog = Settings(self.__settings)
+            self.settings_dialog = SettingsDialog(self.__settings)
             self.settings_dialog.settings_has_changed.connect(
                 self.on_settings_changed)
 
@@ -691,15 +698,18 @@ class IMDWindow(QtWidgets.QMainWindow):
         :param event: a QCloseEvent
         :return: 0 when process finished correctly
         """
+
+        self.settings.setValue('display_on_startup', self.qi.display_on_startup)
+
         msg_box = QMessageBox()
-        msg_box.setWindowIcon(QtGui.QIcon(resource_path(os.path.join("icons", "pyimd_logo2_01_FNf_icon.ico"))))
+        msg_box.setWindowIcon(QtGui.QIcon(resource_path(os.path.join("ui", "icons", "pyimd_logo2_01_FNf_icon.ico"))))
         msg_box.setIcon(QMessageBox.Warning)
         msg_box.setWindowTitle('pyIMD :: Quit Program')
         msg_box.setText('Are you sure you want to quit the program?')
-        save_btn = QPushButton('Quit WITH saving')
+        save_btn = QPushButton('Save first')
         save_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton))
         msg_box.addButton(save_btn, QMessageBox.YesRole)
-        no_save_btn = QPushButton('Quit WITHOUT saving')
+        no_save_btn = QPushButton('Quit')
         no_save_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_DialogNoButton))
         msg_box.addButton(no_save_btn, QMessageBox.NoRole)
         abort_btn = QPushButton('Abort')
