@@ -8,7 +8,7 @@ def write_to_png(plot_object, file, **kwargs):
 
     Args:
         plot_object (`ggplot obj`):   ggplot object
-        file (`str`):                 File path + File name [String] for figure to save
+        file (`str`):                 File path + file name of the figure to save
 
     Keyword Args:
          width (`int`):               Figure width (optional)
@@ -36,7 +36,7 @@ def write_to_pdf(plot_object, file, **kwargs):
 
     Args:
         plot_object (`ggplot object`):  ggplot object
-        file (`str`):                   File path + File name [String] for figure to save
+        file (`str`):                   File path + file name of figure to save
 
     Keyword Args:
          width (`int`):                 Figure width (optional)
@@ -64,9 +64,9 @@ def write_to_disk_as(file_format, plot_object, file, **kwargs):
     """Method to write figures in various file formats
 
     Args:
-        plot_object (`str`):            file format identifier i.e. png or pdf
+        file_format (`str`):            File format identifier i.e. png or pdf
         plot_object (`ggplot object`):  ggplot object
-        file (`str`):                   File path + File name [String] for figure to save
+        file (`str`):                   File path + file name of the figure to save
 
     Keyword Args:
          width (`int`):                 Figure width (optional)
