@@ -50,7 +50,7 @@ class Settings(object):
         Settings representation.
 
         Returns:
-               text (`str`)      Settings representation of pyIMD parameters and project configuration as formatted text
+               text (`str`):      Settings representation of pyIMD parameters and project configuration as formatted text
         """
         return "General settings: \n\tfigure_with: %s (%s) \n\tfigure_height: %s (%s) \n\tfigure_units: %s (%s) " \
                "\n\tfigure_format: %s (%s) \n\tfigure_resolution_dpi: %s (%s) " \
