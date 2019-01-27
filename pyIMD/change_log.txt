@@ -1,0 +1,12 @@
+- 0.0.5
+            - New feature: Added documentation
+- 0.0.4
+            - New feature: Added cell on cantilever position correction.
+- 0.0.3
+            - New feature: Added image montage generator to pyIMD.plotting.figures
+            - New feature: Batch project calculation
+            - Fixed Bug: Reading project xml file did not recognize file delimiter properly.
+- 0.0.2
+            - Fixed Bug: Opening multiple projects in a row did not update drop down menus.
+- 0.0.1
+            - Alpha Pre release.
