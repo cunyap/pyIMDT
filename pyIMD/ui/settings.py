@@ -10,17 +10,34 @@ __author__ = 'Andreas P. Cuny'
 
 
 class Settings(QDialog):
+    """
+    Settings QDialog user interface implementation.
 
+    """
     settings_has_changed = pyqtSignal(dict, name='settings_has_changed')
+    """
+    pyqtSignal sends dictionary with all settings
+
+    Returns:
+        settings ('dict'):                         Dictionary with settings.
+    """
     send_to_console = pyqtSignal(str)
+    """
+    pyqtSignal sends message to console
+
+    Returns:
+        message ('str'):                           Status message to be send to console.
+    """
 
     def __init__(self, settings_dictionary):
         """
-        Constructor.
+        Settings user interface (UI) constructor.
+
+        Returns:
+            QDialog ('obj'):     Settings ui object
         """
         super(Settings, self).__init__()
         uic.loadUi(resource_path(os.path.join('ui', 'setting_dialog.ui')), self)
-        # self.setupUi(self)
         self.setWindowTitle('pyIMD :: Settings')
         self.settingsIcon = QIcon()
         self.settingsIcon.addPixmap(self.style().standardPixmap(QStyle.SP_FileDialogDetailedView), QIcon.Disabled,
@@ -32,7 +49,7 @@ class Settings(QDialog):
         # Establish connections
         self.defaultBtn.clicked.connect(self.set_defaults)
         self.commitBtn.clicked.connect(self.commit_parameters)
-        self.cancelBtn.clicked.connect(self.close_dialog)
+        self.cancelBtn.clicked.connect(self.close_settings_dialog)
 
         double_validator = QDoubleValidator()
         self.figure_width_edit.setValidator(double_validator)
@@ -53,6 +70,12 @@ class Settings(QDialog):
         self.cell_position_edit.textChanged.connect(self.check_state)
         self.read_text_data_from_line_edit.setValidator(double_validator)
         self.read_text_data_from_line_edit.textChanged.connect(self.check_state)
+        self.figure_plot_every_nth_point_edit.setValidator(double_validator)
+        self.figure_plot_every_nth_point_edit.textChanged.connect(self.check_state)
+        self.rolling_window_size_edit.setValidator(double_validator)
+        self.rolling_window_size_edit.textChanged.connect(self.check_state)
+        self.frequency_offset_edit.setValidator(double_validator)
+        self.frequency_offset_edit.textChanged.connect(self.check_state)
 
         reg_ex = QRegExp("[0-9-a-z-A-Z_]+")
         self.figure_name_wo_cell_edit.setValidator(QRegExpValidator(reg_ex, self.figure_name_wo_cell_edit))
@@ -85,8 +108,10 @@ class Settings(QDialog):
 
     def set_defaults(self):
         """
-        Set parameters default values.
-        :return: void
+        Set parameters default values to user interface.
+
+        Returns:
+            void:                   None
         """
         # Set default values
         self.figure_format_edit.setText(str(FIGURE_FORMAT))
@@ -97,6 +122,7 @@ class Settings(QDialog):
         self.figure_name_wo_cell_edit.setText(str(FIGURE_NAME_PRE_START_NO_CELL))
         self.figure_name_w_cell_edit.setText(str(FIGURE_NAME_PRE_START_WITH_CELL))
         self.figure_name_data_edit.setText(str(FIGURE_NAME_MEASURED_DATA))
+        self.figure_plot_every_nth_point_edit.setText(str(FIGURE_PLOT_EVERY_NTH_POINT))
         self.conversion_factor_hz_edit.setText(str(CONVERSION_FACTOR_HZ_TO_KHZ))
         self.conversion_factor_deg_edit.setText(str(CONVERSION_FACTOR_DEG_TO_RAD))
         self.spring_constant_edit.setText(str(SPRING_CONSTANT))
@@ -105,12 +131,17 @@ class Settings(QDialog):
         self.intial_param_guess_edit.setText(str(INITIAL_PARAMETER_GUESS))
         self.lower_param_bound_edit.setText(str(LOWER_PARAMETER_BOUNDS))
         self.upper_param_bound_edit.setText(str(UPPER_PARAMETER_BOUNDS))
+        self.rolling_window_size_edit.setText(str(ROLLING_WINDOW_SIZE))
+        self.frequency_offset_edit.setText(str(FREQUENCY_OFFSET))
         self.read_text_data_from_line_edit.setText(str(READ_TEXT_DATA_FROM_LINE))
         self.text_data_delimiter_edit.setText(repr(TEXT_DATA_DELIMITER).replace("'", ""))
 
     def set_values(self):
         """
-        Set parameter values.
+        Set parameter values to user interface.
+
+        Returns:
+            void:                      None
         """
         # Set default
         self.figure_format_edit.setText(str(self.settings_dictionary['figure_format']))
@@ -121,6 +152,7 @@ class Settings(QDialog):
         self.figure_name_wo_cell_edit.setText(str(self.settings_dictionary['figure_name_pre_start_no_cell']))
         self.figure_name_w_cell_edit.setText(str(self.settings_dictionary['figure_name_pre_start_with_cell']))
         self.figure_name_data_edit.setText(str(self.settings_dictionary['figure_name_measured_data']))
+        self.figure_plot_every_nth_point_edit.setText(str(self.settings_dictionary['figure_plot_every_nth_point']))
         self.conversion_factor_hz_edit.setText(str(self.settings_dictionary['conversion_factor_hz_to_khz']))
         self.conversion_factor_deg_edit.setText(str(self.settings_dictionary['conversion_factor_deg_to_rad']))
         self.spring_constant_edit.setText(str(self.settings_dictionary['spring_constant']))
@@ -129,14 +161,18 @@ class Settings(QDialog):
         self.intial_param_guess_edit.setText(str(self.settings_dictionary['initial_parameter_guess']))
         self.lower_param_bound_edit.setText(str(self.settings_dictionary['lower_parameter_bounds']))
         self.upper_param_bound_edit.setText(str(self.settings_dictionary['upper_parameter_bounds']))
+        self.rolling_window_size_edit.setText(str(self.settings_dictionary['rolling_window_size']))
+        self.frequency_offset_edit.setText(str(self.settings_dictionary['frequency_offset']))
         self.read_text_data_from_line_edit.setText(str(self.settings_dictionary['read_text_data_from_line']))
         self.text_data_delimiter_edit.setText((self.settings_dictionary['text_data_delimiter']))
         # self.text_data_delimiter_edit.setText(repr(self.settings_dictionary['text_data_delimiter']).replace("'", ""))
 
     def commit_parameters(self):
         """
-        Close dialog without updating parameters.
-        :return: void
+        Saves changes on parameters.
+
+        Returns:
+            Parameters ('dict'):     Returns the changed parameters as dictionary.
         """
 
         has_changed = False
@@ -181,6 +217,11 @@ class Settings(QDialog):
             self.settings_dictionary["figure_name_measured_data"] = figure_name_measured
             has_changed = True
 
+        figure_plot_every_nth_point = int(self.figure_plot_every_nth_point_edit.text())
+        if not self.settings_dictionary["figure_plot_every_nth_point"] == figure_plot_every_nth_point:
+            self.settings_dictionary["figure_plot_every_nth_point"] = figure_plot_every_nth_point
+            has_changed = True
+
         conversion_factor_hz = float(self.conversion_factor_hz_edit.text())
         if not self.settings_dictionary["conversion_factor_hz_to_khz"] == conversion_factor_hz:
             self.settings_dictionary["conversion_factor_hz_to_khz"] = conversion_factor_hz
@@ -221,6 +262,16 @@ class Settings(QDialog):
             self.settings_dictionary["upper_parameter_bounds"] = upper_bound
             has_changed = True
 
+        rolling_window_size = str(self.rolling_window_size_edit.text())
+        if not self.settings_dictionary["rolling_window_size"] == rolling_window_size:
+            self.settings_dictionary["rolling_window_size"] = rolling_window_size
+            has_changed = True
+
+        frequency_offset = str(self.frequency_offset_edit.text())
+        if not self.settings_dictionary["frequency_offset"] == frequency_offset:
+            self.settings_dictionary["frequency_offset"] = frequency_offset
+            has_changed = True
+
         read_from_line = int(self.read_text_data_from_line_edit.text())
         if not self.settings_dictionary["read_text_data_from_line"] == read_from_line:
             self.settings_dictionary["read_text_data_from_line"] = read_from_line
@@ -240,6 +291,12 @@ class Settings(QDialog):
         self.close()
 
     def check_state(self):
+        """
+        Live check if parameters entered by user are valid.
+
+        Returns:
+            sender ('obj')                Returns color formatter validator state.
+        """
         sender = self.sender()
         validator = sender.validator()
         state = validator.validate(sender.text(), 0)[0]
@@ -252,11 +309,19 @@ class Settings(QDialog):
         sender.setStyleSheet('QLineEdit { background-color: %s }' % color)
 
     def print_to_console(self, string):
+        """
+        Print changes to console
+
+        Returns:
+            Message ('str'):                Prints message to console.
+        """
         self.send_to_console.emit(string)
 
-    def close_dialog(self):
+    def close_settings_dialog(self):
         """
-        Close dialog without updating parameters.
-        :return: void
+        Close the settings UI dialog without saving changes made on parameters
+
+        Returns:
+            void:                           None.
         """
         self.close()
