@@ -482,7 +482,7 @@ class Settings(object):
             lower_parameter_bounds (`list`):         Lower parameter bounds
             upper_parameter_bounds (`list`):         Upper parameter bounds
             rolling_window_size ('int'):             Window size for calculating the rolling average.
-            frequency_offset ('float'):              Frequceny offset
+            frequency_offset ('float'):              Frequency offset
             cantilever_length (`float`):             Cantilever length in microns
             cell_position (`float`):                 Cell position offset from cantilever tip in microns
             project_folder_path (`str`):             Path to project data files. Also used to store pyIMD results
