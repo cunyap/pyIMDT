@@ -573,7 +573,7 @@ class Settings(object):
             # Add the SubElements
             general_settings = etree.SubElement(root, 'GeneralSettings')
             project_settings = etree.SubElement(root, 'ProjectSettings')
-            selected_files = etree.SubElement(project_settings, 'SelectedFiles')
+            selected_files = etree.SubElement(project_settings, 'selected_files')
             # Add the SubSubElements for the general settings
             figure_format = etree.SubElement(general_settings, 'figure_format')
             figure_width = etree.SubElement(general_settings, 'figure_width')
