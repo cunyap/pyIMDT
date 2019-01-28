@@ -95,11 +95,13 @@ def plot_frequency_shift(x, y, resonance_frequency_without, parameter_without, x
     return p
 
 
-def plot_mass(calculated_cell_mass):
+def plot_mass(calculated_cell_mass, plot_every_nth_point):
     """ Plots the resulting mass
 
     Args:
         calculated_cell_mass (`pandas data frame`):  Pandas data frame [Nx2] with time and calculated cell mass data
+        plot_every_nth_point (`int`):                If 1 all data points are plotted. Otherwise every nth data point is
+                                                     used for plotting.
 
     Returns:
         p (`ggplot object`):                         Returns a ggplot plot object
@@ -109,6 +111,7 @@ def plot_mass(calculated_cell_mass):
     col_names = list(calculated_cell_mass)
     col_names[0] = 'Time [h]'
     calculated_cell_mass.columns = col_names
+    calculated_cell_mass = calculated_cell_mass.iloc[::plot_every_nth_point, :]
 
     # Plot data
     p = ggplot(aes(x=col_names[0], y=col_names[1]), data=calculated_cell_mass) + \
