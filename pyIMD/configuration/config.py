@@ -265,7 +265,8 @@ class Settings(object):
 
     lower_parameter_bounds = property(operator.attrgetter('_lower_parameter_bounds'))
     """
-    Parameter defining the lower parameter bounds
+    Parameter defining the lower parameter bounds.
+    
     Args:
         array (`list`):    Lower parameter bounds.
     """
