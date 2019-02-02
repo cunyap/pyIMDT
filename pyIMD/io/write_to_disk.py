@@ -17,7 +17,7 @@ def write_to_png(plot_object, file, **kwargs):
          resolution (`int`):          Figure resolution in dots per inch [dpi] (optional)
 
     Returns:
-            (`.png`):                 Writes figure to disk
+           png file (`void`):         Writes figure to disk as png
     """
     if 'width' and 'height' and 'units' and 'resolution' in kwargs:
         width = kwargs.get('width')
@@ -45,7 +45,7 @@ def write_to_pdf(plot_object, file, **kwargs):
          resolution (`int`):            Figure resolution in dots per inch [dpi] (optional)
 
     Returns:
-            (`.pdf`):                   Writes figure to disk
+          pdf file (`void`):            Writes figure to disk as pdf
 
     """
     if 'width' and 'height' and 'units' and 'resolution' in kwargs:
@@ -75,7 +75,7 @@ def write_to_disk_as(file_format, plot_object, file, **kwargs):
          resolution (`int`):            Figure resolution in dots per inch [dpi] (optional)
 
     Returns:
-                                        Writes figure to disk in the respective file format
+          file (`void`):                Writes figure to disk in the respective file format
 
     """
     if file_format == 'pdf':
