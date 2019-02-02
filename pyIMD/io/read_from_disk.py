@@ -43,6 +43,7 @@ def read_from_file(file, delimiter):
     Args:
         file (`str`):               File path + file name to a .TDMS or .txt file.
         delimiter (`str`):          Delimiter used in the data file to separate columns
+
     Returns:
         data (`pandas data frame`):  Returns data structured in a pandas data frame.
     """
@@ -53,6 +54,8 @@ def read_from_file(file, delimiter):
     elif p.suffix == '.txt':
         data = read_from_text(file, delimiter, 0)
     elif p.suffix == '':
+        data = read_from_text(file, delimiter, 0)
+    elif p.suffix == '.csv':
         data = read_from_text(file, delimiter, 0)
 
     # Check how many columns we have. For PLL we expect only 2 (minimal) or 7 (default TDMS file). For Cont.Sweep we
