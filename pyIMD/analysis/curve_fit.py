@@ -16,7 +16,7 @@ def fit_function(x, fn, q, a, b):
          b (`float`):              Offset of the background
 
     Returns:
-    phase (`float`):               Returns the phase.
+        phase (`float`):           Returns the phase.
     """
 
     phase = -np.arctan(q * (fn * fn - x * x)/(fn * x)) + a * x + b
