@@ -32,6 +32,9 @@ class Settings(object):
         self.lower_parameter_bounds = LOWER_PARAMETER_BOUNDS
         self.upper_parameter_bounds = UPPER_PARAMETER_BOUNDS
         self.rolling_window_size = ROLLING_WINDOW_SIZE
+        self.correct_for_frequency_offset = CORRECT_FOR_FREQUENCY_OFFSET
+        self.frequency_offset_mode = FREQUENCY_OFFSET_MODE
+        self.frequency_offset_n_measurements_used = FREQUENCY_OFFSET_N_MEASUREMENTS_USED
         self.frequency_offset = FREQUENCY_OFFSET
         self.read_text_data_from_line = READ_TEXT_DATA_FROM_LINE
         self.cantilever_length = CANTILEVER_LENGTH
@@ -60,12 +63,12 @@ class Settings(object):
                "\n\tconversion_factor_deg_to_rad: %s (%s) \n\tspring_constant: %s (%s) " \
                "\n\tinitial_parameter_guess: %s (%s) \n\tlower_parameter_bounds: %s (%s) " \
                "\n\tupper_parameter_bounds: %s (%s) \n\trolling_window_size: % s( % s) " \
-               "\n\tfrequency_offset: % s( % s) \n\tread_text_data_from_line: %s (%s) " \
-               "\n\tcantilever_length: %s (%s) \n\tcell_position: %s (%s) " \
-               "\n\ttext_data_delimiter: %s (%s) \n" \
-               "Project settings: \n\tproject_folder_path: %s (%s) \n\tcalculation_mode: %s (%s) \ " \
-               "\n\tpre_start_no_cell_path: %s (%s) \n\tpre_start_with_cell_path: %s (%s) \ " \
-               "\n\tmeasurements_path: %s (%s) \n\tselected_files: %s (%s) " \
+               "\n\tcorrect_for_frequency_offset: % s( % s) \n\tfrequency_offset_mode: % s( % s) " \
+               "\n\tfrequency_offset_n_measurements_used: % s( % s) \n\tfrequency_offset: % s( % s) " \
+               "\n\tread_text_data_from_line: %s (%s) \n\tcantilever_length: %s (%s) \n\tcell_position: %s (%s) " \
+               "\n\ttext_data_delimiter: %s (%s) \n" "Project settings: \n\tproject_folder_path: %s (%s) " \
+               "\n\tcalculation_mode: %s (%s) \ \n\tpre_start_no_cell_path: %s (%s) " \
+               "\n\tpre_start_with_cell_path: %s (%s) \n\tmeasurements_path: %s (%s) \n\tselected_files: %s (%s) " \
                % (
                    self.figure_width, type(self.figure_width), self.figure_height, type(self.figure_height),
                    self.figure_units, type(self.figure_units), self.figure_format, type(self.figure_format),
@@ -79,9 +82,11 @@ class Settings(object):
                    self.initial_parameter_guess, type(self.initial_parameter_guess),
                    self.lower_parameter_bounds, type(self.lower_parameter_bounds), self.upper_parameter_bounds,
                    type(self.upper_parameter_bounds), self.rolling_window_size, type(self.rolling_window_size),
-                   self.frequency_offset, type(self.frequency_offset), self.read_text_data_from_line,
-                   type(self.read_text_data_from_line), self.cantilever_length, type(self.cantilever_length),
-                   self.cell_position, type(self.cell_position), self.text_data_delimiter,
+                   self.correct_for_frequency_offset, type(self.correct_for_frequency_offset), self.frequency_offset_mode,
+                   type(self.frequency_offset_mode), self.frequency_offset_n_measurements_used,
+                   type(self.frequency_offset_n_measurements_used), self.frequency_offset, type(self.frequency_offset),
+                   self.read_text_data_from_line, type(self.read_text_data_from_line), self.cantilever_length,
+                   type(self.cantilever_length), self.cell_position, type(self.cell_position), self.text_data_delimiter,
                    type(self.text_data_delimiter), self.project_folder_path, type(self.project_folder_path),
                    self.calculation_mode, type(self.calculation_mode), self.pre_start_no_cell_path,
                    type(self.pre_start_no_cell_path), self.pre_start_with_cell_path,
@@ -237,7 +242,7 @@ class Settings(object):
     Parameter defining the spring constant of the cantilever.
 
     Args:
-        sprint_constant (`float`):    Spring constant of the cantilever.
+        spring_constant (`float`):    Spring constant of the cantilever.
     """
     @spring_constant.setter
     def spring_constant(self, spring_constant):
@@ -275,7 +280,7 @@ class Settings(object):
     Parameter defining the upper parameter bounds.
 
     Args:
-        factor (`list`):    Upper parameter bounds
+        array (`list`):    Upper parameter bounds
     """
     @upper_parameter_bounds.setter
     def upper_parameter_bounds(self, array):
@@ -296,12 +301,55 @@ class Settings(object):
             raise Exception("Window size should be of type int.")
         self._rolling_window_size = window_size
 
+    correct_for_frequency_offset = property(operator.attrgetter('_correct_for_frequency_offset'))
+    """
+    Parameter defining if PLL measurement data should be corrected for a potential frequency offset between the 
+    frequency pre start measured after a cell is attached to the cantilever and the actual measurement.
+
+    Args:
+        correction (`boolean`):    Boolean. False by default. True runs in the PLL case a frequency offset correction.
+    """
+
+    @correct_for_frequency_offset.setter
+    def correct_for_frequency_offset(self, correction):
+        if not (type(correction == bool)):
+            raise Exception("Correct for frequency offset should be of type bool.")
+        self._correct_for_frequency_offset = correction
+
+    frequency_offset_mode = property(operator.attrgetter('_frequency_offset_mode'))
+    """
+    Parameter defining the mode to be used to calculate the frequency offset. This applies only to in PLL recorded data.
+
+    Args:
+        mode (`str`):    Mode for frequency offset calculation. Either Auto or Manual.
+    """
+
+    @frequency_offset_mode.setter
+    def frequency_offset_mode(self, mode):
+        if not (type(mode == str), mode == 'Auto', mode == 'Manual'):
+            raise Exception("Frequency offset mode should be of type str. Auto or Manual")
+        self._frequency_offset_mode = mode
+
+    frequency_offset_n_measurements_used = property(operator.attrgetter('_frequency_offset_n_measurements_used'))
+    """
+    Parameter defining how many data points of the measurement should be used to calculate the average frequency offset. 
+
+    Args:
+        n_measurements (`int`):    Number of measurement data points to be used to calculate the average freq. offset.
+    """
+
+    @frequency_offset_n_measurements_used.setter
+    def frequency_offset_n_measurements_used(self, n_measurements):
+        if not (type(n_measurements == float), type(n_measurements) == int, n_measurements > 0):
+            raise Exception("Frequency offset n measurements used should be of of type int or float.")
+        self._frequency_offset_n_measurements_used = n_measurements
+
     frequency_offset = property(operator.attrgetter('_frequency_offset'))
     """
     Parameter defining the frequency offset. 
 
     Args:
-        window_size (`int`):    Frequency offset.
+        freq_offset (`int`):    Frequency offset with which the measurement data will be corrected with.
     """
 
     @frequency_offset.setter
@@ -456,7 +504,7 @@ class Settings(object):
                                                   measurement (tdms file (default) or txt file).
             text_data_delimiter (`str`):          Text file data delimiter i.e '\t' for tab delimited or ',' for
                                                   comma separated data.
-            read_text_data_from_line (`str`):      Line number from which data of pre start measurements should be
+            read_text_data_from_line (`int`):     Line number from which data of pre start measurements should be
                                                   read. Typically the first few lines contain header information
                                                   and no data.
             calculation_mode (`str`):             PLL         := phase lock loops mode
@@ -482,7 +530,11 @@ class Settings(object):
             lower_parameter_bounds (`list`):         Lower parameter bounds
             upper_parameter_bounds (`list`):         Upper parameter bounds
             rolling_window_size ('int'):             Window size for calculating the rolling average.
-            frequency_offset ('float'):              Frequency offset
+            correct_for_frequency_offset ('bool'):   Correct for potential frequency offset during PLL mode.
+            frequency_offset_mode ('str'):           Frequency offset correction mode (Auto or Manual)
+            frequency_offset_n_measurements_used ('int'): Number of measurement data points to be used for automatic
+                                                     frequency offset correction
+            frequency_offset ('float'):              Frequency offset either set manually or calculated automatically
             cantilever_length (`float`):             Cantilever length in microns
             cell_position (`float`):                 Cell position offset from cantilever tip in microns
             project_folder_path (`str`):             Path to project data files. Also used to store pyIMD results
@@ -593,6 +645,10 @@ class Settings(object):
             lower_parameter_bounds = etree.SubElement(general_settings, 'lower_parameter_bounds')
             upper_parameter_bounds = etree.SubElement(general_settings, 'upper_parameter_bounds')
             rolling_window_size = etree.SubElement(general_settings, 'rolling_window_size')
+            correct_for_frequency_offset = etree.SubElement(general_settings, 'correct_for_frequency_offset')
+            frequency_offset_mode = etree.SubElement(general_settings, 'frequency_offset_mode')
+            frequency_offset_n_measurements_used = etree.SubElement(general_settings,
+                                                                    'frequency_offset_n_measurements_used')
             frequency_offset = etree.SubElement(general_settings, 'frequency_offset')
             read_text_data_from_line = etree.SubElement(general_settings, 'read_text_data_from_line')
             text_data_delimiter = etree.SubElement(general_settings, 'text_data_delimiter')
@@ -622,6 +678,9 @@ class Settings(object):
             lower_parameter_bounds.text = str(self.lower_parameter_bounds)
             upper_parameter_bounds.text = str(self.upper_parameter_bounds)
             rolling_window_size.text = str(self.rolling_window_size)
+            correct_for_frequency_offset.text = str(self.correct_for_frequency_offset)
+            frequency_offset_mode.text = str(self.frequency_offset_mode)
+            frequency_offset_n_measurements_used.text = str(self.frequency_offset_n_measurements_used)
             frequency_offset.text = str(self.frequency_offset)
             read_text_data_from_line.text = str(self.read_text_data_from_line)
             text_data_delimiter.text = self.text_data_delimiter
