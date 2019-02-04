@@ -587,7 +587,7 @@ class Settings(object):
                     try:
                         setattr(self, key, yaml.safe_load(json.loads(json.dumps(value))))
                     except Exception as e:
-                        print(e)
+                        print('General settings error:', e)
                 else:
                     # fix escape characters ie \\t or \\n or \\s
                     setattr(self, key, value.replace("'", ""))
@@ -602,7 +602,8 @@ class Settings(object):
                     else:
                         setattr(self, key, value['File'])
                 except Exception as e:
-                    print(e)
+                    print('Project settings error:', e)
+            print(self)
 
             return "Project {} successfully opened".format(pathlib.Path(file_path).name)
         except Exception as e:
