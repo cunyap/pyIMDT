@@ -1,4 +1,4 @@
-Use and Examples
+Examples of usage
 ================
 
 The two examples show the basic usage of **pyIMD** to callculate the mass
