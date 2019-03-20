@@ -7,15 +7,15 @@ __author__ = 'Andreas P. Cuny'
 
 
 def calculate_mass(spring_constant, res_freq_after_cell_load, res_freq_before_cell_load):
-    """Calculates the mass given the spring constant of the cantilever and the resonance frequency without and with \
+    """Calculates the mass given the spring constant of the cantilever and the natural resonance frequency without and with \
     cell attached to the cantilever.
 
     Args:
 
     spring_constant (`float`):            Stiffness of the cantilever [in N/m]
-    res_freq_after_cell_load (`float`):   Resonance frequency of the cantilever AFTER the cell is picked up, at \
+    res_freq_after_cell_load (`float`):   Natural resonance frequency of the cantilever AFTER the cell is picked up, at \
                                                  time point t [in kHz]
-    res_freq_before_cell_load (`float`):  Resonance frequency of the cantilever BEFORE the cell is picked up \
+    res_freq_before_cell_load (`float`):  Natural resonance frequency of the cantilever BEFORE the cell is picked up \
                                                  [in kHz]
 
 
@@ -32,9 +32,9 @@ def calculate_mass(spring_constant, res_freq_after_cell_load, res_freq_before_ce
 def calculate_resonance_frequencies(frequency_array, phase_array, initial_param_guess, lower_param_bounds,
                                     upper_param_bounds):
 
-    """Calculate_resonance_frequencies calculates the resonance frequency
+    """Calculates the  natural resonance frequency
        from input frequency and phase array. It does so via fitting the phase response of a harmonic oscillator \
-       (defined in pyIMD.analysis.curve_fit). The first fit parameter of the fit parameter array is the resonance \
+       (defined in pyIMD.analysis.curve_fit). The first fit parameter of the fit parameter array is the natural resonance \
        frequency.
 
     Args:
@@ -65,8 +65,8 @@ def calculate_resonance_frequencies(frequency_array, phase_array, initial_param_
 
 def calculate_position_correction(cell_position, cantilever_length):
 
-    """Calculates the correction factor with which the measured mass needs to be
-    multiplied to get all the mass present on the cantilever. This is needed as the cantilever is differently sensitive
+    """Calculates the correction factor with which the measured/apparent mass needs to be
+    multiplied to get the cells total mass. It is needed as the cantilever is differently sensitive
     to mass, depending on the location where this mass is attached. The measurements are performed with the first mode \
     of vibration, which is described by the factor kL = 1.875. For higher modes, different would be used (4.694 for \
     the second , 7.855 for the third etc.)
