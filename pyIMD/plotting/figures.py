@@ -36,11 +36,8 @@ def plot_fitting(x, y, resonance_frequency, parameter):
         geom_point() + \
         geom_line(aes(x=col_names[0], y=col_names[2]),  color='red', size=0.5) + \
         theme_seaborn(style='ticks', context='talk', font_scale=0.75) + \
-        theme(figure_size=(15, 7),
-              strip_background=element_rect(fill='white'),
-              axis_line_x=element_line(color='black'),
-              axis_line_y=element_line(color='black'),
-              legend_key=element_rect(fill='white', color='white'))
+        theme(figure_size=(15, 7), strip_background=element_rect(fill='white'), axis_line_x=element_line(color='black'),
+              axis_line_y=element_line(color='black'), legend_key=element_rect(fill='white', color='white'))
     return p
 
 
@@ -87,11 +84,8 @@ def plot_frequency_shift(x, y, resonance_frequency_without, parameter_without, x
         ylab('Phase [rad]') + \
         labs(fill='Raw data', color='Function fits') + \
         theme_seaborn(style='ticks', context='talk', font_scale=0.75) + \
-        theme(figure_size=(15, 7),
-            strip_background=element_rect(fill='white'),
-            axis_line_x=element_line(color='black'),
-            axis_line_y=element_line(color='black'),
-            legend_key=element_rect(fill='white', color='white'))
+        theme(figure_size=(15, 7), strip_background=element_rect(fill='white'), axis_line_x=element_line(color='black'),
+              axis_line_y=element_line(color='black'), legend_key=element_rect(fill='white', color='white'))
     return p
 
 
@@ -99,7 +93,8 @@ def plot_mass(calculated_cell_mass, plot_every_nth_point):
     """ Plots the resulting mass
 
     Args:
-        calculated_cell_mass (`pandas data frame`):  Pandas data frame [Nx2] with time and calculated cell mass data
+        calculated_cell_mass (`pandas data frame`):  Pandas data frame [Nx3] with time and calculated cell mass and
+                                                     rolling mean averaged cell mass
         plot_every_nth_point (`int`):                If 1 all data points are plotted. Otherwise every nth data point is
                                                      used for plotting.
 
