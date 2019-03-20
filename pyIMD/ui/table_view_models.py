@@ -4,7 +4,10 @@ import pandas as pd
 
 
 class PandasDataFrameModel(QtCore.QAbstractTableModel):
-    def __init__(self, data_frame = pd.DataFrame(), parent=None):
+    """
+    Class implementing a QAbstractTableModel to populate a QTableView from a pandas data frame
+    """
+    def __init__(self, data_frame=pd.DataFrame(), parent=None):
         QtCore.QAbstractTableModel.__init__(self, parent=parent)
         self._data_frame = data_frame
 
@@ -35,16 +38,12 @@ class PandasDataFrameModel(QtCore.QAbstractTableModel):
     def setData(self, index, value, role):
         row = self._data_frame.index[index.row()]
         col = self._data_frame.columns[index.column()]
-        if hasattr(value, 'toPyObject'):
-            # PyQt4 gets a QVariant
+        try:
             value = value.toPyObject()
-        else:
-            # PySide gets an unicode
-            dtype = self._data_frame[col].dtype
-            if dtype != object:
-                value = None if value == '' else dtype.type(value)
-        self._data_frame.set_value(row, col, value)
-        return True
+            self._data_frame.set_value(row, col, value)
+            return True
+        except ValueError:
+            return False
 
     def rowCount(self, parent=QtCore.QModelIndex()):
         return len(self._data_frame.index)
@@ -52,9 +51,8 @@ class PandasDataFrameModel(QtCore.QAbstractTableModel):
     def columnCount(self, parent=QtCore.QModelIndex()):
         return len(self._data_frame.columns)
 
-    def sort(self, column, order):
-        column_name = self._data_frame.columns.tolist()[column]
-        self.layoutAboutToBeChanged.emit()
-        self._data_frame.sort_values(column_name, ascending=order == QtCore.Qt.AscendingOrder, inplace=True)
-        self._data_frame.reset_index(inplace=True, drop=True)
-        self.layoutChanged.emit()
+    def flags(self, index):
+        flags = super(self.__class__, self).flags(index)
+        flags |= QtCore.Qt.ItemIsSelectable
+        flags |= QtCore.Qt.ItemIsEnabled
+        return flags

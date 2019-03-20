@@ -27,7 +27,7 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item row="0" column="0">
-       <widget class="QGraphicsView" name="graphicsView"/>
+       <widget class="PlotWidget" name="graphicsView"/>
       </item>
       <item row="1" column="0">
        <widget class="QTableView" name="tableView">
@@ -74,194 +74,195 @@
        <attribute name="title">
         <string>Configuration</string>
        </attribute>
-       <widget class="QWidget" name="gridLayoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>271</width>
-          <height>491</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="gridLayout">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetDefaultConstraint</enum>
-         </property>
-         <item row="10" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <property name="sizeConstraint">
-            <enum>QLayout::SetMinimumSize</enum>
-           </property>
-           <item>
-            <widget class="QRadioButton" name="autoRadio">
-             <property name="text">
-              <string>Auto detect</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="pllRadio">
-             <property name="text">
-              <string>PLL</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="contSweepRadio">
-             <property name="text">
-              <string>Con. Sweep</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="6" column="0">
-          <widget class="QComboBox" name="noCellDataBox"/>
-         </item>
-         <item row="8" column="0">
-          <widget class="QComboBox" name="withCellDataBox"/>
-         </item>
-         <item row="4" column="0">
-          <widget class="QComboBox" name="measuredDataBox">
-           <property name="statusTip">
-            <string/>
-           </property>
-           <property name="currentText">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="noCellDataLabel">
-           <property name="text">
-            <string>Select pre start no cell data:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="withCellDataLabel">
-           <property name="text">
-            <string>Select pre start with cell data:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="11" column="0">
-          <widget class="QPushButton" name="runCalculationBtn">
-           <property name="text">
-            <string>Run calculation</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="measuredDataLabel">
-           <property name="text">
-            <string>Select measured data:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="0">
-          <widget class="QLabel" name="calculationModeLabel">
-           <property name="text">
-            <string>Select calculation mode:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QPushButton" name="selectDirBtn">
-           <property name="text">
-            <string>Select directory</string>
-           </property>
-          </widget>
-         </item>
-         <item row="12" column="0">
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="2" column="0">
-          <widget class="QListWidget" name="listWidget"/>
-         </item>
-        </layout>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <layout class="QGridLayout" name="gridLayout">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetDefaultConstraint</enum>
+          </property>
+          <property name="horizontalSpacing">
+           <number>6</number>
+          </property>
+          <item row="10" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMinimumSize</enum>
+            </property>
+            <item>
+             <widget class="QRadioButton" name="autoRadio">
+              <property name="text">
+               <string>Auto detect</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="pllRadio">
+              <property name="text">
+               <string>PLL</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="contSweepRadio">
+              <property name="text">
+               <string>Cont.Sweep</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="6" column="0">
+           <widget class="QComboBox" name="noCellDataBox"/>
+          </item>
+          <item row="8" column="0">
+           <widget class="QComboBox" name="withCellDataBox"/>
+          </item>
+          <item row="4" column="0">
+           <widget class="QComboBox" name="measuredDataBox">
+            <property name="statusTip">
+             <string/>
+            </property>
+            <property name="currentText">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="noCellDataLabel">
+            <property name="text">
+             <string>Select pre start no cell data:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="withCellDataLabel">
+            <property name="text">
+             <string>Select pre start with cell data:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="0">
+           <widget class="QPushButton" name="runCalculationBtn">
+            <property name="text">
+             <string>Run calculation</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="measuredDataLabel">
+            <property name="text">
+             <string>Select measured data:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLabel" name="calculationModeLabel">
+            <property name="text">
+             <string>Select calculation mode:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="selectDirBtn">
+            <property name="text">
+             <string>Select directory</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="0">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="0">
+           <widget class="QTableView" name="tableViewSelData"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="batchTab">
        <attribute name="title">
         <string>Batch processing</string>
        </attribute>
-       <widget class="QWidget" name="gridLayoutWidget_3">
-        <property name="geometry">
-         <rect>
-          <x>-1</x>
-          <y>-1</y>
-          <width>271</width>
-          <height>501</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_5">
-         <item row="2" column="0">
-          <widget class="QListWidget" name="batchFileListWidget"/>
-         </item>
-         <item row="0" column="0">
-          <widget class="QPushButton" name="projectFilesBtn">
-           <property name="text">
-            <string>Select project files</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QPushButton" name="runBatchBtn">
-           <property name="text">
-            <string>Run batch calculation</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="2" column="0">
+           <widget class="QListWidget" name="batchFileListWidget"/>
+          </item>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="projectFilesBtn">
+            <property name="text">
+             <string>Select project files</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QPushButton" name="runBatchBtn">
+            <property name="text">
+             <string>Run batch calculation</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="resultTab">
        <attribute name="title">
         <string>Results</string>
        </attribute>
-       <widget class="QWidget" name="gridLayoutWidget_2">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>9</y>
-          <width>271</width>
-          <height>491</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="gridLayoutResultTab">
-         <item row="0" column="0">
-          <widget class="QLabel" name="viewFiguresLabel">
-           <property name="text">
-            <string>View resulting figures</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QListWidget" name="figureList"/>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="viewDataLabel">
-           <property name="text">
-            <string>Inspect resulting data</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QListWidget" name="dataList"/>
-         </item>
-        </layout>
-       </widget>
+       <layout class="QGridLayout" name="gridLayout_7">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayoutResultTab">
+          <item row="0" column="0">
+           <widget class="QLabel" name="viewDataLabel">
+            <property name="text">
+             <string>Inspect resulting data and display results</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QListWidget" name="dataList"/>
+          </item>
+          <item row="2" column="0">
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -299,8 +300,19 @@
     </property>
     <addaction name="actionView_Console"/>
    </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionQuick_instructions"/>
+    <addaction name="actionRead_documentation"/>
+    <addaction name="actionChange_log"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
+   </widget>
    <addaction name="menuMenu"/>
    <addaction name="menuView"/>
+   <addaction name="menuAbout"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -389,8 +401,35 @@
     <string>Quit</string>
    </property>
   </action>
+  <action name="actionQuick_instructions">
+   <property name="text">
+    <string>Quick instructions</string>
+   </property>
+  </action>
+  <action name="actionChange_log">
+   <property name="text">
+    <string>Change log</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionRead_documentation">
+   <property name="text">
+    <string>Read documentation</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>pyqtgraph</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

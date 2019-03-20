@@ -1,32 +1,34 @@
 import os
 import sys
-import datetime
+import logging
 import pathlib
 import ctypes
-import xmltodict
 import webbrowser
-from lxml import etree
+import pyqtgraph as pg
 from ast import literal_eval
 from PyQt5 import uic, QtWidgets, QtCore, QtGui
-from PyQt5.Qt import QAction, QFileDialog, QScrollArea, QMessageBox, QApplication, QStyle, QTextCursor, QIcon, \
-     QPushButton, QListWidget, QSize
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QFileSystemWatcher, QThreadPool, QSettings
-from PyQt5.QtWidgets import QGraphicsView
+from PyQt5.Qt import QFileDialog, QMessageBox, QApplication, QStyle, QTextCursor, QPushButton, QListWidget, QSize,\
+    QGraphicsSvgItem
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, QSettings
+from pyIMD.analysis.curve_fit import fit_function
 from pyIMD.ui.settings import SettingsDialog
-from pyIMD.ui.file_viewer import FileViewer
 from pyIMD.configuration.defaults import *
-from pyIMD.inertialmassdetermination import InertialMassDetermination
-from pyIMD.ui.table_view_model import PandasDataFrameModel
-from pyIMD.ui.graphics_rendering import GraphicScene
+from pyIMD.imd import InertialMassDetermination
+from pyIMD.ui.table_view_models import PandasDataFrameModel
 from concurrent.futures import ThreadPoolExecutor
 from pyIMD.ui.resource_path import resource_path
 from pyIMD.ui.help import QuickInstructions, ChangeLog, About
 from pyIMD.__init__ import __version__, __operating_system__
+pg.setConfigOption('background', 'w')
+pg.setConfigOption('foreground', 'k')
 
 __author__ = 'Andreas P. Cuny'
 
 
 class Stream(QtCore.QObject):
+    """
+    Implementation of a stream to handle logging messages
+    """
     newText = QtCore.pyqtSignal(str)
 
     def write(self, text: object) -> object:
@@ -34,8 +36,9 @@ class Stream(QtCore.QObject):
 
 
 class IMDWindow(QtWidgets.QMainWindow):
-
-    signal_file_index_changed = pyqtSignal(int, name='file_index_changed')
+    """
+    Implementation of the pyIMD main user interface widnow.
+    """
     send_to_console = pyqtSignal(str)
 
     def __init__(self):
@@ -59,22 +62,13 @@ class IMDWindow(QtWidgets.QMainWindow):
 
         self.settings_dialog = None
         self.about_window = None
-        self.file_viewer = None
-        self.figure_viewer = None
-        self.result_data_viewer = None
         self.file_list = []
-        self.current_file_index = []
-        self.figure_list = []
-        self.current_figure_index = []
         self.current_batch_project_file = []
         self.last_selected_path = ''
         self.show()
         self.console_edit.setReadOnly(True)
         self.radio_btn_name_array = ['autoRadio', 'pllRadio', 'contSweepRadio']
-        self.opening_mode = 0
-        self.thread = None
-        self.threadpool = QThreadPool()
-        self.obj = None
+        self.opening_mode = 0 # intended to be used to distinguish if the ui is started as stand alone or not.
         self.task_done = False
         self.executor = ThreadPoolExecutor(max_workers=4)
 
@@ -97,19 +91,23 @@ class IMDWindow(QtWidgets.QMainWindow):
                            "lower_parameter_bounds": LOWER_PARAMETER_BOUNDS,
                            "upper_parameter_bounds": UPPER_PARAMETER_BOUNDS,
                            "rolling_window_size": ROLLING_WINDOW_SIZE,
+                           "correct_for_frequency_offset": CORRECT_FOR_FREQUENCY_OFFSET,
+                           "frequency_offset_mode": FREQUENCY_OFFSET_MODE,
+                           "frequency_offset_n_measurements_used": FREQUENCY_OFFSET_N_MEASUREMENTS_USED,
                            "frequency_offset": FREQUENCY_OFFSET,
                            "read_text_data_from_line": READ_TEXT_DATA_FROM_LINE,
                            "text_data_delimiter": repr(TEXT_DATA_DELIMITER).replace("'", "")}
 
         self.settings_dialog = SettingsDialog(self.__settings)
+        self.settings_dialog.settings_has_changed.connect(
+            self.on_settings_changed)
         self.settings_dialog.set_values()
         self.setup_console_connection()
         self.selectDirBtn.clicked.connect(self.select_data_files)
-        # self.signal_file_index_changed.connect(self.handle_changed_file_index)
-        self.setup_file_viewer()
-        self.setup_figure_viewer()
+        self.selectDirBtn.setShortcut("Ctrl+N")
 
-        data_items = ['Measured data', 'Pre start no cell data', 'Pre start with cell data', 'Calculated cell mass']
+        data_items = ['Measured data', 'Pre start no cell data', 'Pre start with cell data', 'Pre start frequency shift',
+                      'Calculated cell mass']
         for i in range(0, len(data_items)):
             self.dataList.addItem(str(data_items[i]))
         self.dataList.itemSelectionChanged.connect(self.on_data_list_selection_changed)
@@ -123,7 +121,7 @@ class IMDWindow(QtWidgets.QMainWindow):
         self.actionView_Console.setIcon(QApplication.style().standardIcon(QStyle.SP_DialogApplyButton))
         self.actionView_Console.setShortcut("Ctrl+C")
         self.actionView_Console.setStatusTip('Show / hide console console')
-        self.actionView_Console.triggered.connect(self.view_console)
+        self.actionView_Console.triggered.connect(self.show_console)
 
         self.actionQuit.setIcon(QApplication.style().standardIcon(QStyle.SP_DialogCloseButton))
         self.actionQuit.setShortcut("Ctrl+Q")
@@ -162,67 +160,68 @@ class IMDWindow(QtWidgets.QMainWindow):
 
         sys.stderr = Stream(newText=self.on_update_text)
 
-        self.file_system_watcher = QFileSystemWatcher()
-        self.file_system_watcher.directoryChanged.connect(self.on_folder_change)
-
         self.batchFileListWidget.setSelectionMode(QListWidget.MultiSelection)
         self.tabWidget.setTabEnabled(2, False)
         self.tabWidget.setCurrentIndex(0)
 
-        self.scene = GraphicScene()
-        self.scene.signalMoveOffset.connect(self.on_image_pan)
-        self.graphicsView.setScene(self.scene)
-        self.graphicsView.setViewportUpdateMode(
-            QGraphicsView.FullViewportUpdate)
-        self.graphicsView.setDragMode(QGraphicsView.RubberBandDrag)
-        self.graphicsView.setMouseTracking(True)
+        self.graphicsView.plotItem.ctrlMenu = None
+        self.imd_icon = QGraphicsSvgItem(os.path.join(os.path.join("ui", "icons", "pyIMD_Logo-01.svg")))
+        self.imd_icon.scale(1, -1)
 
-        self.scene.display_image(resource_path(os.path.join(os.path.join("ui", "icons", "pyIMD_Logo-01.png"))))
-        self.scene.redraw()
+        self.graphicsView.addItem(self.imd_icon)
+        self.graphicsView.hideAxis('bottom')
+        self.graphicsView.hideAxis('left')
+
+        self.logger = self.get_logger_object(__name__)
+        self.logger.setLevel(logging.INFO)
+
+        self.imd = InertialMassDetermination()
 
         if int(self.settings.value('display_on_startup')) == 2:
             self.qi.show()
 
     @staticmethod
     def on_read_documentation():
+        """
+        Opens the documentation in the default web browser.
+        """
         webbrowser.open('file://' + os.path.realpath('docs/_build/html/index.html'))
 
     def on_change_log(self):
+        """
+        Displays the change log window.
+        """
         self.change_log.show()
 
     def on_quick_instructions(self):
+        """
+        Displays the quick instructions window.
+        """
         self.qi.show()
 
     def on_about(self):
+        """
+        Displays the about window.
+        """
         self.about_window.show()
 
-    def on_image_pan(self, offset):
-        try:
-            self.graphicsView.verticalScrollBar().setValue(self.graphicsView.verticalScrollBar().value() + offset.y())
-            self.graphicsView.horizontalScrollBar().setValue(self.graphicsView.horizontalScrollBar().value() + offset.x())
-        except Exception as e:
-            self.print_to_console("Error scrolling: " + str(e))
-
-    def on_folder_change(self):
-        # Try to add images to list and then plot
-        file_list = []
-        for file in pathlib.Path(self.last_selected_path).glob('*.png'):
-            file_list.append(file)
-
-        self.figure_list = []
-        for idx in range(0, len(file_list)):
-            self.figure_list.append(str(file_list[idx]))
-
-        self.figure_viewer.set_data([], self.figure_list)
-
     def on_update_text(self, text):
+        """
+        Writes new text to the console at the last text cursor position
+
+        Args:
+            text (`str`):   Text to be shown on the console.
+        """
         cursor = self.console_edit.textCursor()
         cursor.movePosition(QTextCursor.NoMove)
         cursor.insertText(text)
         self.console_edit.setTextCursor(cursor)
         self.console_edit.ensureCursorVisible()
 
-    def view_console(self):
+    def show_console(self):
+        """
+        Show and hide the console with the program log.
+        """
         if self.consoleDock.isVisible():
             self.consoleDock.hide()
             self.actionView_Console.setIcon(QApplication.style().standardIcon(QStyle.SP_DialogCancelButton))
@@ -231,93 +230,173 @@ class IMDWindow(QtWidgets.QMainWindow):
             self.actionView_Console.setIcon(QApplication.style().standardIcon(QStyle.SP_DialogApplyButton))
 
     def run_calculation(self):
-
+        """
+        Implementation of the pyIMD calculation start as new thread.
+        """
         if self.autoRadio.isChecked():
             self.print_to_console("Auto mode not implemented yet: ")
         elif self.contSweepRadio.isChecked():
             self.print_to_console("Sweep mode starting...")
             self.print_to_console('')  # Needed to output logging information to newline in console
-            self.obj = InertialMassDetermination(self.noCellDataBox.currentText(), self.withCellDataBox.currentText(),
-                                                 self.measuredDataBox.currentText(),
-                                                 self.__settings["text_data_delimiter"],
-                                                 int(self.__settings["read_text_data_from_line"]), 0)
-            self.update_settings()
 
-            task = self.executor.submit(self.obj.run_intertial_mass_determination)
+            self.sync_settings()
+
+            task = self.executor.submit(self.imd.run_inertial_mass_determination)
             task.add_done_callback(self.on_task_finished)
 
         elif self.pllRadio.isChecked():
             self.print_to_console("PLL mode starting...")
-
             self.print_to_console('')  # Needed to output logging information to newline in console
-            self.obj = InertialMassDetermination(self.noCellDataBox.currentText(), self.withCellDataBox.currentText(),
-                                                 self.measuredDataBox.currentText(),
-                                                 self.__settings["text_data_delimiter"],
-                                                 int(self.__settings["read_text_data_from_line"]), 1)
-            self.update_settings()
 
-            task = self.executor.submit(self.obj.run_intertial_mass_determination)
+            self.sync_settings()
+
+            task = self.executor.submit(self.imd.run_inertial_mass_determination)
             task.add_done_callback(self.on_task_finished)
 
     def on_task_finished(self, task):
+        """
+        Enable the Result tab after the inertial mass determination run is finished.
+
+        Args:
+        task:  ThreadPoolExecutor task
+        """
         self.tabWidget.setTabEnabled(2, True)
+        self.settings_dialog.frequency_offset_edit.setText(str(self.imd.settings.frequency_offset))
         self.task_done = True
 
     def run_batch_calculation(self):
-
+        """
+        Implementation of the pyIMD calculation batch mode based on pyIMD project files.
+        """
         selected_project_files = []
         for item in self.batchFileListWidget.selectedItems():
             selected_project_files.append(item.text())
 
         if len(selected_project_files) != 0:
             self.print_to_console("Batch calculation mode starting...")
-            for iProject in range(0,len(selected_project_files)):
+            for iProject in range(0, len(selected_project_files)):
                 self.current_batch_project_file = selected_project_files[iProject]  # here iterate over project files
-                print(self.current_batch_project_file)
+                self.print_to_console(self.current_batch_project_file)
                 # 1. Open Project from list
                 self.open_project()
-                # 2. Run
+                # 2. Run calculation
                 self.run_calculation()
                 # 3. Get signal that it is done
-                # Start again
+                # Start next project
 
     def on_combo_box_changed(self, index):
+        """
+        Prints the selected item of the data drop down list to the console.
+
+        Args:
+            index (`int`): Index of the selected item from the drop down list.
+
+        """
         sender = self.sender().objectName()
         if sender == 'noCellDataBox':
+            # self.imd.settings.pre_start_no_cell_path = self.file_list[index]
             self.print_to_console("Pre start no cell file selected:" + self.file_list[index])
         elif sender == 'withCellDataBox':
+            # self.imd.settings.pre_start_with_cell_path = self.file_list[index]
             self.print_to_console("Pre start with cell file selected:" + self.file_list[index])
         elif sender == 'measuredDataBox':
+            # self.imd.settings.measurements_path = self.file_list[index]
             self.print_to_console("Measurement file selected:" + self.file_list[index])
 
     def on_data_list_selection_changed(self):
+        """
+        Adds the selected data to the PandasDataFrameModel model to be displayed in the results table view.
+        """
         item = self.dataList.selectedItems()[0]
         try:
             if item.text() == 'Measured data':
                 # Display data
-                model = PandasDataFrameModel(self.obj.data_measured)
+                model = PandasDataFrameModel(self.imd.data_measured)
                 self.tableView.setModel(model)
                 # Notify user about selection
                 self.print_to_console("Displaying: " + item.text())
 
             elif item.text() == 'Pre start no cell data':
                 # Display data
-                model = PandasDataFrameModel(self.obj.data_pre_start_no_cell)
+                model = PandasDataFrameModel(self.imd.data_pre_start_no_cell)
                 self.tableView.setModel(model)
+                self.graphicsView.clear()
+                self.graphicsView.plot(self.imd.data_pre_start_no_cell.iloc[:, 0],
+                                       self.imd.data_pre_start_no_cell.iloc[:, 2], pen=None, symbol='o',
+                                       symbolPen=pg.hsvColor(0, 0, 0, 0.1), symbolBrush=pg.hsvColor(0, 0, 0, 0.1))
+                y_fit = fit_function(self.imd.data_pre_start_no_cell.iloc[:, 0],
+                                     self.imd.resonance_freq_pre_start_no_cell, self.imd.fit_param_pre_start_no_cell[0],
+                                     self.imd.fit_param_pre_start_no_cell[1], self.imd.fit_param_pre_start_no_cell[2])
+                self.graphicsView.plot(self.imd.data_pre_start_no_cell.iloc[:, 0], y_fit, pen=pg.mkPen('r', width=1.5))
+                self.graphicsView.setLabel('bottom', 'Frequency [kHz]')
+                self.graphicsView.setLabel('left', 'Phase [rad]')
+                self.graphicsView.showGrid(x=True, y=True)
                 # Notify user about selection
                 self.print_to_console("Displaying: " + item.text())
 
             elif item.text() == 'Pre start with cell data':
                 # Display data
-                model = PandasDataFrameModel(self.obj.data_pre_start_with_cell)
+                model = PandasDataFrameModel(self.imd.data_pre_start_with_cell)
                 self.tableView.setModel(model)
+                self.graphicsView.clear()
+                self.graphicsView.plot(self.imd.data_pre_start_with_cell.iloc[:, 0],
+                                       self.imd.data_pre_start_with_cell.iloc[:, 2], pen=None, symbol='o',
+                                       symbolPen=pg.hsvColor(0, 0, 0, 0.1), symbolBrush=pg.hsvColor(0, 0, 0, 0.1))
+                y_fit = fit_function(self.imd.data_pre_start_with_cell.iloc[:, 0],
+                                     self.imd.resonance_freq_pre_start_with_cell, self.imd.fit_param_pre_start_with_cell[0],
+                                     self.imd.fit_param_pre_start_with_cell[1], self.imd.fit_param_pre_start_with_cell[2])
+                self.graphicsView.plot(self.imd.data_pre_start_with_cell.iloc[:, 0], y_fit, pen=pg.mkPen('r', width=1.5))
+                self.graphicsView.setLabel('bottom', 'Frequency [kHz]')
+                self.graphicsView.setLabel('left', 'Phase [rad]')
+                self.graphicsView.showGrid(x=True, y=True)
+                # Notify user about selection
+                self.print_to_console("Displaying: " + item.text())
+
+            elif item.text() == 'Pre start frequency shift':
+                # Display data
+                model = PandasDataFrameModel(self.imd.data_pre_start_no_cell)# Try to fuse the dfs first to one table
+                self.tableView.setModel(model)
+                self.graphicsView.clear()
+                y_fit_without = fit_function(self.imd.data_pre_start_no_cell.iloc[:, 0],
+                                     self.imd.resonance_freq_pre_start_no_cell, self.imd.fit_param_pre_start_no_cell[0],
+                                     self.imd.fit_param_pre_start_no_cell[1], self.imd.fit_param_pre_start_no_cell[2])
+                y_fit_with = fit_function(self.imd.data_pre_start_with_cell.iloc[:, 0],
+                                     self.imd.resonance_freq_pre_start_with_cell, self.imd.fit_param_pre_start_with_cell[0],
+                                     self.imd.fit_param_pre_start_with_cell[1], self.imd.fit_param_pre_start_with_cell[2])
+
+                self.graphicsView.plot(self.imd.data_pre_start_no_cell.iloc[:, 0],
+                                       self.imd.data_pre_start_no_cell.iloc[:, 2], pen=None, symbol='o',
+                                       symbolPen=pg.hsvColor(0, 0, 0, 0.1), symbolBrush=pg.hsvColor(0, 0, 0, 0.1),
+                                       name="Raw phase w/o cell")
+                self.graphicsView.plot(self.imd.data_pre_start_no_cell.iloc[:, 0], y_fit_without,
+                                       pen=pg.mkPen('r', width=1.5), name="Phase fit w/ cell attached")
+                self.graphicsView.plot(self.imd.data_pre_start_with_cell.iloc[:, 0],
+                                       self.imd.data_pre_start_with_cell.iloc[:, 2], pen=None, symbol='o',
+                                       symbolPen=pg.hsvColor(0, 0, 0, 0.1), symbolBrush=pg.hsvColor(0, 0, 0, 0.1),
+                                       name="Raw phase w/ cell")
+                self.graphicsView.plot(self.imd.data_pre_start_with_cell.iloc[:, 0], y_fit_with,
+                                       pen=pg.mkPen('c', width=1.5), name="Phase fit w/o cell attached")
+                self.graphicsView.setLabel('bottom', 'Frequency [kHz]')
+                self.graphicsView.setLabel('left', 'Phase [rad]')
+                self.graphicsView.showGrid(x=True, y=True)
                 # Notify user about selection
                 self.print_to_console("Displaying: " + item.text())
 
             elif item.text() == 'Calculated cell mass':
                 # Display data
-                model = PandasDataFrameModel(self.obj.calculated_cell_mass)
+                model = PandasDataFrameModel(self.imd.calculated_cell_mass)
                 self.tableView.setModel(model)
+                self.graphicsView.clear()
+                self.graphicsView.plot(self.imd.calculated_cell_mass.iloc[::10, 0],
+                                       self.imd.calculated_cell_mass.iloc[::10, 1], pen=None, symbol='o',
+                                       symbolPen=pg.hsvColor(0, 0, 0, 0.1), symbolBrush=pg.hsvColor(0, 0, 0, 0.1),
+                                       name="Measured cell mass")
+                self.graphicsView.plot(self.imd.calculated_cell_mass.iloc[:, 0],
+                                       self.imd.calculated_cell_mass.iloc[:, 2], pen=pg.mkPen('r', width=1.5),
+                                       name="Mean measured cell mass")
+                self.graphicsView.setLabel('bottom', 'Time [h]')
+                self.graphicsView.setLabel('left', 'Mass [g]')
+                self.graphicsView.showGrid(x=True, y=True)
                 # Notify user about selection
                 self.print_to_console("Displaying: " + item.text())
             else:
@@ -327,7 +406,7 @@ class IMDWindow(QtWidgets.QMainWindow):
 
     def select_data_files(self):
         """
-        Select data files.
+        Select data files to create a new pyIMD project
         """
         try:
             filter_ext = "All files (*.*);; Txt (*.txt);; TDMS (*.tdms);; All files " \
@@ -344,19 +423,18 @@ class IMDWindow(QtWidgets.QMainWindow):
                 self.file_list = names
                 sorted_file_list = self.file_list
                 self.last_selected_path = os.path.dirname(sorted_file_list[0])
-                self.current_file_index = 0
-                self.show_files()
+                self.show_data()
                 self.print_to_console("Selected %d files." % (len(sorted_file_list)))
 
-            # Populate drop down list with selected items.
-            self.noCellDataBox.clear()
-            self.withCellDataBox.clear()
-            self.measuredDataBox.clear()
-            self.noCellDataBox.addItems(self.file_list)
-            self.withCellDataBox.addItems(self.file_list)
-            self.measuredDataBox.addItems(self.file_list)
-            # Add path to system watcher
-            self.file_system_watcher.addPaths([self.last_selected_path])
+                # Populate drop down list with selected items.
+                self.noCellDataBox.clear()
+                self.withCellDataBox.clear()
+                self.measuredDataBox.clear()
+                self.noCellDataBox.addItems(self.file_list)
+                self.withCellDataBox.addItems(self.file_list)
+                self.measuredDataBox.addItems(self.file_list)
+                # Create new pyimd project
+                self.imd.create_pyimd_project(self.file_list[0], self.file_list[0], self.file_list[0], '\t', 23, 'PLL')
         except Exception as e:
             self.print_to_console("Error could not select files." + str(e))
 
@@ -375,19 +453,17 @@ class IMDWindow(QtWidgets.QMainWindow):
 
     def show_data(self):
         """
-        Display the data names om the file viewer.
+        Display the selected file names om the file viewer.
         """
-        data_list = [self.obj.data_measured, self.obj.data_pre_start_no_cell, self.obj.data_pre_start_with_cell,
-                     self.obj.calculated_cell_mass]
-        self.file_viewer.set_data([], data_list)
-        # model = PandasDataFrameModel(data_list[0])
-        # self.tableView.setModel(model)
+        model = QtGui.QStandardItemModel(len(self.file_list), 0)
 
-    def show_files(self):
-        """
-        Display the file names om the file viewer.
-        """
-        self.file_viewer.set_data([], self.file_list)
+        for row, label in enumerate(self.file_list):
+            p = pathlib.Path(label)
+            item = QtGui.QStandardItem(p.stem)
+            model.setItem(row, 0, item)
+        self.tableViewSelData.setModel(model)
+        self.tableViewSelData.horizontalHeader().setStretchLastSection(True)
+        self.tableViewSelData.horizontalHeader().hide()
 
     def show_settings_dialog(self):
         """
@@ -400,103 +476,112 @@ class IMDWindow(QtWidgets.QMainWindow):
 
         self.settings_dialog.exec()
 
-    @pyqtSlot(dict, name="on_settings_changed")
+    @pyqtSlot(dict, name="settings_has_changed")
     def on_settings_changed(self, changed_settings):
         """
-        Update settings
-        :return: void
-        """
+        Update settings from settings dialog to settings configuration as soon as user commits parameter changes.
 
-        # Update the settings
+        Args:
+            changed_settings (`dict`):  Settings dictionary
+
+        Returns:
+            Null (`void`):              Updates the changed settings on the object directly
+        """
+        # Update the settings of the ui
         self.__settings = changed_settings
+        # Update the settings of the imd object
+        self.sync_settings()
 
-    def setup_console_connection(self):
-        self.settings_dialog.send_to_console.connect(self.handle_change_console_text)
-
-    def print_to_console(self, string):
-        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S ")
-        self.console_edit.append(current_time + string)
-
-    @pyqtSlot(int, name="handle_changed_file_index")
-    def handle_changed_file_index(self, i):
+    def sync_settings(self):
         """
-        :param i: new file index.
+        Synchronizes the settings of the UI with the pyIMD object settings object.
         """
-        if i > len(self.file_list) - 1:
-            self.print_to_console("Please load a data file first!")
-            return
-
-        self.current_file_index = i
-        self.print_to_console("Currently selected file: " + self.file_list[i])
-
-    @pyqtSlot(int, name="handle_changed_figure_index")
-    def handle_changed_figure_index(self, i):
-        """
-        :param i: new figure index.
-        """
-        if i > len(self.figure_list) - 1:
-            self.print_to_console("Please load a figure file first!")
-            return
         try:
-            self.scene.clear()
-            self.scene.display_image(self.figure_list[i])
-            self.scene.redraw()
+            # Parameter settings
+            self.imd.settings.figure_width = float(self.__settings["figure_width"])
+            self.imd.settings.figure_height = float(self.__settings["figure_height"])
+            self.imd.settings.figure_units = str(self.__settings["figure_units"])
+            self.imd.settings.figure_format = str(self.__settings["figure_format"])
+            self.imd.settings.figure_resolution_dpi = int(self.__settings["figure_resolution_dpi"])
+            self.imd.settings.figure_name_pre_start_no_cell = self.__settings["figure_name_pre_start_no_cell"]
+            self.imd.settings.figure_name_pre_start_with_cell = self.__settings["figure_name_pre_start_with_cell"]
+            self.imd.settings.figure_name_measured_data = self.__settings["figure_name_measured_data"]
+            self.imd.settings.figure_plot_every_nth_point = int(self.__settings["figure_plot_every_nth_point"])
+            self.imd.settings.conversion_factor_hz_to_khz = float(self.__settings["conversion_factor_hz_to_khz"])
+            self.imd.settings.conversion_factor_deg_to_rad = float(self.__settings["conversion_factor_deg_to_rad"])
+            self.imd.settings.spring_constant = float(self.__settings["spring_constant"])
+            self.imd.settings.cantilever_length = float(self.__settings["cantilever_length"])
+            self.imd.settings.cell_position = float(self.__settings["cell_position"])
+
+            if type(self.__settings["initial_parameter_guess"]) == str:
+                self.imd.settings.initial_parameter_guess = literal_eval(self.__settings["initial_parameter_guess"])
+            else:
+                self.imd.settings.initial_parameter_guess = self.__settings["initial_parameter_guess"]
+
+            if type(self.__settings["lower_parameter_bounds"]) == str:
+                self.imd.settings.lower_parameter_bounds = literal_eval(self.__settings["lower_parameter_bounds"])
+            else:
+                self.imd.settings.lower_parameter_bounds = self.__settings["lower_parameter_bounds"]
+
+            if type(self.__settings["upper_parameter_bounds"]) == str:
+                self.imd.settings.upper_parameter_bounds = literal_eval(self.__settings["upper_parameter_bounds"])
+            else:
+                self.imd.settings.upper_parameter_bounds = self.__settings["upper_parameter_bounds"]
+
+            self.imd.settings.rolling_window_size = int(self.__settings["rolling_window_size"])
+            self.imd.settings.correct_for_frequency_offset = self.__settings["correct_for_frequency_offset"]
+            self.imd.settings.frequency_offset_mode = str(self.__settings["frequency_offset_mode"])
+            self.imd.settings.frequency_offset_n_measurements_used = float(self.__settings[
+                                                                               "frequency_offset_n_measurements_used"])
+            self.imd.settings.frequency_offset = float(self.__settings["frequency_offset"])
+            self.imd.settings.read_text_data_from_line = int(self.__settings["read_text_data_from_line"])
+            self.imd.settings.text_data_delimiter = str(self.__settings["text_data_delimiter"])
+            # Project settings
+            self.imd.settings.selected_files = self.file_list
+
+            for i in range(0, len(self.radio_btn_name_array)):
+                radio_name = getattr(self, self.radio_btn_name_array[i])
+                if radio_name.isChecked():
+                    self.imd.settings.calculation_mode = radio_name.text()
+
+            self.imd.settings.pre_start_no_cell_path = self.noCellDataBox.currentText()
+            self.imd.settings.pre_start_with_cell_path = self.withCellDataBox.currentText()
+            self.imd.settings.measurements_path = self.measuredDataBox.currentText()
 
         except Exception as e:
-            self.print_to_console("Error could not open figure: " + str(e))
+            self.print_to_console("Error during settings synchronization: " + str(e))
 
-        self.current_figure_index = i
-        self.print_to_console("Currently selected figure: " + self.figure_list[i])
-
-    def setup_file_viewer(self):
+    def setup_console_connection(self):
         """
-        Set up the file viewer.
+        Set up the console connection between the settings and the main window.
         """
+        self.settings_dialog.send_to_console.connect(self.handle_change_console_text)
 
-        # Initialize widget if need
-        if self.file_viewer is None:
-            self.file_viewer = FileViewer()
-
-        # Connect the signal
-        self.file_viewer.signal_file_index_changed.connect(
-            self.handle_changed_file_index)
-        # Add a scroll area
-        scroll_area = QScrollArea(self)
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setWidget(self.file_viewer)
-        self.gridLayout.addWidget(scroll_area, 2, 0)
-        # Show the widget
-        self.file_viewer.show()
-
-    def setup_figure_viewer(self):
+    def print_to_console(self, text):
         """
-        Set up the figure viewer.
-        """
+        Print text to console.
 
-        # Initialize widget if need
-        if self.figure_viewer is None:
-            self.figure_viewer = FileViewer()
-        # Connect the signal
-        self.figure_viewer.signal_file_index_changed.connect(
-            self.handle_changed_figure_index)
-        # Add a scroll area
-        scroll_area = QScrollArea(self)
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setWidget(self.figure_viewer)
-        self.gridLayoutResultTab.addWidget(scroll_area, 1, 0)
-        # Show the widget
-        self.figure_viewer.show()
+        Args:
+            text (`str`)        Text to be printed to the console.
+        """
+        self.logger.info(text)
 
     @pyqtSlot(str, name="handle_change_console_text")
-    def handle_change_console_text(self, string):
+    def handle_change_console_text(self, text):
         """
-        :param string: String received from Settings instance to print to the console.
+        Implementation of the handle_change_console_text slot.
+
+        Args:
+            text (`str`):       String received from Settings instance to print to the console.
         """
-        self.print_to_console(string)
+        self.print_to_console(text)
 
     def save_project(self):
         """
-        Saves a pyIMD project file as .xml
+        Saves a pyIMD project file as .xml using the IntertialMassDetermination.save_pyimd_project method
+
+        Returns:
+            Null (`void`):      Saves pyIMD project as xml file to disk
         """
 
         file_dialog = QFileDialog()
@@ -504,86 +589,10 @@ class IMDWindow(QtWidgets.QMainWindow):
 
         if len(project_file_dir[0]) > 0:
             try:
-                # Create the root element
-                root = etree.Element('PyIMDSettings', creator='pyIMD',
-                                 timestamp=datetime.datetime.now().strftime('%Y_%m_%d__%H_%M_%S'))
-                # Make a new document tree
-                doc = etree.ElementTree(root)
-                # Add the SubElements
-                general_settings = etree.SubElement(root, 'GeneralSettings')
-                ui_settings = etree.SubElement(root, 'UiSettings')
-                selected_files = etree.SubElement(ui_settings, 'SelectedFiles')
-                # Add the SubSubElements for the general settings
-                figure_format = etree.SubElement(general_settings, 'figure_format')
-                figure_width = etree.SubElement(general_settings, 'figure_width')
-                figure_height = etree.SubElement(general_settings, 'figure_height')
-                figure_units = etree.SubElement(general_settings, 'figure_units')
-                figure_resolution = etree.SubElement(general_settings, 'figure_resolution_dpi')
-                figure_name_pre_start_no_cell = etree.SubElement(general_settings, 'figure_name_pre_start_no_cell')
-                figure_name_pre_start_with_cell = etree.SubElement(general_settings, 'figure_name_pre_start_with_cell')
-                figure_name_measured_data = etree.SubElement(general_settings, 'figure_name_measured_data')
-                conversion_factor_hz_to_khz = etree.SubElement(general_settings, 'conversion_factor_hz_to_khz')
-                conversion_factor_deg_to_rad = etree.SubElement(general_settings, 'conversion_factor_deg_to_rad')
-                spring_constant = etree.SubElement(general_settings, 'spring_constant')
-                cantilever_length = etree.SubElement(general_settings, 'cantilever_length')
-                cell_position = etree.SubElement(general_settings, 'cell_position')
-                initial_parameter_guess = etree.SubElement(general_settings, 'initial_parameter_guess')
-                lower_parameter_bounds = etree.SubElement(general_settings, 'lower_parameter_bounds')
-                upper_parameter_bounds = etree.SubElement(general_settings, 'upper_parameter_bounds')
-                read_text_data_from_line = etree.SubElement(general_settings, 'read_text_data_from_line')
-                text_data_delimiter = etree.SubElement(general_settings, 'text_data_delimiter')
-                # Add the SubSubElements for the ui settings
-                project_folder_path = etree.SubElement(ui_settings, 'ProjectFolderPath')
-                data_pre_start_no_cell = etree.SubElement(ui_settings, 'SelectedDataPreStartNoCell')
-                data_pre_start_with_cell = etree.SubElement(ui_settings, 'SelectedDataPreStartWithCell')
-                data_measured = etree.SubElement(ui_settings, 'SelectedDataMeasured')
-                calculation_mode = etree.SubElement(ui_settings, 'CalculationMode')
+                # Make sure all ui settings are in sync with imd settings.
+                self.sync_settings()
 
-                # Add the data
-                figure_format.text = str(self.__settings["figure_format"])
-                figure_width.text = str(self.__settings["figure_width"])
-                figure_height.text = str(self.__settings["figure_height"])
-                figure_units.text = str(self.__settings["figure_units"])
-                figure_resolution.text = str(self.__settings["figure_resolution_dpi"])
-                figure_name_pre_start_no_cell.text = str(self.__settings["figure_name_pre_start_no_cell"])
-                figure_name_pre_start_with_cell.text = str(self.__settings["figure_name_pre_start_with_cell"])
-                figure_name_measured_data.text = str(self.__settings["figure_name_measured_data"])
-                conversion_factor_hz_to_khz.text = str(self.__settings["conversion_factor_hz_to_khz"])
-                conversion_factor_deg_to_rad.text = str(self.__settings["conversion_factor_deg_to_rad"])
-                spring_constant.text = str(self.__settings["spring_constant"])
-                cantilever_length.text = str(self.__settings["cantilever_length"])
-                cell_position.text = str(self.__settings["cell_position"])
-                initial_parameter_guess.text = str(self.__settings["initial_parameter_guess"])
-                lower_parameter_bounds.text = str(self.__settings["lower_parameter_bounds"])
-                upper_parameter_bounds.text = str(self.__settings["upper_parameter_bounds"])
-                read_text_data_from_line.text = str(self.__settings["read_text_data_from_line"])
-                text_data_delimiter.text = self.__settings["text_data_delimiter"]
-                project_folder_path.text = self.last_selected_path
-                data_pre_start_no_cell.text = self.noCellDataBox.currentText()
-                data_pre_start_with_cell.text = self.withCellDataBox.currentText()
-                data_measured.text = self.measuredDataBox.currentText()
-                for i in range(0, len(self.radio_btn_name_array)):
-                    radio_name = getattr(self, self.radio_btn_name_array[i])
-                    if radio_name.isChecked():
-                        calculation_mode.text = radio_name.text()
-
-                file_dict = {}
-                for i in range(0, len(self.file_list)):
-                    file_dict["string{0}".format(i)] = etree.SubElement(selected_files, 'File')
-                    file_dict["string{0}".format(i)].text = pathlib.Path(self.file_list[i]).name
-
-                # Check for correct file suffix. If not provided by user or wrong suffix given correct it
-                if not pathlib.Path(project_file_dir[0]).suffix:
-                    save_file_name = project_file_dir[0] + '.xml'
-                elif pathlib.Path(project_file_dir[0]).suffix != '.xml':
-                    project_file_dir[0].suffix = '.xml'
-                    save_file_name = project_file_dir[0]
-                else:
-                    save_file_name = project_file_dir[0]
-
-                # Save to XML file
-                doc.write(save_file_name, xml_declaration=True, encoding='utf-8', method="xml", standalone=False,
-                          pretty_print=True)
+                self.imd.save_pyimd_project(project_file_dir[0])
 
                 self.print_to_console("Project saved successfully")
             except Exception as e:
@@ -593,7 +602,7 @@ class IMDWindow(QtWidgets.QMainWindow):
 
     def open_project(self):
         """
-        Opens a pyIMD project file (.xml)
+        Opens a pyIMD project file (.xml) using the IntertialMassDetermination.load_pyimd_project method
         """
 
         # Quick hack to distinguish action depending on sender
@@ -604,115 +613,125 @@ class IMDWindow(QtWidgets.QMainWindow):
             file_dialog.setFileMode(QFileDialog.ExistingFiles)
             selected_project_file = file_dialog.getOpenFileName(self, "Select a pyIMD project file",
                                                                 self.last_selected_path, project_filter_ext)
-            print('opened using dialog')
         else:
             selected_project_file = [self.current_batch_project_file]
-            print('direct opening')
 
         if len(selected_project_file[0]) > 0:
             try:
-                with open(selected_project_file[0]) as fd:
-                    doc = xmltodict.parse(fd.read())
+                # Load pyimd project
+                self.imd.load_pyimd_project(selected_project_file[0])
 
-                self.__settings = doc['PyIMDSettings']['GeneralSettings']
-                # fix escape characters ie \\t or \\n or \\s
-                self.__settings['text_data_delimiter'] = self.__settings['text_data_delimiter'].replace("'", "")
-                # self.__settings['text_data_delimiter'].encode().decode('unicode_escape')
-
-                # Update settings dialog with opened project data
-                self.settings_dialog.settings_dictionary = self.__settings
+                # Update ui.Settings with parameters:
+                self.__settings = {"figure_format": self.imd.settings.figure_format,
+                                   "figure_width": self.imd.settings.figure_width,
+                                   "figure_height": self.imd.settings.figure_height,
+                                   "figure_units": self.imd.settings.figure_units,
+                                   "figure_resolution_dpi": self.imd.settings.figure_resolution_dpi,
+                                   "figure_name_pre_start_no_cell": self.imd.settings.figure_name_pre_start_no_cell,
+                                   "figure_name_pre_start_with_cell": self.imd.settings.figure_name_pre_start_with_cell,
+                                   "figure_name_measured_data": self.imd.settings.figure_name_measured_data,
+                                   "figure_plot_every_nth_point": self.imd.settings.figure_plot_every_nth_point,
+                                   "conversion_factor_hz_to_khz": self.imd.settings.conversion_factor_hz_to_khz,
+                                   "conversion_factor_deg_to_rad": self.imd.settings.conversion_factor_deg_to_rad,
+                                   "spring_constant": self.imd.settings.spring_constant,
+                                   "cantilever_length": self.imd.settings.cantilever_length,
+                                   "cell_position": self.imd.settings.cell_position,
+                                   "initial_parameter_guess": self.imd.settings.initial_parameter_guess,
+                                   "lower_parameter_bounds": self.imd.settings.lower_parameter_bounds,
+                                   "upper_parameter_bounds": self.imd.settings.upper_parameter_bounds,
+                                   "rolling_window_size": self.imd.settings.rolling_window_size,
+                                   "correct_for_frequency_offset": self.imd.settings.correct_for_frequency_offset,
+                                   "frequency_offset_mode": self.imd.settings.frequency_offset_mode,
+                                   "frequency_offset_n_measurements_used": self.imd.settings.frequency_offset_n_measurements_used,
+                                   "frequency_offset": self.imd.settings.frequency_offset,
+                                   "read_text_data_from_line": self.imd.settings.read_text_data_from_line,
+                                   "text_data_delimiter": self.imd.settings.text_data_delimiter}
+                self.settings_dialog.__init__(self.__settings)
                 self.settings_dialog.set_values()
 
                 # Update ui with loaded data:
-                ui_settings = doc['PyIMDSettings']['UiSettings']
-                self.last_selected_path = ui_settings['ProjectFolderPath']
-                self.file_system_watcher.addPaths([self.last_selected_path])
-                files = ui_settings['SelectedFiles']['File']
+                self.last_selected_path = self.imd.settings.project_folder_path.replace("\\", "/")
 
                 self.file_list = []
-                for i in range(0, len(files)):
-                    self.file_list.append(pathlib.Path().joinpath(self.last_selected_path, files[i]).as_posix())
-
-                self.show_files()
+                for i in range(0, len(self.imd.settings.selected_files)):
+                    self.file_list.append(pathlib.Path().joinpath(self.last_selected_path,
+                                                                  self.imd.settings.selected_files[i]).as_posix())
+                self.show_data()
                 self.noCellDataBox.clear()
                 self.noCellDataBox.addItems(self.file_list)
-                index = self.noCellDataBox.findText(ui_settings['SelectedDataPreStartNoCell'], QtCore.Qt.MatchFixedString)
-
+                index = self.noCellDataBox.findText(self.imd.settings.pre_start_no_cell_path.replace("\\", "/"),
+                                                    QtCore.Qt.MatchFixedString)
                 if index >= 0:
                     self.noCellDataBox.setCurrentIndex(index)
 
                 self.withCellDataBox.clear()
                 self.withCellDataBox.addItems(self.file_list)
-                index = self.withCellDataBox.findText(ui_settings['SelectedDataPreStartWithCell'], QtCore.Qt.MatchFixedString)
+                index = self.withCellDataBox.findText(self.imd.settings.pre_start_with_cell_path.replace("\\", "/"),
+                                                      QtCore.Qt.MatchFixedString)
                 if index >= 0:
                     self.withCellDataBox.setCurrentIndex(index)
-
                 self.measuredDataBox.clear()
                 self.measuredDataBox.addItems(self.file_list)
-                index = self.measuredDataBox.findText(ui_settings['SelectedDataMeasured'], QtCore.Qt.MatchFixedString)
+                index = self.measuredDataBox.findText(self.imd.settings.measurements_path.replace("\\", "/"),
+                                                      QtCore.Qt.MatchFixedString)
                 if index >= 0:
                     self.measuredDataBox.setCurrentIndex(index)
 
                 for i in range(0, len(self.radio_btn_name_array)):
                     radio_name = getattr(self, self.radio_btn_name_array[i])
-                    if radio_name.text() == ui_settings['CalculationMode']:
+                    if radio_name.text() == self.imd.settings.calculation_mode:
                         radio_name.setChecked(True)
 
-                self.print_to_console("Project {} successfully opened".format(pathlib.Path(selected_project_file[0]).name))
+                self.print_to_console("Project {} successfully opened".format(pathlib.Path(
+                    selected_project_file[0]).name))
             except Exception as e:
-                self.print_to_console("Error during opening project: " + str(e))
+                self.print_to_console("Error during opening project in UI: " + str(e))
         else:
             self.print_to_console("Project opening aborted by user")
 
-    def update_settings(self):
+    @staticmethod
+    def get_logger_object(name):
         """
-        Updates the settings of the pyIMD object
+        Gets a logger object to log messages of pyIMD status to the console in a standardized format.
+
+        Returns:
+            logger (`object`):      Returns a logger object with correct string formatting.
         """
+        logger = logging.getLogger(name)
+        if not logger.handlers:
+            # Prevent logging from propagating to the root logger
+            logger.propagate = 0
+            console = logging.StreamHandler(sys.stderr)
+            logger.addHandler(console)
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+            console.setFormatter(formatter)
+            logger.setLevel(logging.INFO)
 
-        try:
-            self.obj.settings.FIGURE_WIDTH = float(self.__settings["figure_width"])
-            self.obj.settings.FIGURE_HEIGHT = float(self.__settings["figure_height"])
-            self.obj.settings.FIGURE_UNITS = str(self.__settings["figure_units"])
-            self.obj.settings.FIGURE_FORMAT = str(self.__settings["figure_format"])
-            self.obj.settings.FIGURE_RESOLUTION_DPI = int(self.__settings["figure_resolution_dpi"])
-            self.obj.settings.FIGURE_NAME_PRE_START_NO_CELL = self.__settings["figure_name_pre_start_no_cell"]
-            self.obj.settings.FIGURE_NAME_PRE_START_WITH_CELL = self.__settings["figure_name_pre_start_with_cell"]
-            self.obj.settings.FIGURE_NAME_MEASURED_DATA = self.__settings["figure_name_measured_data"]
-            self.obj.settings.CONVERSION_FACTOR_HZ_TO_KHZ = float(self.__settings["conversion_factor_hz_to_khz"])
-            self.obj.settings.CONVERSION_FACTOR_DEG_TO_RAD = float(self.__settings["conversion_factor_deg_to_rad"])
-            self.obj.settings.SPRING_CONSTANT = float(self.__settings["spring_constant"])
-            self.obj.settings.CANTILEVER_LENGTH = float(self.__settings["cantilever_length"])
-            self.obj.settings.CELL_POSITION = float(self.__settings["cell_position"])
-            self.obj.settings.INITIAL_PARAMETER_GUESS = literal_eval(self.__settings["initial_parameter_guess"])
-            self.obj.settings.LOWER_PARAMETER_BOUNDS = literal_eval(self.__settings["lower_parameter_bounds"])
-            self.obj.settings.UPPER_PARAMETER_BOUNDS = literal_eval(self.__settings["upper_parameter_bounds"])
-            self.obj.settings.READ_TEXT_DATA_FROM_LINE = int(self.__settings["read_text_data_from_line"])
-            self.obj.settings.TEXT_DATA_DELIMITER = str(self.__settings["text_data_delimiter"])
-
-        except Exception as e:
-            self.print_to_console("Error during opening project: " + str(e))
+        return logger
 
     def close_application(self, event):
         """
         Opens a message box to handle program exit properly asking the user if the project should be saved first.
-        :param event: a QCloseEvent
-        :return: 0 when process finished correctly
-        """
 
+        Args:
+            event(`QCloseEvent`):                   A QCloseEvent
+
+        Returns:
+            status_code (`int`):                    0 when process finished correctly, otherwise >0
+        """
         self.settings.setValue('display_on_startup', self.qi.display_on_startup)
 
         msg_box = QMessageBox()
         msg_box.setWindowIcon(QtGui.QIcon(resource_path(os.path.join("ui", "icons", "pyimd_logo2_01_FNf_icon.ico"))))
-        msg_box.setIcon(QMessageBox.Warning)
         msg_box.setWindowTitle('pyIMD :: Quit Program')
-        msg_box.setText('Are you sure you want to quit the program?')
-        save_btn = QPushButton('Save first')
+        msg_box.setText('Do you want to save changes before quitting the program?')
+        save_btn = QPushButton('Save')
         save_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton))
         msg_box.addButton(save_btn, QMessageBox.YesRole)
-        no_save_btn = QPushButton('Quit')
+        no_save_btn = QPushButton('Don\'t save')
         no_save_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_DialogNoButton))
         msg_box.addButton(no_save_btn, QMessageBox.NoRole)
-        abort_btn = QPushButton('Abort')
+        abort_btn = QPushButton('Cancel')
         abort_btn.setIcon(QApplication.style().standardIcon(QStyle.SP_DialogCancelButton))
         msg_box.addButton(abort_btn, QMessageBox.RejectRole)
         ret = msg_box.exec_()
@@ -737,9 +756,13 @@ class IMDWindow(QtWidgets.QMainWindow):
 
     def closeEvent(self, event):
         """
-        Application close event
-        :param event: a QCloseEvent
-        :return: 0 when process finished correctly
+        Application close event override of QMainWindow closeEvent
+
+        Args:
+            event (`QCloseEvent`):                  A QCloseEvent
+
+        Returns:
+            status_code (`int`):                   O when process finished correctly otherwise >0
         """
         self.close_application(event)
 

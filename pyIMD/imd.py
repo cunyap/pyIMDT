@@ -1,22 +1,26 @@
+from PyQt5.QtWidgets import QApplication
 from pandas import concat, DataFrame
 from pyIMD.configuration.config import Settings
+from pyIMD.ui.settings import SettingsDialog
 from pyIMD.io.read_from_disk import read_from_text, read_from_file
 from pyIMD.io.write_to_disk import write_to_disk_as
 from pyIMD.analysis.calculations import calculate_mass
 from pyIMD.analysis.calculations import calculate_resonance_frequencies, calculate_position_correction
+from pyIMD.configuration.defaults import *
+from PyQt5.QtCore import pyqtSlot, QObject
 import matplotlib
 matplotlib.use('Qt5Agg')
 from pyIMD.plotting.figures import plot_fitting, plot_frequency_shift, plot_mass
 import os
+import sys
 import logging
-from pathlib import Path
 from tqdm import trange
 import numpy as np
 
 __author__ = 'Andreas P. Cuny'
 
 
-class InertialMassDetermination:
+class InertialMassDetermination(QObject):
     """
     Constructs a IntertialMassDetermination object
     """
@@ -26,8 +30,10 @@ class InertialMassDetermination:
         Constructs an InteritalMassDetermination object.
         """
 
+        super(InertialMassDetermination, self).__init__()
         # Initialize settings class
         self.settings = Settings()
+        self.settings_dialog = None
         self._has_valid_configuration = 0
         # Initialize data properties
         self.data_pre_start_no_cell = []
@@ -46,8 +52,34 @@ class InertialMassDetermination:
         self.result_folder = []  # os.path.dirname(os.path.abspath(file_path3))
 
         self.logger = self.get_logger_object(__name__)
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.INFO)
         self.logger.info('Object constructed successfully')
+
+        # Load default settings
+        self.__settings = {"figure_format": FIGURE_FORMAT,
+                           "figure_width": FIGURE_WIDTH,
+                           "figure_height": FIGURE_HEIGHT,
+                           "figure_units": FIGURE_UNITS,
+                           "figure_resolution_dpi": FIGURE_RESOLUTION_DPI,
+                           "figure_name_pre_start_no_cell": FIGURE_NAME_PRE_START_NO_CELL,
+                           "figure_name_pre_start_with_cell": FIGURE_NAME_PRE_START_WITH_CELL,
+                           "figure_name_measured_data": FIGURE_NAME_MEASURED_DATA,
+                           "figure_plot_every_nth_point": FIGURE_PLOT_EVERY_NTH_POINT,
+                           "conversion_factor_hz_to_khz": CONVERSION_FACTOR_HZ_TO_KHZ,
+                           "conversion_factor_deg_to_rad": CONVERSION_FACTOR_DEG_TO_RAD,
+                           "spring_constant": SPRING_CONSTANT,
+                           "cantilever_length": CANTILEVER_LENGTH,
+                           "cell_position": CELL_POSITION,
+                           "initial_parameter_guess": INITIAL_PARAMETER_GUESS,
+                           "lower_parameter_bounds": LOWER_PARAMETER_BOUNDS,
+                           "upper_parameter_bounds": UPPER_PARAMETER_BOUNDS,
+                           "rolling_window_size": ROLLING_WINDOW_SIZE,
+                           "correct_for_frequency_offset": CORRECT_FOR_FREQUENCY_OFFSET,
+                           "frequency_offset_mode": FREQUENCY_OFFSET_MODE,
+                           "frequency_offset_n_measurements_used" : FREQUENCY_OFFSET_N_MEASUREMENTS_USED,
+                           "frequency_offset": FREQUENCY_OFFSET,
+                           "read_text_data_from_line": READ_TEXT_DATA_FROM_LINE,
+                           "text_data_delimiter": repr(TEXT_DATA_DELIMITER).replace("'", "")}
 
     def create_pyimd_project(self, pre_start_no_cell_path, pre_start_with_cell_path, measurements_path,
                              text_data_delimiter, read_text_data_from_line, calculation_mode, **kwargs):
@@ -65,7 +97,7 @@ class InertialMassDetermination:
                                                    measurement (tdms file (default) or txt file).
              text_data_delimiter (`str`):          Text file data delimiter i.e '\t' for tab delimited or ',' for comma
                                                    separated data.
-             read_text_data_from_line (`str`):      Line number from which data of pre start measurements should be read
+             read_text_data_from_line (`int`):      Line number from which data of pre start measurements should be read
                                                    Typically the first few lines contain header information and no data.
              calculation_mode (`str`):             PLL         := phase lock loops mode
                                                    Cont.Sweep  := sweep mode
@@ -88,7 +120,11 @@ class InertialMassDetermination:
              lower_parameter_bounds (`list`):         Lower parameter bounds
              upper_parameter_bounds (`list`):         Upper parameter bounds
              rolling_window_size ('int'):             Window size for calculating the rolling average.
-             frequency_offset ('float'):              Frequency offset
+             correct_for_frequency_offset ('bool'):   Correct for potential frequency offset during PLL mode.
+             frequency_offset_mode ('str'):           Frequency offset correction mode (Auto or Manual)
+             frequency_offset_n_measurements_used ('int'): Number of measurement data points to be used for automatic
+                                                      frequency offset correction
+             frequency_offset ('float'):              Frequency offset either set manually or calculated automatically
              cantilever_length (`float`):             Cantilever length in microns
              cell_position (`float`):                 Cell position offset from cantilever tip in microns
              project_folder_path (`str`):             Path to project data files. Also used to store pyIMD results such
@@ -214,7 +250,7 @@ class InertialMassDetermination:
 
             write_to_disk_as(self.settings.figure_format, fig,
                              '{}'.format(self.result_folder + os.sep + 'PreStartFrequencyShift'), **optional_fig_param)
-
+            self.logger.info('Done with pre start frequency shift figure generation')
             if self.settings.calculation_mode == 'Cont.Sweep':
                 # The continuous sweep mode
                 self.calculated_cell_mass = []
@@ -241,13 +277,12 @@ class InertialMassDetermination:
 
                 calculated_cell_mass = concat([(self.data_measured.iloc[0:int(((len(self.data_measured)) / 3)-1), 256] -
                                                 self.data_measured.iloc[0, 256]) / 3600,
-                                               DataFrame(self.calculated_cell_mass, columns=['Mass [ng]'])] , axis=1)
+                                               DataFrame(self.calculated_cell_mass, columns=['Mass [ng]'])], axis=1)
                 calculated_cell_mass['Mean mass [ng]'] = calculated_cell_mass['Mass [ng]'].rolling(
                     window=self.settings.rolling_window_size).mean()
 
-                # @todo Add plot every nth point parameter
                 self.calculated_cell_mass = calculated_cell_mass
-                figure_cell_mass = plot_mass(calculated_cell_mass)
+                figure_cell_mass = plot_mass(calculated_cell_mass, self.settings.figure_plot_every_nth_point)
                 self.logger.info('Start writing figure to disk')
                 write_to_disk_as(self.settings.figure_format, figure_cell_mass,
                                  '{}'.format(self.result_folder + os.sep + self.settings.figure_name_measured_data),
@@ -264,10 +299,26 @@ class InertialMassDetermination:
                 # Add resonance_freq_pre_start_with_cell to measured resonance frequency delta
                 # Calculate the mass
                 self.calculated_cell_mass = []
+                if self.settings.correct_for_frequency_offset:
+                    if self.settings.frequency_offset_mode == 'Auto':
+                        # Calc auto frequency offset by averaging the first n measurement data points and save this
+                        # offset value found.
+                        n = int(self.settings.frequency_offset_n_measurements_used)
+
+                        auto_freq_offset = np.mean(self.data_measured.iloc[0:n, 6])
+                        self.logger.info('Offset calculation result: {}'.format(auto_freq_offset))
+                        self.settings.frequency_offset = auto_freq_offset
+
                 for iPLL in trange(0, len(self.data_measured)):
-                    mass = calculate_mass(self.settings.spring_constant, self.data_measured.iloc[iPLL, 6] +
-                                          self.resonance_freq_pre_start_with_cell,
-                                          self.resonance_freq_pre_start_no_cell)
+                    if self.settings.correct_for_frequency_offset:
+                            mass = calculate_mass(self.settings.spring_constant, (self.data_measured.iloc[iPLL, 6] -
+                                                                                  self.settings.frequency_offset) +
+                                                  self.resonance_freq_pre_start_with_cell,
+                                                  self.resonance_freq_pre_start_no_cell)
+                    else:
+                        mass = calculate_mass(self.settings.spring_constant, self.data_measured.iloc[iPLL, 6] +
+                                              self.resonance_freq_pre_start_with_cell,
+                                              self.resonance_freq_pre_start_no_cell)
 
                     self.calculated_cell_mass.append(mass * self.position_correction_factor)
 
@@ -276,8 +327,8 @@ class InertialMassDetermination:
                 calculated_cell_mass['Mean mass [ng]'] = calculated_cell_mass['Mass [ng]'].rolling(
                     window=self.settings.rolling_window_size).mean()
                 self.calculated_cell_mass = calculated_cell_mass
-                # @todo Add plot every nth point parameter
-                figure_cell_mass = plot_mass(calculated_cell_mass)
+
+                figure_cell_mass = plot_mass(calculated_cell_mass, self.settings.figure_plot_every_nth_point)
                 self.logger.info('Start writing figure to disk')
                 write_to_disk_as(self.settings.figure_format, figure_cell_mass,
                                  '{}'.format(self.result_folder + os.sep + self.settings.figure_name_measured_data),
@@ -354,9 +405,45 @@ class InertialMassDetermination:
         if not logger.handlers:
             # Prevent logging from propagating to the root logger
             logger.propagate = 0
-            console = logging.StreamHandler()
+            console = logging.StreamHandler(sys.stderr)
             logger.addHandler(console)
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
             console.setFormatter(formatter)
+            logger.setLevel(logging.INFO)
+
         return logger
 
+    def show_settings_dialog(self):
+        """
+        Shows the settings dialog in a pop up window.
+        """
+        if self.settings_dialog is None:
+            app = QApplication([])
+            SettingsDialog(self.__settings)
+            self.settings_dialog = SettingsDialog(self.__settings)
+            self.settings_dialog.set_values()
+            self.settings_dialog.settings_has_changed.connect(self.on_settings_changed)
+            self.setup_console_connection()
+            self.settings_dialog.show()
+            app.exec_()
+
+    @pyqtSlot(dict, name="on_settings_changed")
+    def on_settings_changed(self, changed_settings):
+        """
+        Update settings
+        :return: void
+        """
+
+        # Update the settings
+        self.__settings = changed_settings
+
+    def setup_console_connection(self):
+        self.settings_dialog.send_to_console.connect(self.handle_change_console_text)
+
+    @pyqtSlot(str, name="handle_change_console_text")
+    def handle_change_console_text(self, string):
+        """
+        :param string: String received from Settings instance to print to the console.
+        """
+        # self.print_to_console(string)
+        self.logger.info(string)

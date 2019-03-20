@@ -1,3 +1,11 @@
+- 0.0.7
+            - New feature: Added settings dialog functionality for pyIMD console use to facilitate update of parameters.
+            - Fixed Bug: Settings to project file synchronisation.
+            - Restructuring and simplification of code base.
+            - Increased unittest code coverage.
+- 0.0.6
+            - New feature: Added frequency offset support with automatic frequency offset detection or manual frequency
+                                     offset determination
 - 0.0.5
             - New feature: Added documentation
 - 0.0.4
