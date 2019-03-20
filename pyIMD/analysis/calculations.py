@@ -11,15 +11,16 @@ def calculate_mass(spring_constant, res_freq_after_cell_load, res_freq_before_ce
     cell attached to the cantilever.
 
     Args:
-        spring_constant (`float`):            Stiffness of the cantilever [in N/m]
-        res_freq_after_cell_load (`float`):   Resonance frequency of the cantilever AFTER the cell is picked up, at \
+
+    spring_constant (`float`):            Stiffness of the cantilever [in N/m]
+    res_freq_after_cell_load (`float`):   Resonance frequency of the cantilever AFTER the cell is picked up, at \
                                                  time point t [in kHz]
-        res_freq_before_cell_load (`float`):  Resonance frequency of the cantilever BEFORE the cell is picked up \
+    res_freq_before_cell_load (`float`):  Resonance frequency of the cantilever BEFORE the cell is picked up \
                                                  [in kHz]
 
 
     Returns:
-        mass (`float`):                        Returns data as float, which is the mass at time point t.
+    mass (`float`):                        Returns data as float, which is the mass at time point t.
 
     """
     mass = (spring_constant / (4 * pi * pi) * (1 / (res_freq_after_cell_load*res_freq_after_cell_load) - 1 /
@@ -31,16 +32,17 @@ def calculate_mass(spring_constant, res_freq_after_cell_load, res_freq_before_ce
 def calculate_resonance_frequencies(frequency_array, phase_array, initial_param_guess, lower_param_bounds,
                                     upper_param_bounds):
 
-    """Calculate_resonance_frequencies calculates the resonance frequency from input frequency and phase array. It does \
-     so via fitting the phase response of a harmonic oscillator (defined in pyIMD.analysis.curve_fit). The first fit \
-     parameter of the fit parameter array is the resonance frequency.
+    """Calculate_resonance_frequencies calculates the resonance frequency
+       from input frequency and phase array. It does so via fitting the phase response of a harmonic oscillator \
+       (defined in pyIMD.analysis.curve_fit). The first fit parameter of the fit parameter array is the resonance \
+       frequency.
 
     Args:
         frequency_array (`float array`):        Array of frequencies [in kHz]
         phase_array (`float array`):            Array of phase [in Rad]
-        initial_param_guess (`list`):          Initial parameter guess (1x4 array)
-        lower_param_bounds (`list`):           Lower bounds (1x4 array)
-        upper_param_bounds (`list`):           Upper bounds (1x4 array)
+        initial_param_guess (`float`):          Initial parameter guess (1x4 array)
+        lower_param_bounds (`float`):           Lower bounds (1x4 array)
+        upper_param_bounds (`float`):           Upper bounds (1x4 array)
 
     Returns:
         resonance_frequency (`float`):          Resonance frequency [in kHz]

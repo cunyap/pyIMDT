@@ -40,7 +40,7 @@ pyIMD can then be used trough its graphical user interface (GUI) directly.
 From sources
 ------------
 
-The sources for pyImd can be downloaded from the `Github repo`_.
+The sources for pyIMD can be downloaded from the `Github repo`_.
 
 You can clone the public repository:
 

@@ -1,11 +1,11 @@
 pyIMD
 -----
-The aim of this module is the calculation of the inertial mass for measurements taken in continous sweep mode or phase lock loops (PLL) mode .
+The aim of this module is the calculation of the total/inertial mass for measurements taken in the continous sweep or in the phase-lock loop (PLL) mode.
 
 Installation
 ------------
 
-To install this module, simply do on a cmd shell::
+To install this module, type on a cmd shell::
 
     >>> git clone https://git.bsse.ethz.ch/cunya/pyIMD
     >>> cd pyIMD
@@ -14,7 +14,7 @@ To install this module, simply do on a cmd shell::
 Usage
 -----
 
-To use this module, simply do::
+To use this module, write::
 
     >>> from pyIMD.inertialmassdetermination import InertialMassDetermination
 
@@ -36,7 +36,7 @@ Change settings for calculation and figure output the following way before calli
 Note
 ----
 
-Use tab completion to access the object's attributes (eg. to get the calculated mass)::
+Use tab completion to access the object's attributes (e.g. to get the calculated mass)::
 
     >>> mass = obj.calculated_cell_mass
 
