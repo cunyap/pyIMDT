@@ -4,7 +4,7 @@ __author__ = 'Andreas P. Cuny'
 
 
 def fit_function(x, fn, q, a, b):
-    """fit_function defines the phase response of a damped harmonic oscillator (i.e. the cantilever with or without cell).
+    """Defines the phase response of a damped harmonic oscillator (i.e. the cantilever with or without cell).
     It is called from calculate_resonance_frequencies, to be fitted to the data primarily to extract the natural resonance \
     frequency.
 
