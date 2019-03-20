@@ -2,7 +2,8 @@ from setuptools import setup
 
 
 def extract_version():
-    """Return pyIMD.__version__ from pyIMD/__init__.py
+    """
+    Return pyIMD.__version__ from pyIMD/__init__.py
     """
     with open('pyIMD/__init__.py') as fd:
         ns = {}
@@ -36,7 +37,7 @@ setup(name='pyIMD',
                    'pyIMD.ui': 'pyIMD/ui',
                    'pyIMD.configuration': 'pyIMD/configuration'},
       keywords='Inertial mass determination',
-      license='GPL2.0',
+      license='GPL3.0',
       classifiers=['Development Status :: 1 - Alpha',
                    'Intended Audience :: Developers, Users',
                    'Natural Language :: English',
@@ -44,10 +45,10 @@ setup(name='pyIMD',
                    'Operating System :: MacOS :: MacOS X',
                    'Operating System :: Microsoft :: Windows',
                    'Programming Language :: Python :: 3',
-                   'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
+                   'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
                    'Topic :: Scientific/Engineering'
                    ],
       install_requires=['pandas==0.23.3', 'numpy==1.14.5', 'scipy==1.1.0', 'nptdms==0.12.0', 'tqdm==4.23.4',
-                        'plotnine==0.3.0', 'PyQT5', 'lxml', 'xmltodict', 'matplotlib'],
+                        'plotnine==0.3.0', 'PyQT5', 'lxml', 'xmltodict', 'matplotlib', 'pyyaml', 'pyqtgraph'],
 
       )
