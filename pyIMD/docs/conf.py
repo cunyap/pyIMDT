@@ -15,6 +15,8 @@
 
 import sys
 import os
+import os.path as osp
+import sphinx_nbexamples
 
 
 def extract_version():
@@ -45,7 +47,9 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.ifconfig',
     'sphinx_automodapi.automodapi',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
+    'nbsphinx',
+    'sphinx.ext.mathjax',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -55,6 +59,15 @@ templates_path = ['_templates']
 # You can specify multiple suffix as a list of string:
 # source_suffix = ['.rst', '.md']
 source_suffix = '.rst'
+
+#not_document_data = 'sphinx_nbexamples.gallery_config'
+
+#example_gallery_config = dict(
+#    dont_preprocess=['../examples/notebooks/example_pyIMD_isage_notebook.ipynb'],
+#    examples_dirs='../examples',
+#    gallery_dirs='../examples',
+#    )
+#process_examples = not osp.exists(osp.join(osp.dirname(__file__), 'examples'))
 
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'
@@ -91,7 +104,7 @@ language = None
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build']
+exclude_patterns = ['_build', '**.ipynb_checkpoints']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.

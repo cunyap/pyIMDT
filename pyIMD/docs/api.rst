@@ -1,6 +1,10 @@
-API
-===
+#############
+API Reference
+#############
 
+.. currentmodule:: pyIMD
+
+.. autosummary::
 .. toctree::
    :numbered:
    :maxdepth: 10
