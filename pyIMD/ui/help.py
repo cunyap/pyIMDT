@@ -29,7 +29,7 @@ class QuickInstructions(QWidget):
 
         self.resize(400, 370)
         self.setWindowIcon(QtGui.QIcon(resource_path(os.path.join(os.path.join("ui", "icons",
-                                                                               "pyimd_logo2_01_FNf_icon.ico")))))
+                                                                               "pyIMD_logo_icon.ico")))))
         grid = QGridLayout()
         grid.setContentsMargins(5, 5, 5, 5)
         ok = QPushButton('Ok')
@@ -90,7 +90,7 @@ class ChangeLog(QWidget):
         self.setWindowTitle('pyIMD :: What\'s new in pyIMD')
         self.setFixedSize(1100, 500)
         self.setWindowIcon(QtGui.QIcon(resource_path(os.path.join(os.path.join("ui", "icons",
-                                                                               "pyimd_logo2_01_FNf_icon.ico")))))
+                                                                               "pyIMD_logo_icon.ico")))))
         self.setWindowFlags(Qt.WindowCloseButtonHint)
 
         h_box = QVBoxLayout()
@@ -167,7 +167,7 @@ class About(QWidget):
         self.copyright.setFont(font)
         self.dependencies.setFont(font_b)
 
-        logo = QtGui.QPixmap(resource_path(os.path.join(os.path.join("ui", "icons", "pyIMD_Logo-01.png"))))
+        logo = QtGui.QPixmap(resource_path(os.path.join(os.path.join("ui", "icons", "pyIMD_logo.png"))))
         logo = logo.scaled(250, 250, Qt.KeepAspectRatio)
         self.le.setPixmap(logo)
 

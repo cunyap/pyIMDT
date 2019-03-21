@@ -46,7 +46,7 @@ class IMDWindow(QtWidgets.QMainWindow):
         uic.loadUi(resource_path(os.path.join('ui', 'main_window.ui')), self)
         self.setWindowTitle('pyIMD: Inertial mass determination [build: v%s %s]' % (__version__, __operating_system__))
         self.setWindowIcon(QtGui.QIcon(resource_path(os.path.join(os.path.join("ui", "icons",
-                                                                               "pyimd_logo2_01_FNf_icon.ico")))))
+                                                                               "pyIMD_logo_icon.ico")))))
 
         # Add AppUserModelID for windows systems
         if sys.platform == 'win32':
@@ -165,7 +165,7 @@ class IMDWindow(QtWidgets.QMainWindow):
         self.tabWidget.setCurrentIndex(0)
 
         self.graphicsView.plotItem.ctrlMenu = None
-        self.imd_icon = QGraphicsSvgItem(os.path.join(os.path.join("ui", "icons", "pyIMD_Logo-01.svg")))
+        self.imd_icon = QGraphicsSvgItem(os.path.join(os.path.join("ui", "icons", "pyIMD_logo_vect.svg")))
         self.imd_icon.scale(1, -1)
 
         self.graphicsView.addItem(self.imd_icon)
@@ -722,7 +722,7 @@ class IMDWindow(QtWidgets.QMainWindow):
         self.settings.setValue('display_on_startup', self.qi.display_on_startup)
 
         msg_box = QMessageBox()
-        msg_box.setWindowIcon(QtGui.QIcon(resource_path(os.path.join("ui", "icons", "pyimd_logo2_01_FNf_icon.ico"))))
+        msg_box.setWindowIcon(QtGui.QIcon(resource_path(os.path.join("ui", "icons", "pyIMD_logo_icon.ico"))))
         msg_box.setWindowTitle('pyIMD :: Quit Program')
         msg_box.setText('Do you want to save changes before quitting the program?')
         save_btn = QPushButton('Save')
@@ -771,6 +771,6 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     main = IMDWindow()
     app_icon = QtGui.QIcon()
-    app_icon.addFile(resource_path(os.path.join("icons", "pyimd_logo2_01_FNf_icon.ico")), QSize(256, 256))
+    app_icon.addFile(resource_path(os.path.join("icons", "pyIMD_logo_icon.ico")), QSize(256, 256))
     app.setWindowIcon(app_icon)
     sys.exit(app.exec_())

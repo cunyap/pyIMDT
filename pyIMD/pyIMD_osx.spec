@@ -23,13 +23,13 @@ a = Analysis(['/Users/gflaesch/PycharmProjects/test/pyIMD/pyIMD/main.py'],
 
 hookspath=['/Users/gflaesch/PycharmProjects/test/pyIMD/pyIMD/ui/hooks/']
 
-a.datas += [('ui/icons/pyimd_logo2_01_FNf_icon.ico','/Users/gflaesch/PycharmProjects/test/pyIMD/pyIMD/ui/icons/pyimd_logo2_01_FNf_icon.ico','DATA'),
-            ('ui/icons/pyIMD_Logo2-01.png','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyIMD_Logo2-01.png','DATA'),
-            ('ui/icons/pyIMD_Logo-01.svg','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyIMD_Logo-01.svg','DATA'),
+a.datas += [('ui/icons/pyIMD_logo_icon.ico','/Users/gflaesch/PycharmProjects/test/pyIMD/pyIMD/ui/icons/pyIMD_logo_icon.ico','DATA'),
+            ('ui/icons/pyIMD_logo.png','/Users/gflaesch/PycharmProjects/test/pyIMD/pyIMD/ui/icons/pyIMD_logo.png','DATA'),
+            ('ui/icons/pyIMD_logo.svg','/Users/gflaesch/PycharmProjects/test/pyIMD/pyIMD/ui/icons/pyIMD_logo.svg','DATA'),
             ('ui/main_window.ui','/Users/gflaesch/PycharmProjects/test/pyIMD/pyIMD/ui/main_window.ui','DATA'),
             ('ui/setting_dialog.ui','/Users/gflaesch/PycharmProjects/test/pyIMD/pyIMD/ui/setting_dialog.ui','DATA'),
             ('imd.py','/Users/gflaesch/PycharmProjects/test/pyIMD/pyIMD/imd.py','DATA'),
-            ('change_log.txt','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\change_log.txt','DATA'),
+            ('change_log.txt','/Users/gflaesch/PycharmProjects/test/pyIMD/pyIMD/ui/icons/change_log.txt','DATA'),
 		    ('palettable/colorbrewer/data/colorbrewer_all_schemes.json', '/Users/gflaesch/anaconda3/lib/python3.6/site-packages/palettable/colorbrewer/data/colorbrewer_all_schemes.json', 'DATA')]
 
 pyz = PYZ(a.pure, a.zipped_data,
