@@ -69,12 +69,8 @@ class IMDWindow(QtWidgets.QMainWindow):
             app_id = u'ethz.csb.pyCAME.v%s' % __version__
             ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
 
-        # Init QSettings and specify cross-platform temp file
-        self.settings = QSettings(QSettings.IniFormat, QSettings.SystemScope, '__CSB', '__pyIMD_settings')
-        self.settings.setFallbacksEnabled(False)
-        self.settings.setPath(QSettings.IniFormat, QSettings.SystemScope, './__pyIMD_settings.ini')
-        file_object = open(self.settings.fileName(), 'w')
-        file_object.write('[General]\ndisplay_on_startup=2')  # Create ui settings file for the first time
+        # Init QSettings for cross-platform temp settings file in ini format
+        self.settings = QSettings(QSettings.IniFormat, QSettings.SystemScope, 'CSB', 'pyIMD')
 
         self.settings_dialog = None
         self.about_window = None
