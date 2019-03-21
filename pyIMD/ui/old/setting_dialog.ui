@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>398</width>
+    <height>638</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>19</y>
+     <width>381</width>
+     <height>569</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="12" column="3">
+     <widget class="QLineEdit" name="figure_name_data_edit"/>
+    </item>
+    <item row="17" column="3">
+     <widget class="QLineEdit" name="figure_resolution_edit"/>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLabel" name="lowe_param_bound_label">
+      <property name="text">
+       <string>Lower parameter bound</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1">
+     <widget class="QLabel" name="conversion_factor_deg_label">
+      <property name="text">
+       <string>Conversion factor (deg to rad)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="3">
+     <widget class="QLineEdit" name="intial_param_guess_edit"/>
+    </item>
+    <item row="5" column="3">
+     <widget class="QLineEdit" name="upper_param_bound_edit"/>
+    </item>
+    <item row="11" column="3">
+     <widget class="Line" name="line_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1">
+     <widget class="QLabel" name="conversion_factor_hz_label">
+      <property name="text">
+       <string>Conversion factor (Hz to kHz)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="13" column="1">
+     <widget class="QLabel" name="figure_name_w_cell_label">
+      <property name="text">
+       <string>Figure name pre start no cell</string>
+      </property>
+     </widget>
+    </item>
+    <item row="23" column="1">
+     <widget class="QLabel" name="text_data_delimiter_label">
+      <property name="text">
+       <string>Data text delimiter</string>
+      </property>
+     </widget>
+    </item>
+    <item row="22" column="3">
+     <widget class="QLineEdit" name="read_text_data_from_line_edit"/>
+    </item>
+    <item row="23" column="3">
+     <widget class="QLineEdit" name="text_data_delimiter_edit"/>
+    </item>
+    <item row="13" column="3">
+     <widget class="QLineEdit" name="figure_name_w_cell_edit"/>
+    </item>
+    <item row="17" column="1">
+     <widget class="QLabel" name="figure_resolution_label">
+      <property name="text">
+       <string>Figure resolution (dpi)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="19" column="1">
+     <widget class="QLabel" name="figure_format_label">
+      <property name="text">
+       <string>Figure format</string>
+      </property>
+     </widget>
+    </item>
+    <item row="15" column="1">
+     <widget class="QLabel" name="figure_width_label">
+      <property name="text">
+       <string>Figure width</string>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="1">
+     <widget class="QLabel" name="figure_name_wo_cell_label">
+      <property name="text">
+       <string>Figure name pre start with cell</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="3">
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="Line" name="seperator_line2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="1">
+     <widget class="Line" name="seperator_line1">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="3">
+     <widget class="QLineEdit" name="lower_param_bound_edit"/>
+    </item>
+    <item row="16" column="3">
+     <widget class="QLineEdit" name="figure_height_edit"/>
+    </item>
+    <item row="18" column="3">
+     <widget class="QLineEdit" name="figure_unit_edit"/>
+    </item>
+    <item row="19" column="3">
+     <widget class="QLineEdit" name="figure_format_edit"/>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLabel" name="upper_param_bound_label">
+      <property name="text">
+       <string>Upper parameter bound</string>
+      </property>
+     </widget>
+    </item>
+    <item row="22" column="1">
+     <widget class="QLabel" name="read_text_data_from_line_label">
+      <property name="text">
+       <string>Read text data from line</string>
+      </property>
+     </widget>
+    </item>
+    <item row="21" column="3">
+     <widget class="Line" name="line_3">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="21" column="1">
+     <widget class="Line" name="line_4">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="1">
+     <widget class="QLabel" name="figure_name_data_label">
+      <property name="text">
+       <string>Figure name measured data</string>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="3">
+     <widget class="QLineEdit" name="figure_name_wo_cell_edit"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLabel" name="init_param_guess_label">
+      <property name="text">
+       <string>Initial parameter guess</string>
+      </property>
+     </widget>
+    </item>
+    <item row="15" column="3">
+     <widget class="QLineEdit" name="figure_width_edit"/>
+    </item>
+    <item row="0" column="3">
+     <widget class="QLineEdit" name="spring_constant_edit"/>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLabel" name="spring_constant_label">
+      <property name="text">
+       <string>Spring constant</string>
+      </property>
+     </widget>
+    </item>
+    <item row="18" column="1">
+     <widget class="QLabel" name="figure_unit_label">
+      <property name="text">
+       <string>Figure unit</string>
+      </property>
+     </widget>
+    </item>
+    <item row="16" column="1">
+     <widget class="QLabel" name="figure_height_label">
+      <property name="text">
+       <string>Figure height</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="3">
+     <widget class="QLineEdit" name="conversion_factor_deg_edit"/>
+    </item>
+    <item row="10" column="3">
+     <widget class="QLineEdit" name="conversion_factor_hz_edit"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLabel" name="cell_position_label">
+      <property name="text">
+       <string>Cell position [um]</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QLabel" name="rolling_window_size_label">
+      <property name="text">
+       <string>Rolling average window size</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="3">
+     <widget class="QLineEdit" name="rolling_window_size_edit"/>
+    </item>
+    <item row="7" column="3">
+     <widget class="QLineEdit" name="frequency_offset_edit"/>
+    </item>
+    <item row="7" column="1">
+     <widget class="QLabel" name="frequency_offset_label">
+      <property name="text">
+       <string>Frequency offset</string>
+      </property>
+     </widget>
+    </item>
+    <item row="20" column="3">
+     <widget class="QLineEdit" name="figure_plot_every_nth_point_edit"/>
+    </item>
+    <item row="20" column="1">
+     <widget class="QLabel" name="figure_plot_every_nth_point_label">
+      <property name="text">
+       <string>Plot every nth point</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLabel" name="cantilever_length_label">
+      <property name="text">
+       <string>Cantilever length [um]</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="3">
+     <widget class="QLineEdit" name="cell_position_edit"/>
+    </item>
+    <item row="2" column="3">
+     <widget class="QLineEdit" name="cantilever_length_edit"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>600</y>
+     <width>381</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QPushButton" name="defaultBtn">
+      <property name="text">
+       <string>Default</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="cancelBtn">
+      <property name="text">
+       <string>Cancel</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="commitBtn">
+      <property name="text">
+       <string>Commit</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -22,7 +22,7 @@ a = Analysis(['C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIM
 	 
 a.datas += [('ui/icons/pyimd_logo_icon.ico','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyimd_logo_icon.ico','DATA'),
             ('ui/icons/pyIMD_logo.png','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyIMD_logo.png','DATA'),
-            ('ui/icons/pyIMD_logo.svg','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyIMD_logo.svg','DATA'),
+            ('ui/icons/pyIMD_logo_vect.svg','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyIMD_logo_vect.svg','DATA'),
 			('ui/main_window.ui','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\main_window.ui','DATA'),
 			('ui/setting_dialog.ui','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\setting_dialog.ui','DATA'),
 			('imd.py','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\imd.py','DATA'),
@@ -40,4 +40,4 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           console=True,
-		  icon='C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyimd_logo2_01_FNf_icon.ico')
+		  icon='C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyimd_logo_icon.ico')

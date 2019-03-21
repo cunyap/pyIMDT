@@ -12,13 +12,13 @@ warnings.filterwarnings("ignore")
 
 
 def plot_fitting(x, y, resonance_frequency, parameter):
-    """ Plots the resonance frequency and the function fit
+    """ Plots the phase response and the corresponding fit of the harmonic damped oscillator.
 
     Args:
         x (`float array`):                       X coordinates (frequency in kHz)
         y (`float array`):                       Y coordinates (phase in radians)
-        resonance_frequency (`float array`):     Resonance frequency of x, y
-        parameter (`float array`):               Parameter of function fit
+        resonance_frequency (`float array`):     Resonance frequency given by the fit of x and y
+        parameter (`float array`):               Others parameters of function fit (Q factor, offset, linear background)
 
     Returns:
         p (`ggplot object`):                     Returns a ggplot object
@@ -41,20 +41,22 @@ def plot_fitting(x, y, resonance_frequency, parameter):
     return p
 
 
-def plot_frequency_shift(x, y, resonance_frequency_without, parameter_without, xx, yy, resonance_frequency_with,
-                         parameter):
-    """ Plots the resonance frequency shift of pre start data without and with cell attached to cantilever with the
+def plot_response_shift(x, y, resonance_frequency_without, parameter_without, xx, yy, resonance_frequency_with,
+                        parameter):
+    """ Plots the phase response of pre start data without and with cell attached to cantilever with the
     respective function fit.
 
     Args:
-        x (`float array`):                               X coordinates (frequency in kHz)
-        y (`float array`):                               Y coordinates (phase in radians)
-        xx (`float array`):                              X coordinates (frequency in kHz)
-        yy (`float array`):                              Y coordinates (phase in radians)
-        resonance_frequency_without (`float array`):     Resonance frequency of x, y
-        resonance_frequency_with (`float array`):        Resonance frequency of x, y
-        parameter (`float array`):                       Parameter of function fit
-        parameter_without (`float array`):               Parameter of function fit
+        x (`float array`):                               X coordinates w/o cell (frequency in kHz)
+        y (`float array`):                               Y coordinates w/o cell (phase in radians)
+        xx (`float array`):                              X coordinates w/ cell(frequency in kHz)
+        yy (`float array`):                              Y coordinates w/ cell (phase in radians)
+        resonance_frequency_without (`float array`):     Resonance frequency given by the fit of x and y  w/o cell
+        resonance_frequency_with (`float array`):        Resonance frequency given by the fit of x and y w/ cell
+        parameter (`float array`):                       Others parameters of function fit (Q factor, offset, linear
+                                                         background) w/o cell
+        parameter_without (`float array`):               Others parameters of function fit (Q factor, offset, linear
+                                                         background) w/ cell
 
     Returns:
         p (`ggplot object`):                             Returns a ggplot object

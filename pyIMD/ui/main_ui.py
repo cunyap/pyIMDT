@@ -29,17 +29,33 @@ class Stream(QtCore.QObject):
     """
     Implementation of a stream to handle logging messages
     """
-    newText = QtCore.pyqtSignal(str)
+
+    stream_signal = QtCore.pyqtSignal(str)
+    """
+        pyqtsignal to redirect sterr
+    """
 
     def write(self, text: object) -> object:
-        self.newText.emit(str(text))
+        """
+            Emits text formatted as string.
+            Args:
+                text (`str`) Text sent to sterr to be rerouted to the console in the ui.
+        """
+        self.stream_signal.emit(str(text))
 
 
 class IMDWindow(QtWidgets.QMainWindow):
     """
-    Implementation of the pyIMD main user interface widnow.
+    Implementation of the pyIMD main user interface window.
     """
-    send_to_console = pyqtSignal(str)
+
+    send_to_console_signal = pyqtSignal(str)
+    """
+        pyqtSignal used to send a text to the console.
+        
+    Args:
+        message (`str`)         Text to be sent to the console
+    """
 
     def __init__(self):
         super(IMDWindow, self).__init__()
@@ -99,7 +115,7 @@ class IMDWindow(QtWidgets.QMainWindow):
                            "text_data_delimiter": repr(TEXT_DATA_DELIMITER).replace("'", "")}
 
         self.settings_dialog = SettingsDialog(self.__settings)
-        self.settings_dialog.settings_has_changed.connect(
+        self.settings_dialog.settings_has_changed_signal.connect(
             self.on_settings_changed)
         self.settings_dialog.set_values()
         self.setup_console_connection()
@@ -471,12 +487,12 @@ class IMDWindow(QtWidgets.QMainWindow):
         """
         if self.settings_dialog is None:
             self.settings_dialog = SettingsDialog(self.__settings)
-            self.settings_dialog.settings_has_changed.connect(
+            self.settings_dialog.settings_has_changed_signal.connect(
                 self.on_settings_changed)
 
         self.settings_dialog.exec()
 
-    @pyqtSlot(dict, name="settings_has_changed")
+    @pyqtSlot(dict, name="settings_has_changed_signal")
     def on_settings_changed(self, changed_settings):
         """
         Update settings from settings dialog to settings configuration as soon as user commits parameter changes.
@@ -555,7 +571,7 @@ class IMDWindow(QtWidgets.QMainWindow):
         """
         Set up the console connection between the settings and the main window.
         """
-        self.settings_dialog.send_to_console.connect(self.handle_change_console_text)
+        self.settings_dialog.send_to_console_signal.connect(self.handle_change_console_text)
 
     def print_to_console(self, text):
         """

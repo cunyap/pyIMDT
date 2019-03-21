@@ -12,7 +12,7 @@ __author__ = 'Andreas P. Cuny'
 
 class Settings(object):
     """
-    Settings constructor. Initialization with default parameter values stored in pyIMD.configuration.defaults
+    Settings initialization with default parameter values stored in pyIMD.configuration.defaults
     """
     def __init__(self):
         # General parameters (initialized with default parameters)
@@ -53,7 +53,7 @@ class Settings(object):
         Settings representation.
 
         Returns:
-               text (`str`):      Settings representation of pyIMD parameters and project configuration as formatted text
+               text (`str`):      Settings representation of pyIMD parameters and project configuration as formatted text.
         """
         return "General settings: \n\tfigure_with: %s (%s) \n\tfigure_height: %s (%s) \n\tfigure_units: %s (%s) " \
                "\n\tfigure_format: %s (%s) \n\tfigure_resolution_dpi: %s (%s) " \
@@ -121,7 +121,7 @@ class Settings(object):
 
     figure_height = property(operator.attrgetter('_figure_height'))
     """
-    Parameter defining the result figure(s) height
+    Parameter defining the result figure(s) height.
 
     Args:
         height (`float`):    Figure height in the unit specified.
@@ -147,7 +147,7 @@ class Settings(object):
 
     figure_resolution_dpi = property(operator.attrgetter('_figure_resolution_dpi'))
     """
-    Parameter defining the result figure(s) resolution in dpi
+    Parameter defining the result figure(s) resolution in dpi.
 
     Args:
         resolution (`int`):    Figure resolution. E.g. 72, 150, 300.
@@ -160,7 +160,7 @@ class Settings(object):
 
     figure_name_pre_start_no_cell = property(operator.attrgetter('_figure_name_pre_start_no_cell'))
     """
-    Parameter defining the figure name for the function fit pre start no cell
+    Parameter defining the figure name for the function fit pre start no cell.
 
     Args:
         name (`str`):    Figure name for the function fit pre start no cell.
@@ -173,7 +173,7 @@ class Settings(object):
 
     figure_name_pre_start_with_cell = property(operator.attrgetter('_figure_name_pre_start_with_cell'))
     """
-    Parameter defining the figure name for the function fit pre start with cell
+    Parameter defining the figure name for the function fit pre start with cell.
 
     Args:
         name (`str`):    Figure name for the function fit pre start with cell.
@@ -199,7 +199,7 @@ class Settings(object):
 
     figure_plot_every_nth_point = property(operator.attrgetter('_figure_plot_every_nth_point'))
     """
-    Parameter defining the how many data points are used for visualization. For very large data sets a number > 1 could 
+    Parameter defining how many data points are used for visualization. For very large data sets a number > 1 could 
     increase the readability of the figure and lower the file size.
 
     Args:
@@ -213,7 +213,7 @@ class Settings(object):
 
     conversion_factor_hz_to_khz = property(operator.attrgetter('_conversion_factor_hz_to_khz'))
     """
-    Parameter defining the data conversion factor from hertz to kilo hertz.
+    Parameter defining the data conversion factor from Hz to kHz.
 
     Args:
         factor (`float`):    Data conversion factor from hertz to kilo hertz.
@@ -252,7 +252,7 @@ class Settings(object):
 
     initial_parameter_guess = property(operator.attrgetter('_initial_parameter_guess'))
     """
-    Parameter defining the initial parameter guess
+    Parameter defining the initial parameter guess.
 
     Args:
         array (`list`):    Initial parameter guess.
@@ -281,7 +281,7 @@ class Settings(object):
     Parameter defining the upper parameter bounds.
 
     Args:
-        array (`list`):    Upper parameter bounds
+        array (`list`):    Upper parameter bounds.
     """
     @upper_parameter_bounds.setter
     def upper_parameter_bounds(self, array):
@@ -361,7 +361,8 @@ class Settings(object):
 
     read_text_data_from_line = property(operator.attrgetter('_read_text_data_from_line'))
     """
-    Parameter defining the line number from where on to read the data from.
+    Parameter defining the length of the header inside the initial sweep files. From this line number the data will be 
+    imported.
 
     Args:
         line_number (`int`):    Line number from where on to read the data from.
@@ -387,10 +388,10 @@ class Settings(object):
 
     cell_position = property(operator.attrgetter('_cell_position'))
     """
-      Parameter defining the cell position offset
+      Parameter defining the cell position offset.
 
       Args:
-          cell_position (`float`):    Cell position offset in microns.
+          cell_position (`float`):    Cell position offset in microns from the free end of the cantilever.
     """
     @cell_position.setter
     def cell_position(self, cell_position):
@@ -400,7 +401,7 @@ class Settings(object):
 
     text_data_delimiter = property(operator.attrgetter('_text_data_delimiter'))
     """
-      Parameter defining the text file data delimiter
+      Parameter defining the text file data delimiter.
 
       Args:
           delimiter (`str`):    Text file data delimiter i.e '\t' for tab delimited or ',' for comma separated data.
@@ -413,10 +414,10 @@ class Settings(object):
 
     project_folder_path = property(operator.attrgetter('_project_folder_path'))
     """
-       Parameter defining the path to the files
+       Parameter defining the path to the files.
 
        Args:
-           path (`str`):     The path to the files
+           path (`str`):     The path to the files.
     """
     @project_folder_path.setter
     def project_folder_path(self, path):
@@ -426,10 +427,10 @@ class Settings(object):
 
     calculation_mode = property(operator.attrgetter('_calculation_mode'))
     """
-       Parameter defining the calculation mode
+       Parameter defining the calculation mode.
 
        Args:
-           mode (`str`):     The calculation mode. PLL, Cont.Sweep or Auto
+           mode (`str`):     The calculation mode. PLL, Cont.Sweep or Auto.
     """
     @calculation_mode.setter
     def calculation_mode(self, mode):
@@ -439,10 +440,10 @@ class Settings(object):
 
     pre_start_no_cell_path = property(operator.attrgetter('_pre_start_no_cell_path'))
     """
-       Parameter defining the path to the pre start no cell file
+       Parameter defining the path to the pre start no cell file.
 
        Args:
-           path (`str`):     Path to the pre start no cell file (.txt)
+           path (`str`):     Path to the pre start no cell file (.txt).
     """
     @pre_start_no_cell_path.setter
     def pre_start_no_cell_path(self, path):
@@ -452,10 +453,10 @@ class Settings(object):
 
     pre_start_with_cell_path = property(operator.attrgetter('_pre_start_with_cell_path'))
     """
-       Parameter defining the path to the pre start with cell file
+       Parameter defining the path to the pre start with cell file.
 
        Args:
-           path (`str`):     Path to the pre start with cell file (.txt)
+           path (`str`):     Path to the pre start with cell file (.txt).
     """
     @pre_start_with_cell_path.setter
     def pre_start_with_cell_path(self, path):
@@ -468,7 +469,7 @@ class Settings(object):
        Parameter defining the path to the measurement file.
 
        Args:
-           path (`str`):     Path to the measurement file. (.tdms or .txt file)
+           path (`str`):     Path to the measurement file. (.tdms or .txt file).
     """
     @measurements_path.setter
     def measurements_path(self, path):
@@ -481,7 +482,7 @@ class Settings(object):
       Parameter defining the selected files for calculation.
 
       Args:
-          files (`list`):    Selected files for calculation
+          files (`list`):    Selected files for calculation.
     """
     @selected_files.setter
     def selected_files(self, files):

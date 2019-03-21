@@ -10,7 +10,7 @@ from pyIMD.configuration.defaults import *
 from PyQt5.QtCore import pyqtSlot, QObject
 import matplotlib
 matplotlib.use('Qt5Agg')
-from pyIMD.plotting.figures import plot_fitting, plot_frequency_shift, plot_mass
+from pyIMD.plotting.figures import plot_fitting, plot_response_shift, plot_mass
 import os
 import sys
 import logging
@@ -142,10 +142,10 @@ class InertialMassDetermination(QObject):
         Loads a pre defined pyIMD project form a XML file.
 
         Args:
-            file_path (`str`)   Full path + file name to the pyIMD project file.
+            file_path (`str`):   Full path + file name to the pyIMD project file.
 
         Returns:
-            status (`str`):     String reporting the success of failure of loading a pyIMD project.
+            status (`str`):      String reporting the success of failure of loading a pyIMD project.
         """
         try:
             message = self.settings.read_pyimd_project(file_path)
@@ -157,11 +157,12 @@ class InertialMassDetermination(QObject):
     def save_pyimd_project(self, file_path):
         """
         Saves the current pyIMD project as XML file.
+
         Args:
-            file_path (`str`)   Full path + file name to the pyIMD project file.
+            file_path (`str`):   Full path + file name to the pyIMD project file.
 
         Returns:
-            status (`str`):     String reporting the success of failure of loading a pyIMD project.
+            status (`str`):      String reporting the success of failure of loading a pyIMD project.
         """
         try:
             self.settings.write_pyimd_project(file_path)
@@ -173,7 +174,7 @@ class InertialMassDetermination(QObject):
         Prints the current pyIMD settings and parameters to the console.
 
         Returns:
-            pyIMD project summary (`str`):        pyIMD settings and parameter summary as formated string.
+            pyIMD project summary (`str`):        pyIMD settings and parameter summary as formatted string.
         """
         self.logger.info(self.settings)
 
@@ -181,7 +182,7 @@ class InertialMassDetermination(QObject):
         """Runs the inertial mass determination calculation
 
         Returns:
-            result:          Returns result structured in a pandas data frame and saves function fit plots as pdf \
+            void:            Returns result structured in a pandas data frame and saves function fit plots as pdf \
                              or png files directly to the disk.
         """
 
@@ -243,10 +244,10 @@ class InertialMassDetermination(QObject):
                              **optional_fig_param)
             self.logger.info('Done with pre start with cell resonance frequency calculation')
 
-            fig = plot_frequency_shift(self.data_pre_start_no_cell.iloc[:, 0], self.data_pre_start_no_cell.iloc[:, 2],
-                                       self.resonance_freq_pre_start_no_cell, self.fit_param_pre_start_no_cell,
+            fig = plot_response_shift(self.data_pre_start_no_cell.iloc[:, 0], self.data_pre_start_no_cell.iloc[:, 2],
+                                      self.resonance_freq_pre_start_no_cell, self.fit_param_pre_start_no_cell,
                                        self.data_pre_start_with_cell.iloc[:, 0], self.data_pre_start_with_cell.iloc[:, 2],
-                                       self.resonance_freq_pre_start_with_cell, self.fit_param_pre_start_with_cell)
+                                      self.resonance_freq_pre_start_with_cell, self.fit_param_pre_start_with_cell)
 
             write_to_disk_as(self.settings.figure_format, fig,
                              '{}'.format(self.result_folder + os.sep + 'PreStartFrequencyShift'), **optional_fig_param)
@@ -354,7 +355,7 @@ class InertialMassDetermination(QObject):
             args (`list`):   List of one or many file paths + file names to valid pyIMD project files.
 
         Returns:
-            result:          Returns result structured in a pandas data frame and saves function fit plots as pdf \
+            void:            Returns result structured in a pandas data frame and saves function fit plots as pdf \
                              files.
         """
         try:
@@ -371,9 +372,6 @@ class InertialMassDetermination(QObject):
 
     def convert_data(self):
         """ Converts imported data to correct units needed for further calculation.
-
-        Returns:
-            -:               Acts on data directly.
         """
 
         attributes = ['data_pre_start_no_cell', 'data_pre_start_with_cell']
@@ -422,8 +420,8 @@ class InertialMassDetermination(QObject):
             SettingsDialog(self.__settings)
             self.settings_dialog = SettingsDialog(self.__settings)
             self.settings_dialog.set_values()
-            self.settings_dialog.settings_has_changed.connect(self.on_settings_changed)
-            self.setup_console_connection()
+            self.settings_dialog.settings_has_changed_signal.connect(self.on_settings_changed)
+            self.establish_console_connection()
             self.settings_dialog.show()
             app.exec_()
 
@@ -431,19 +429,22 @@ class InertialMassDetermination(QObject):
     def on_settings_changed(self, changed_settings):
         """
         Update settings
-        :return: void
         """
 
         # Update the settings
         self.__settings = changed_settings
 
-    def setup_console_connection(self):
-        self.settings_dialog.send_to_console.connect(self.handle_change_console_text)
+    def establish_console_connection(self):
+        """
+        Establish console connection between the imd object and the settings dialog.
+        """
+        self.settings_dialog.send_to_console_signal.connect(self.handle_change_console_text)
 
     @pyqtSlot(str, name="handle_change_console_text")
     def handle_change_console_text(self, string):
         """
-        :param string: String received from Settings instance to print to the console.
+        Args:
+            string (`str`): String received from Settings instance to print to the console.
         """
         # self.print_to_console(string)
         self.logger.info(string)

@@ -2,7 +2,7 @@ from unittest import TestCase, main
 import pandas as pd
 import numpy as np
 import plotnine
-from pyIMD.plotting.figures import plot_fitting, plot_frequency_shift, plot_mass, create_montage_array, \
+from pyIMD.plotting.figures import plot_fitting, plot_response_shift, plot_mass, create_montage_array, \
     get_montage_array_size
 
 
@@ -32,11 +32,11 @@ class TestPlotting(TestCase):
         parameter_without = [1,2,3]
         parameter_with = [1, 2, 3]
 
-        self.assertEqual(type(plot_frequency_shift(df_without.iloc[:, 0], df_without.iloc[:, 1],
-                                                   resonance_frequency_without, parameter_without,
+        self.assertEqual(type(plot_response_shift(df_without.iloc[:, 0], df_without.iloc[:, 1],
+                                                  resonance_frequency_without, parameter_without,
                                                    df_with.iloc[:, 0], df_with.iloc[:, 1],
-                                                   resonance_frequency_with, parameter_with
-                                                   )), plotnine.ggplot)
+                                                  resonance_frequency_with, parameter_with
+                                                  )), plotnine.ggplot)
 
     def testCreateMontageArray(self):
 

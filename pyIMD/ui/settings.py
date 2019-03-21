@@ -15,21 +15,21 @@ class SettingsDialog(QDialog):
 
     """
 
+    settings_has_changed_signal = pyqtSignal(dict, name='settings_has_changed_signal')
     """
     pyqtSignal sends dictionary with all settings
 
     Returns:
         settings (`dict`):                         Dictionary with settings.
     """
-    settings_has_changed = pyqtSignal(dict, name='settings_has_changed')
 
+    send_to_console_signal = pyqtSignal(str, name='send_to_console_signal')
     """
     pyqtSignal sends message to console
 
     Returns:
         message (`str`):                           Status message to be send to console.
     """
-    send_to_console = pyqtSignal(str, name='send_to_console')
 
     def __init__(self, settings_dictionary):
         """
@@ -381,7 +381,7 @@ class SettingsDialog(QDialog):
 
         # Emit a signal
         if has_changed:
-            self.settings_has_changed.emit(self.settings_dictionary)
+            self.settings_has_changed_signal.emit(self.settings_dictionary)
 
         self.print_to_console("Parameters updated")
         # Close the dialog
@@ -428,7 +428,7 @@ class SettingsDialog(QDialog):
         Returns:
             Message (`str`):                Prints message to console.
         """
-        self.send_to_console.emit(text)
+        self.send_to_console_signal.emit(text)
 
     def close_settings_dialog(self):
         """

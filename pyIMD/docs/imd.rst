@@ -1,7 +1,7 @@
 imd
 ===
 
-.. automodule:: pyIMD.inertialmassdetermination
+.. automodule:: pyIMD.imd
     :members:
     :undoc-members:
     :show-inheritance:
