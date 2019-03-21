@@ -174,7 +174,7 @@ class IMDWindow(QtWidgets.QMainWindow):
         self.actionRead_documentation.setStatusTip('Show online documentation')
         self.actionRead_documentation.triggered.connect(self.on_read_documentation)
 
-        sys.stderr = Stream(newText=self.on_update_text)
+        sys.stderr = Stream(stream_signal=self.on_update_text)
 
         self.batchFileListWidget.setSelectionMode(QListWidget.MultiSelection)
         self.tabWidget.setTabEnabled(2, False)
