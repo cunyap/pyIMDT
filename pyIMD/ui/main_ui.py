@@ -177,7 +177,7 @@ class IMDWindow(QtWidgets.QMainWindow):
         self.tabWidget.setCurrentIndex(0)
 
         self.graphicsView.plotItem.ctrlMenu = None
-        self.imd_icon = QGraphicsSvgItem(os.path.join(os.path.join("ui", "icons", "pyIMD_logo_vect.svg")))
+        self.imd_icon = QGraphicsSvgItem(resource_path(os.path.join(os.path.join("ui", "icons", "pyIMD_logo_vect.svg"))))
         self.imd_icon.scale(1, -1)
 
         self.graphicsView.addItem(self.imd_icon)
