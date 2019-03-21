@@ -2,7 +2,7 @@
 # Main script to bundle pyIMD
 # Author Andreas P. Cuny, andreas.cuny@bsse.ethz.ch
 # Use the following command to build the executable with pyinstaller
-# C:\\Python35-3-3-64\\Scripts pyinstaller.exe --noconsole --onefile C:\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\pyIMD.spec
+# C:\\Python35-3-3-64\\Scripts pyinstaller.exe --noconsole --onefile C:\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\pyIMD_win.spec
 
 block_cipher = None
 
@@ -21,9 +21,12 @@ a = Analysis(['C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIM
 			  
 	 
 a.datas += [('ui/icons/pyimd_logo2_01_FNf_icon.ico','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyimd_logo2_01_FNf_icon.ico','DATA'),
+            ('ui/icons/pyIMD_Logo2-01.png','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyIMD_Logo2-01.png','DATA'),
+            ('ui/icons/pyIMD_Logo-01.svg','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyIMD_Logo-01.svg','DATA'),
 			('ui/main_window.ui','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\main_window.ui','DATA'),
 			('ui/setting_dialog.ui','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\setting_dialog.ui','DATA'),
-			('inertialmassdetermination.py','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\inertialmassdetermination.py','DATA')]
+			('imd.py','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\imd.py','DATA'),
+			('change_log.txt','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\change_log.txt','DATA')]
 			    			 			 
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
