@@ -381,7 +381,7 @@ class InertialMassDetermination(QObject):
                                                         self.settings.conversion_factor_hz_to_khz
             getattr(self, str(iAttribute)).iloc[:, 2] = getattr(self, str(iAttribute)).iloc[:, 2] / \
                                                         self.settings.conversion_factor_deg_to_rad
-        if self.settings.calculation_mode == 0:
+        if self.settings.calculation_mode == 'Cont.Sweep':
             for iSweep in range(0, len(self.data_measured), 3):
                 # Calc resonance frequency and function fit for the ith sweep (iSweep)
                 self.data_measured.iloc[iSweep + 1, 0:255] = self.data_measured.iloc[iSweep + 1, 0:255] / \
