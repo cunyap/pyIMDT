@@ -2,7 +2,7 @@
 # Main script to bundle pyIMD
 # Author Andreas P. Cuny, andreas.cuny@bsse.ethz.ch
 # Use the following command to build the executable with pyinstaller
-# C:\\Python35-3-3-64\\Scripts pyinstaller.exe --noconsole --onefile C:\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\pyIMD_win.spec
+# C:\\Python35-3-3-64\\Scripts pyinstaller.exe --noconsole --onefile C:\Users\localadmin\ownCloud\SoftwareDev\Python\pyIMD\pyIMD\pyIMD_win.spec
 
 block_cipher = None
 
