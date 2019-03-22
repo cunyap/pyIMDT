@@ -407,7 +407,7 @@ class IMDWindow(QtWidgets.QMainWindow):
                                        self.imd.calculated_cell_mass.iloc[:, 2], pen=pg.mkPen('r', width=1.5),
                                        name="Mean measured cell mass")
                 self.graphicsView.setLabel('bottom', 'Time [h]')
-                self.graphicsView.setLabel('left', 'Mass [g]')
+                self.graphicsView.setLabel('left', 'Mass [ng]')
                 self.graphicsView.showGrid(x=True, y=True)
                 # Notify user about selection
                 self.print_to_console("Displaying: " + item.text())
