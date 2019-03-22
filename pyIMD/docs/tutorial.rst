@@ -8,6 +8,7 @@ This tutorial provides a simple example with a test dataset, teaching step by st
     - create a pyIMD project
     - calculate the mass form the measured data
 
+The layout of the following windows and the paths are set for windows and might differ for Mac or Unix.
 First, lets have a look at the input data. The typical data set consists of 3 files: 
 1) a sweep file of the cantilever
 WITHOUT cell (text file with multi-line header) 2) a sweep file of the cantilever WITH cell (text file with multi-line header) 
