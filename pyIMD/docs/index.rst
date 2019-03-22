@@ -18,12 +18,13 @@ Welcome to pyIMD's documentation!
     The mass data was acquired every 10ms (data shown in black), overlaid in red is the rolling mean with a window of
     1000. Images taken every 3 min over the observed times span, we see on average a steady increase of the cell mass.
 
-With the introduction of a picoscopic cell balance that is compatible with optical microscopy, a new tool for the
-investigation of the cell state-dependent cell mass regulation is available for use in biophysics, cell biology,
-physiology and medicine. However, the analysis of the data can be challenging due to a) the amount of high resolution
-data or b) the structure of low-stress measurement (low resolution) data. Here, we introduce the software **pyIMD**, which
-allows to easily extract the mass as a function of time for non-moving cells out of the raw data. **pyIMD** Stands for
-Python inertial mass determination.
+The total mass of single cells can be accurately monitored in real time under physiological conditions with our recently
+developed picobalance. It is a powerful tool to investigate crucial processes in biophysics, cell biology or medicine,
+such as cell mass regulation. However, processing of the raw data can be challenging, as computation is needed to extract
+the mass and long-term measurements can generate large amounts of data. Here, we introduce the software package **pyIMD**  that
+automates raw data processing, particularly when investigating non-migrating cells. **pyIMD** Stands for
+Python inertial mass determination and is implemented using Python 3.6 and can be used as a command line tool
+or as a stand-alone version including a graphical user interface. 
 
 
 This documentation of **pyIMD** describes the API as well as gives provides a sample data set as well as sample scripts to
