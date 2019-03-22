@@ -189,8 +189,16 @@ class IMDWindow(QtWidgets.QMainWindow):
 
         self.imd = InertialMassDetermination()
 
-        if int(self.settings.value('display_on_startup')) == 2:
-            self.qi.show()
+        try:
+            if self.settings.value('display_on_startup') is None:
+                self.settings.setValue('display_on_startup', 2)
+                self.qi.show()
+
+            elif int(self.settings.value('display_on_startup')) == 2:
+                self.qi.show()
+        except Exception as e:
+            self.print_to_console('Could not load quick instruction window due to corrupt settings.ini file' + str(e))
+
 
     @staticmethod
     def on_read_documentation():

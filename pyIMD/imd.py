@@ -309,7 +309,8 @@ class InertialMassDetermination(QObject):
                         auto_freq_offset = np.mean(self.data_measured.iloc[0:n, 6])
                         self.logger.info('Offset calculation result: {}'.format(auto_freq_offset))
                         self.settings.frequency_offset = auto_freq_offset
-
+                        self.resonance_freq_pre_start_with_cell = self.resonance_freq_pre_start_with_cell -\
+                                                                  self.settings.frequency_offset
                 for iPLL in trange(0, len(self.data_measured)):
                     if self.settings.correct_for_frequency_offset:
                             mass = calculate_mass(self.settings.spring_constant, (self.data_measured.iloc[iPLL, 6] -
