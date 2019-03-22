@@ -6,7 +6,8 @@ Welcome to pyIMD!
         :alt: made-with-python
 
 
-.. figure:: ../examples/figures/pyIMD_ShowCaseFigure-01.png
+.. figure:: pyIMD/examples/figures/pyIMD_ShowCaseFigure-01.png
+    :width: 200 px
     :alt: result
 
     Evolution of mass over time and the corresponding microscopy images are shown for a time span of 20min.
