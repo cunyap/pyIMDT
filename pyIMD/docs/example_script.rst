@@ -1,7 +1,7 @@
-Example pyIMD script
+pyIMD example script
 --------------------
 
-This example is the simplest one that can be executed with **pyIMD**:
+This example script demonstrates the simplest interaction with **pyIMD**:
 
 .. literalinclude:: ../examples/example_usage_script.py
    :language: python

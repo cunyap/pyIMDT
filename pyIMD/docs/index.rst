@@ -10,8 +10,29 @@ Welcome to pyIMD's documentation!
         :target: https://www.python.org/
         :alt: made-with-python
 
+.. image:: https://img.shields.io/pypi/pyversions/pyimd.svg
+        :target: https://www.python.org/
+        :alt: made-with-python3.6
 
-.. figure:: ../examples/figures/pyIMD_ShowCaseFigure-01.png 
+.. image:: https://img.shields.io/badge/platform-linux--x64%20%7C%20osx--x64%20%7C%20win--64-lightgrey.svg
+        :alt: supported-platform
+
+.. image:: https://img.shields.io/badge/license-GPLv3-brightgreen.svg
+        :target: https://git.bsse.ethz.ch/cunya/pyimd/master/LICENSE
+        :alt: License
+
+.. image:: https://readthedocs.org/projects/pyimd/badge/?version=latest
+        :target: https://pyimd.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
+
+.. raw:: html
+    <img src="../examples/figures/pyIMD_ShowCaseFigure-01.png" height="100px">
+
+.. figure:: ../examples/figures/pyIMD_ShowCaseFigure-01.png
+    :width: 400 px
+    :alt: result
+
+.. figure:: ../examples/figures/pyIMD_ShowCaseFigure_web.png
     :alt: result
     
     

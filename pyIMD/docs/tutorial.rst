@@ -1,5 +1,5 @@
-pyIMD User Interface Tutorial
-=============================
+pyIMD tutorial with user interface
+==================================
 
 Before starting, make sure pyIMD is :doc:`installed </installation>`
 

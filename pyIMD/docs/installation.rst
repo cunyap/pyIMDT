@@ -31,16 +31,20 @@ As stand alone executable
 If you want to install pyIMD on your system without installing Python yourself just download the
 pre-compiled executable matching your operating system:
 
-    * /builds/pyIMD_win_64x
-    * /builds/pyIMD_osx_64x
-    * /builds/pyIMD_ubuntu_64x
+.. only:: html
+
+    :download:`Download portable for WINDOWS x64 systems <..//builds/pyIMD_win_x64.zip>`.
+
+    :download:`Download portable for OSX x64 systems <..//builds/pyIMD_osx_x64.zip>`.
+
+    :download:`Download portable for UNIX x64 systems <..//builds/pyIMD_unix_x64.zip>`.
 
 pyIMD can then be used trough its graphical user interface (GUI) directly.
 
 From sources
 ------------
 
-The sources for pyIMD can be downloaded from the `Github repo`_.
+The latest sources for pyIMD can be downloaded from the `Github repo`_.
 
 You can clone the public repository:
 
