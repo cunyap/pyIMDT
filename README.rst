@@ -20,10 +20,7 @@ Welcome to pyIMD!
         :target: https://pyimd.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
         
-.. raw:: html
-    <img src="/pyIMD/examples/figures/pyIMD_ShowCaseFigure-01.png" height="100px">
-
-.. figure:: pyIMD/examples/figures/pyIMD_ShowCaseFigure_web.png
+.. figure:: /pyIMD/examples/figures/pyIMD_ShowCaseFigure_web.png
     :width: 400 px
     :alt: result
 
@@ -55,13 +52,9 @@ Installation
 If you download the portable for your operating system there is no need for any installation and you can use **pyIMD**
 directly trough the user interface.
 
-.. only:: html
-
-    :download:`Download portable for WINDOWS x64 systems <..//builds/pyIMD_win_x64.zip>`.
-
-    :download:`Download portable for OSX x64 systems <..//builds/pyIMD_osx_x64.zip>`.
-
-    :download:`Download portable for UNIX x64 systems <..//builds/pyIMD_unix_x64.zip>`.
+* `Download portable for WINDOWS x64 systems <https://git.bsse.ethz.ch/cunya/pyimd/raw/master/pyIMD/builds/pyIMD_win_x64.zip>`
+* `Download portable for OSX x64 systems <https://git.bsse.ethz.ch/cunya/pyimd/raw/master/pyIMD/builds/pyIMD_osx_x64.zip>`
+* `Download portable for UNIX x64 systems <https://git.bsse.ethz.ch/cunya/pyimd/raw/master/pyIMD/builds/pyIMD_unix_x64.zip>`
 
 Otherwise, to install this module from source, type on your terminal::
 
