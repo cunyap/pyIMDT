@@ -1,4 +1,4 @@
-from pyIMD.inertialmassdetermination import InertialMassDetermination
+from pyIMD.imd import InertialMassDetermination
 
 file_path1 = "C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\tests\\testData\\20180628\\20180628_SBC_3_C_4_B"
 file_path2 = "C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\tests\\testData\\20180628\\20180628_SBC_3_C_4_A"
