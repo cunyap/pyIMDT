@@ -14,7 +14,7 @@ Welcome to pyIMD's documentation!
         :target: https://www.python.org/
         :alt: made-with-python3.6
 
-.. image:: https://img.shields.io/badge/platform-linux--x64%20%7C%20osx--x64%20%7C%20win--64-lightgrey.svg
+.. image:: https://img.shields.io/badge/platform-linux--x64%20%7C%20osx--x64%20%7C%20win--x64-lightgrey.svg
         :alt: supported-platform
 
 .. image:: https://img.shields.io/badge/license-GPLv3-brightgreen.svg
@@ -25,20 +25,13 @@ Welcome to pyIMD's documentation!
         :target: https://pyimd.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-.. raw:: html
-    <img src="../examples/figures/pyIMD_ShowCaseFigure-01.png" height="100px">
-
-.. figure:: ../examples/figures/pyIMD_ShowCaseFigure-01.png
-    :width: 400 px
-    :alt: result
-
 .. figure:: ../examples/figures/pyIMD_ShowCaseFigure_web.png
     :alt: result
     
     
     Evolution of mass over time and the corresponding microscopy images are shown for a time span of 20min.
     The mass data was acquired every 10 ms (data shown in black), overlaid in red is the rolling mean with a window of
-    1000. Images taken every 3 min over the observed times span. The mammeloan cell increases mass steadily..
+    1000. Images taken every 3 min over the observed times span. The mammalian cell increases mass steadily..
 
 The total mass of single cells can be accurately monitored in real time under physiological conditions with our recently
 developed picobalance. It is a powerful tool to investigate crucial processes in biophysics, cell biology or medicine,
