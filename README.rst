@@ -9,7 +9,7 @@ Welcome to pyIMD!
         :target: https://www.python.org/
         :alt: made-with-python3.6
   
-.. image:: https://img.shields.io/badge/platform-linux--x64%20%7C%20osx--x64%20%7C%20win--64-lightgrey.svg
+.. image:: https://img.shields.io/badge/platform-linux--x64%20%7C%20osx--x64%20%7C%20win--x64-lightgrey.svg
         :alt: supported-platform      
 
 .. image:: https://img.shields.io/badge/license-GPLv3-brightgreen.svg
@@ -55,7 +55,15 @@ Installation
 If you download the portable for your operating system there is no need for any installation and you can use **pyIMD**
 directly trough the user interface.
 
-To install this module from source, type on your terminal::
+.. only:: html
+
+    :download:`Download portable for WINDOWS x64 systems <..//builds/pyIMD_win_x64.zip>`.
+
+    :download:`Download portable for OSX x64 systems <..//builds/pyIMD_osx_x64.zip>`.
+
+    :download:`Download portable for UNIX x64 systems <..//builds/pyIMD_unix_x64.zip>`.
+
+Otherwise, to install this module from source, type on your terminal::
 
     >>> git clone https://git.bsse.ethz.ch/cunya/pyIMD
     >>> cd pyIMD
@@ -66,22 +74,22 @@ Usage
 
 To use this module in a Python script, write::
 
-    >>> from pyIMD.inertialmassdetermination import InertialMassDetermination
+    >>> from pyIMD.imd import InertialMassDetermination
 
     >>> file_path1 = "Path/to/measurement_no_cell"
     >>> file_path2 = "Path/to/measurement_with_cell"
     >>> file_path3 = "Path/to/measurement.tdms"
-    >>> obj = InertialMassDetermination(file_path1, file_path2, file_path3, '\t', 23, 0)
-    >>> obj.run_intertial_mass_determination()
+    >>> imd = InertialMassDetermination(file_path1, file_path2, file_path3, '\t', 23, 0)
+    >>> imd.run_intertial_mass_determination()
 
 
 List default settings for calculation::
 
-    >>> obj.settings.__dict__
+    >>> imd.print_pyimd_project()
 
 Change settings for calculation and figure output the following way before calling run_intertial_mass_determination()::
 
-    >>> obj.settings.SPRING_CONSTANT = 4
+    >>> imd.settings.spring_constant = 4
 
 More info and examples can be found in the online `Documentation <https://pyimd.readthedocs.io>`_
 
@@ -90,7 +98,7 @@ Note
 
 Use tab completion to access the object's attributes (e.g. to get the calculated mass)::
 
-    >>> mass = obj.calculated_cell_mass
+    >>> mass = imd.calculated_cell_mass
 
 Known Issues
 ------------
