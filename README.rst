@@ -23,7 +23,7 @@ Welcome to pyIMD!
 .. raw:: html
     <img src="/pyIMD/examples/figures/pyIMD_ShowCaseFigure-01.png" height="100px">
 
-.. figure:: pyIMD/examples/figures/pyIMD_ShowCaseFigure-01.png
+.. figure:: pyIMD/examples/figures/pyIMD_ShowCaseFigure_web.png
     :width: 400 px
     :alt: result
 
