@@ -20,7 +20,7 @@ a = Analysis(['C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIM
              cipher=block_cipher)
 			  
 	 
-a.datas += [('ui/icons/pyimd_logo_icon.ico','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyimd_logo_icon.ico','DATA'),
+a.datas += [('ui/icons/pyIMD_logo_icon.ico','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyIMD_logo_icon.ico','DATA'),
             ('ui/icons/pyIMD_logo.png','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyIMD_logo.png','DATA'),
             ('ui/icons/pyIMD_logo_vect.svg','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyIMD_logo_vect.svg','DATA'),
 			('ui/main_window.ui','C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\main_window.ui','DATA'),
@@ -40,4 +40,4 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           console=False,
-		  icon='C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyimd_logo_icon.ico')
+		  icon='C:\\Users\\localadmin\\ownCloud\\SoftwareDev\\Python\\pyIMD\\pyIMD\\ui\\icons\\pyIMD_logo_icon.ico')

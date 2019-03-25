@@ -44,11 +44,11 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           console=False,
-          icon='/Users/gflaesch/PycharmProjects/test/pyIMD/pyIMD/ui/icons/pyimd_logo2_01_FNf_icon.ico')
+          icon='/Users/gflaesch/PycharmProjects/test/pyIMD/pyIMD/ui/icons/pyIMD_logo_icon.ico')
 
 app = BUNDLE(exe,
          name='pyIMD.app',
-         icon='/Users/gflaesch/PycharmProjects/test/pyIMD/pyIMD/ui/icons/pyIMD_Logo-01.png',
+         icon='/Users/gflaesch/PycharmProjects/test/pyIMD/pyIMD/ui/icons/pyIMD_logo-01.png',
          bundle_identifier=None,
          info_plist={'NSHighResolutionCapable': 'True'},
          )
