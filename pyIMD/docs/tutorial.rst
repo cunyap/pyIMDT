@@ -16,7 +16,7 @@ and 3) the actual (long-term) measurement file, which is either a text file or T
 time resolution is 10 ms for the data acquisition so these files can be
 quite large. **Fig. 1** visualizes the data input which can be found as example data set for download and testing.
 
-.. figure:: ../examples/figures/pyIMD_ShowCase_InputData.png
+.. figure:: ../examples/figures/pyIMD_ShowCase_InputData_web.png
     :alt: dataInput
 
     **Figure 1**: Data format for pyIMD
@@ -54,7 +54,7 @@ project related parameters such as the names of the output figures. After all se
 The console (8) logs all actions performed with the UI and indicates when all calculations are done. The results can be
 viewed in the results tab (2), where as all the output figures are listed as well as the data can be inspected.
 
-.. figure:: ../examples/figures/pyIMD_UI_Figure.png
+.. figure:: ../examples/figures/pyIMD_UI_Figure_web.png
     :alt: uiExample
 
     **Figure 2**: . Through the menu bar (1) the pyIMD project can be loaded, saved, and the settings and parameter dialog
@@ -90,7 +90,7 @@ is 8 N/m (adjustable parameter 'sprint_constant'). The position of the cell proj
 cantilever was 9.5 um (adjustable parameter, 'cell_position') and did not change, which is of importance for
 the current use of the software.
 
-.. figure:: ../examples/figures/pyIMD_ShowCaseFigure-01.png
+.. figure:: ../examples/figures/pyIMD_ShowCaseFigure-02_web.png
     :alt: result
 
     **Figure 4**: Evolution of mass over time

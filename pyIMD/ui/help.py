@@ -156,7 +156,8 @@ class About(QWidget):
                                 <br>PyQT5, under the <a href=https://www.riverbankcomputing.com/static/Docs/PyQt5/introduction.html#license>GPL v3 License</a> \
                                 <br>xmltodict, under the <a href=https://github.com/martinblech/xmltodict/blob/master/LICENSE>MIT License</a> \
                                 <br>matplotlib, under the <a href=https://matplotlib.org/devel/license.html>PSF License</a>\
-                                <br>pyqtgraph, under the <a href=https://github.com/pyqtgraph/pyqtgraph/blob/develop/LICENSE.txt>MIT License</a>")
+                                <br>pyqtgraph, under the <a href=https://github.com/pyqtgraph/pyqtgraph/blob/develop/LICENSE.txt>MIT License</a>\
+                                <br>xmlunittest, under the <a href=https://github.com/Exirel/python-xmlunittest/blob/master/LICENSE>MIT License</a>")
         self.dependencies.setReadOnly(True)
         self.dependencies.setOpenExternalLinks(True)
         self.le.setAlignment(Qt.AlignCenter)

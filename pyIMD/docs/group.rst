@@ -12,7 +12,7 @@ The two examples show the basic usage of **pyIMD** to calculate the mass
 .. toctree::
    :maxdepth: 4
 
-   example_pyIMD_usage_notebook.ipynb
+   example_nb
 
 .. only:: html
 
