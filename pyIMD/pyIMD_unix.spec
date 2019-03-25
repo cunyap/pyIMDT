@@ -2,14 +2,14 @@
 # Main script to bundle pyIMD
 # Author Andreas P. Cuny, andreas.cuny@bsse.ethz.ch
 # Use the following command to build the executable with pyinstaller==3.3.1 !
-# pyinstaller --noconsole --onefile /home/andreascuny/Documents/pyimd/pyIMD/pyIMD_unix.spec
+# pyinstaller --noconsole --onefile --icon=/home/andreascuny/Documents/pyIMD/pyIMD/ui/icons/pyIMD_logo_icon.ico /home/andreascuny/Documents/pyIMD/pyIMD/pyIMD_unix.spec
 
 
 import sys
 sys.setrecursionlimit(3000)
 block_cipher = None
 
-a = Analysis(['/home/andreascuny/Documents/pyimd/pyIMD/main.py'],
+a = Analysis(['/home/andreascuny/Documents/pyIMD/pyIMD/main.py'],
              pathex=['/home/andreascuny/pyIMDENV/lib/python3.6/site-packages/PyInstaller/'],
              binaries=[],
              datas=[],
@@ -21,7 +21,7 @@ a = Analysis(['/home/andreascuny/Documents/pyimd/pyIMD/main.py'],
 			    'statsmodels.tsa.statespace._filters._univariate', 'statsmodels.tsa.statespace._smoothers._alternative', 
 			    'statsmodels.tsa.statespace._smoothers._classical',	'statsmodels.tsa.statespace._smoothers._conventional',
     			    'statsmodels.tsa.statespace._smoothers._univariate', 'PyQt5.sip'],
-             hookspath=['/home/andreascuny/Documents/pyimd/pyIMD/ui/hooks/'],
+             hookspath=['/home/andreascuny/Documents/pyIMD/pyIMD/ui/hooks/'],
              runtime_hooks=[],
              excludes=['jinja2'],
              win_no_prefer_redirects=False,
@@ -29,13 +29,13 @@ a = Analysis(['/home/andreascuny/Documents/pyimd/pyIMD/main.py'],
              cipher=block_cipher)
 			  
 	 
-a.datas += [('ui/icons/pyimd_logo_icon.ico','/home/andreascuny/Documents/pyimd/pyIMD/ui/icons/pyIMD_logo_icon.ico','DATA'),
-            ('ui/icons/pyIMD_logo.png','/home/andreascuny/Documents/pyimd/pyIMD/ui/icons/pyIMD_logo.png','DATA'),
-            ('ui/icons/pyIMD_logo_vect.svg','/home/andreascuny/Documents/pyimd/pyIMD/ui/icons/pyIMD_logo_vect.svg','DATA'),
-			('ui/main_window.ui','/home/andreascuny/Documents/pyimd/pyIMD/ui/main_window.ui','DATA'),
-			('ui/setting_dialog.ui','/home/andreascuny/Documents/pyimd/pyIMD/ui/setting_dialog.ui','DATA'),
-			('imd.py','/home/andreascuny/Documents/pyimd/pyIMD/imd.py','DATA'),
-			('change_log.txt','/home/andreascuny/Documents/pyimd/pyIMD/change_log.txt','DATA')]
+a.datas += [('ui/icons/pyIMD_logo_icon.ico','/home/andreascuny/Documents/pyIMD/pyIMD/ui/icons/pyIMD_logo_icon.ico','DATA'),
+            ('ui/icons/pyIMD_logo.png','/home/andreascuny/Documents/pyIMD/pyIMD/ui/icons/pyIMD_logo.png','DATA'),
+            ('ui/icons/pyIMD_logo_vect.svg','/home/andreascuny/Documents/pyIMD/pyIMD/ui/icons/pyIMD_logo_vect.svg','DATA'),
+			('ui/main_window.ui','/home/andreascuny/Documents/pyIMD/pyIMD/ui/main_window.ui','DATA'),
+			('ui/setting_dialog.ui','/home/andreascuny/Documents/pyIMD/pyIMD/ui/setting_dialog.ui','DATA'),
+			('imd.py','/home/andreascuny/Documents/pyIMD/pyIMD/imd.py','DATA'),
+			('change_log.txt','/home/andreascuny/Documents/pyIMD/pyIMD/change_log.txt','DATA')]
 			    			 			 
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
@@ -45,8 +45,8 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           name='pyIMD',
-          debug=False,
+          debug=True,
           strip=False,
-          upx=True,
+          upx=False,
           console=False,
-		  icon='/home/andreascuny/Documents/pyimd/pyIMD/ui/icons/pyimd_logo_icon.ico')
+	  icon='/home/andreascuny/Documents/pyIMD/pyIMD/ui/icons/pyIMD_logo_icon.ico')
