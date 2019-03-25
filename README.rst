@@ -52,9 +52,9 @@ Installation
 If you download the portable for your operating system there is no need for any installation and you can use **pyIMD**
 directly trough the user interface.
 
-* `Download portable for WINDOWS x64 systems <https://git.bsse.ethz.ch/cunya/pyimd/raw/master/pyIMD/builds/pyIMD_win_x64.zip>`
-* `Download portable for OSX x64 systems <https://git.bsse.ethz.ch/cunya/pyimd/raw/master/pyIMD/builds/pyIMD_osx_x64.zip>`
-* `Download portable for UNIX x64 systems <https://git.bsse.ethz.ch/cunya/pyimd/raw/master/pyIMD/builds/pyIMD_unix_x64.zip>`
+* `Download portable for WINDOWS x64 systems <https://git.bsse.ethz.ch/cunya/pyimd/raw/master/pyIMD/builds/pyIMD_win_x64.zip>`_
+* `Download portable for OSX x64 systems <https://git.bsse.ethz.ch/cunya/pyimd/raw/master/pyIMD/builds/pyIMD_osx_x64.zip>`_
+* `Download portable for UNIX x64 systems <https://git.bsse.ethz.ch/cunya/pyimd/raw/master/pyIMD/builds/pyIMD_unix_x64.zip>`_
 
 Otherwise, to install this module from source, type on your terminal::
 
@@ -69,10 +69,13 @@ To use this module in a Python script, write::
 
     >>> from pyIMD.imd import InertialMassDetermination
 
-    >>> file_path1 = "Path/to/measurement_no_cell"
-    >>> file_path2 = "Path/to/measurement_with_cell"
-    >>> file_path3 = "Path/to/measurement.tdms"
-    >>> imd = InertialMassDetermination(file_path1, file_path2, file_path3, '\t', 23, 0)
+Set path to files either absolute or relative to where you run the script from, i.e. using the provided show case data:
+
+    >>> file_path1 = "/pyIMD/examples/data/show_case/0190110_ShowCase_PLL_B.txt"
+    >>> file_path2 = "/pyIMD/examples/data/show_case/20190110_ShowCase_PLL_A.txt"
+    >>> file_path3 = "/pyIMD/examples/data/show_case/20190110_ShowCase_PLL_LongTerm.txt"
+    >>> imd.create_pyimd_project(file_path1, file_path2, file_path3, '\t', 23, 'PLL', figure_width=16.5, figure_height=20,
+                         initial_parameter_guess=[60.0, 2.0, 0.0, 0.0], cell_position=9.5, figure_format='pdf')
     >>> imd.run_intertial_mass_determination()
 
 

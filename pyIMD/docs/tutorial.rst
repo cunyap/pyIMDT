@@ -31,10 +31,10 @@ The example pyIMD script section demonstrates how a pyIMD project is created on 
     imd = InertialMassDetermination()
 
     # Create a config file for the project / experiment to analyze using default values. Note non default parameters can be
-    # added as optional arguments for e.g. spring_constant = 5.
-    file_path1 = "C:\\Users\\<USERNAME>\\PyIMD Showcase data\\0190110_ShowCase_PLL_B.txt"
-    file_path2 = "C:\\Users\\<USERNAME>\\PyIMD Showcase data\\20190110_ShowCase_PLL_A.txt"
-    file_path3 = "C:\\Users\\<USERNAME>\\PyIMD Showcase data\\20190110_ShowCase_PLL_LongTerm.txt"
+    # added as optional arguments for e.g. cell_position = 9.5.
+    file_path1 = "/pyIMD/examples/data/show_case/0190110_ShowCase_PLL_B.txt"
+    file_path2 = "/pyIMD/examples/data/show_case/20190110_ShowCase_PLL_A.txt"
+    file_path3 = "/pyIMD/examples/data/show_case/20190110_ShowCase_PLL_LongTerm.txt"
     imd.create_pyimd_project(file_path1, file_path2, file_path3, '\t', 23, 'PLL', figure_width=16.5, figure_height=20,
                              initial_parameter_guess=[60.0, 2.0, 0.0, 0.0], cell_position=9.5, figure_format='pdf')
 
@@ -101,7 +101,7 @@ The project can either be re-run with different parameters, to i.e. improve the 
 .. code-block:: python
 
     # save a pyIMD project
-    imd.save_pyimd_project("C:\\Users\\<USERNAME>\\PyIMD Showcase data\\pyIMDShowCaseProject.xml")
+    imd.save_pyimd_project("/pyIMD/examples/data/show_case/pyIMDShowCaseProject.xml")
 
 A previously saved project can be loaded again at a later time from the menu (**Fig. 2**, (1))or also from the command
 line without the user interface:
@@ -109,5 +109,5 @@ line without the user interface:
 .. code-block:: python
 
     # load a pyIMD project
-    imd.load_pyimd_project("C:\\Users\\<USERNAME>\\PyIMD Showcase data\\pyIMDShowCaseProject.xml")
+    imd.load_pyimd_project("/pyIMD/examples/data/show_case/pyIMDShowCaseProject.xml")
 
