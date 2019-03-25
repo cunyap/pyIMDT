@@ -98,3 +98,9 @@ Known Issues
 
 In a IPython notebook the progress bar works not properly but has no effect on the calculations.
 In a IPython notebook the calculation speed is much slower.
+
+Contribute
+----------
+
+Please do contribute! Issues and pull requests are welcome.
+Thank you for your help improving software one changelog at a time!
