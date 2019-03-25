@@ -1,8 +1,8 @@
 # -*- mode: python -*-
 # Main script to bundle pyIMD
 # Author Andreas P. Cuny, andreas.cuny@bsse.ethz.ch
-# Use the following command to build the executable with pyinstaller
-# LD_LIBRARY_PATH=/usr/local/lib pyinstaller --noconsole --onefile /home/andreascuny/Documents/pyimd/pyIMD/pyIMD_unix.spec
+# Use the following command to build the executable with pyinstaller==3.3.1 !
+# pyinstaller --noconsole --onefile /home/andreascuny/Documents/pyimd/pyIMD/pyIMD_unix.spec
 
 
 import sys
@@ -10,19 +10,17 @@ sys.setrecursionlimit(3000)
 block_cipher = None
 
 a = Analysis(['/home/andreascuny/Documents/pyimd/pyIMD/main.py'],
-             pathex=['/usr/local/lib/python3.6/site-packages/PyInstaller'],
+             pathex=['/home/andreascuny/pyIMDENV/lib/python3.6/site-packages/PyInstaller/'],
              binaries=[],
              datas=[],
-	         hiddenimports=["tkinter", "tkinter.filedialog", "pandas._libs.tslibs.np_datetime","pandas._libs.tslibs.nattype", "pandas._libs.skiplist", "scipy.optimize", "scipy.optimize.minipack2", "pyIMD", "plotnine", "mizani", "palettable.colorbrewer", "statsmodels.tsa.statespace", 'statsmodels.tsa.statespace._kalman_filter', 'statsmodels.tsa.statespace._kalman_smoother', 'statsmodels.tsa.statespace._representation', 'statsmodels.tsa.statespace._simulation_smoother',
-		    'statsmodels.tsa.statespace._statespace',
-		    'statsmodels.tsa.statespace._tools',
-		    'statsmodels.tsa.statespace._filters._conventional',
-		    'statsmodels.tsa.statespace._filters._inversions',
-		    'statsmodels.tsa.statespace._filters._univariate',
-		    'statsmodels.tsa.statespace._smoothers._alternative',
-		    'statsmodels.tsa.statespace._smoothers._classical',
-		    'statsmodels.tsa.statespace._smoothers._conventional',
-		    'statsmodels.tsa.statespace._smoothers._univariate'],
+             hiddenimports=["tkinter", "tkinter.filedialog", "pandas._libs.tslibs.np_datetime","pandas._libs.tslibs.nattype","pandas._libs.skiplist", 
+    			    "scipy.optimize", "scipy.optimize.minipack2", "pyIMD", "plotnine", "mizani", "palettable.colorbrewer", "statsmodels.tsa.statespace",
+    			    'statsmodels.tsa.statespace._kalman_filter', 'statsmodels.tsa.statespace._kalman_smoother', 'statsmodels.tsa.statespace._representation',
+    			    'statsmodels.tsa.statespace._simulation_smoother', 'statsmodels.tsa.statespace._statespace', 'statsmodels.tsa.statespace._tools',
+    			    'statsmodels.tsa.statespace._filters._conventional', 'statsmodels.tsa.statespace._filters._inversions', 
+			    'statsmodels.tsa.statespace._filters._univariate', 'statsmodels.tsa.statespace._smoothers._alternative', 
+			    'statsmodels.tsa.statespace._smoothers._classical',	'statsmodels.tsa.statespace._smoothers._conventional',
+    			    'statsmodels.tsa.statespace._smoothers._univariate', 'PyQt5.sip'],
              hookspath=['/home/andreascuny/Documents/pyimd/pyIMD/ui/hooks/'],
              runtime_hooks=[],
              excludes=['jinja2'],
@@ -47,8 +45,8 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           name='pyIMD',
-          debug=True,
+          debug=False,
           strip=False,
           upx=True,
-          console=True,
+          console=False,
 		  icon='/home/andreascuny/Documents/pyimd/pyIMD/ui/icons/pyimd_logo_icon.ico')
