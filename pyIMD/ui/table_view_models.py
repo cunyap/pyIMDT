@@ -1,3 +1,13 @@
+# /********************************************************************************
+# * Copyright © 2018-2019, ETH Zurich, D-BSSE, Andreas P. Cuny & Gotthold Fläschner
+# * All rights reserved. This program and the accompanying materials
+# * are made available under the terms of the GNU Public License v3.0
+# * which accompanies this distribution, and is available at
+# * http://www.gnu.org/licenses/gpl
+# *
+# * Contributors:
+# *     Andreas P. Cuny - initial API and implementation
+# *******************************************************************************/
 from PyQt5 import QtCore
 
 import pandas as pd
@@ -6,6 +16,9 @@ import pandas as pd
 class PandasDataFrameModel(QtCore.QAbstractTableModel):
     """
     Class implementing a QAbstractTableModel to populate a QTableView from a pandas data frame
+
+    This class was adopted from a post from Edwin Christian Yllanes Cucho under the MIT license:
+    https://github.com/eyllanesc/stackoverflow/blob/master/questions/44603119/
     """
     def __init__(self, data_frame=pd.DataFrame(), parent=None):
         QtCore.QAbstractTableModel.__init__(self, parent=parent)

@@ -1,3 +1,14 @@
+# /********************************************************************************
+# * Copyright © 2018-2019, ETH Zurich, D-BSSE, Andreas P. Cuny & Gotthold Fläschner
+# * All rights reserved. This program and the accompanying materials
+# * are made available under the terms of the GNU Public License v3.0
+# * which accompanies this distribution, and is available at
+# * http://www.gnu.org/licenses/gpl
+# *
+# * Contributors:
+# *     Andreas P. Cuny - initial API and implementation
+# *******************************************************************************/
+
 import os
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
@@ -20,13 +31,6 @@ class QuickInstructions(QWidget):
         # self.setAttribute(Qt.WA_DeleteOnClose) # Deletes instance on window close
         self.setWindowTitle('pyIMD :: Quick instructions')
         self.display_on_startup = 2
-        self.init_widget()
-
-    def init_widget(self):
-        """
-        Initialization of the quick instructions widget.
-        """
-
         self.resize(400, 370)
         self.setWindowIcon(QtGui.QIcon(resource_path(os.path.join(os.path.join("ui", "icons",
                                                                                "pyIMD_logo_icon.ico")))))
