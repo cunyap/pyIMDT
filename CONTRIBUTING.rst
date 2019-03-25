@@ -1,1 +1,1 @@
-See [README](README.rst#development).
+`See [README] <../README.rst#conribute>`_
