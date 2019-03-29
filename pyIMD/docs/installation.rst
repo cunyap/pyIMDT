@@ -50,7 +50,7 @@ You can clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://git.bsse.ethz.ch/cunya/pyimd.git
+    $ git clone git://git.gitlab.com/csb.ethz/pyIMD.git
 
 Once you have a copy of the source, navigate into the directory and run:
 
@@ -58,4 +58,4 @@ Once you have a copy of the source, navigate into the directory and run:
 
     $ python setup.py install .
 
-.. _Github repo: https://git.bsse.ethz.ch/cunya/pyimd.git
+.. _Github repo: https://git.gitlab.com/csb.ethz/pyIMD.git
