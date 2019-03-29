@@ -35,6 +35,7 @@ def extract_version():
 sys.path.insert(0, os.path.abspath('../../'))
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.insert(0, os.path.abspath('../examples/notebooks'))
+sys.path.insert(0, os.path.abspath('../data/pll'))
 
 # -- General configuration ------------------------------------------------
 
