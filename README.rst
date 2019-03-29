@@ -52,7 +52,7 @@ Installation
 If you download the portable for your operating system there is no need for any installation and you can use **pyIMD**
 directly trough the user interface.
 
-* `Download portable for WINDOWS x64 systems <https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/buildspyIMD_win_x64.zip>`_
+* `Download portable for WINDOWS x64 systems <https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/builds/pyIMD_win_x64.zip>`_
 * `Download portable for OSX x64 systems <https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/builds/pyIMD_osx_x64.zip>`_
 * `Download portable for UNIX x64 systems <https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/builds/pyIMD_unix_x64.zip>`_
 

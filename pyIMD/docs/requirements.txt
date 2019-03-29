@@ -3,3 +3,4 @@
 nbsphinx==0.4.2
 nbsphinx_link==1.2.0
 sphinx_automodapi==0.10
+pyIMD==0.0.7
