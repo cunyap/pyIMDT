@@ -9,6 +9,7 @@
 # *     Andreas P. Cuny - initial API and implementation
 # *******************************************************************************/
 
+import os
 from setuptools import setup
 
 
@@ -24,6 +25,14 @@ def extract_version():
                 return ns['__version__']
 
 
+def read_file(filename):
+    """
+    Reads file from source
+    """
+    with open(os.path.join(os.path.dirname(__file__), filename)) as file:
+        return file.read()
+
+
 setup(name='pyIMD',
       version=extract_version(),
       author='Andreas P. Cuny <andreas.cuny@bsse.ethz.ch>, Gotthold Fläschner <gotthold.flaeschner@bsse.ethz.ch>',
@@ -31,7 +40,7 @@ setup(name='pyIMD',
       url='https://gitlab.com/csb.ethz/pyIMD/tree/master',
       download_url='https://gitlab.com/csb.ethz/pyIMD/tree/master',
       description='Inertial mass determination',
-      long_description='',
+      long_description=read_file('README.md'),
       packages={'pyIMD': 'pyIMD',
                 'pyIMD.analysis': 'pyIMD/analysis',
                 'pyIMD.configuration': 'pyIMD/configuration',
