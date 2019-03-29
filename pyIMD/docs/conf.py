@@ -53,6 +53,7 @@ extensions = [
     'nbsphinx',
     'sphinx.ext.mathjax',
     'nbsphinx_link',
+    'sphinx_nbexamples,
 ]
 
 # Add any paths that contain templates here, relative to this directory.
