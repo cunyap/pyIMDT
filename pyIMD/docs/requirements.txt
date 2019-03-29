@@ -1,0 +1,4 @@
+# Install all the requirements needed for documentation
+
+nbsphinx==0.4.2
+nbsphinx_link==1.2.0

@@ -46,12 +46,12 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.ifconfig',
-    'sphinx_automodapi.automodapi',
     'sphinx.ext.napoleon',
     'nbsphinx',
     'sphinx.ext.mathjax',
     'nbsphinx_link',
 ]
+#     'sphinx_automodapi.automodapi',
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
