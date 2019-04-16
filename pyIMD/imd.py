@@ -236,6 +236,7 @@ class InertialMassDetermination(QObject):
             # Calc position correction for cell attached to cantilever
             self.position_correction_factor = calculate_position_correction(self.settings.cell_position,
                                                                             self.settings.cantilever_length)
+            self.logger.info('Position correction factor: {}'.format(self.position_correction_factor))
 
             # Calc resonance frequency for pre start data with cell attached to cantilever
             self.resonance_freq_pre_start_with_cell, self.fit_param_pre_start_with_cell = \
@@ -320,8 +321,7 @@ class InertialMassDetermination(QObject):
                         auto_freq_offset = np.mean(self.data_measured.iloc[0:n, 6])
                         self.logger.info('Offset calculation result: {}'.format(auto_freq_offset))
                         self.settings.frequency_offset = auto_freq_offset
-                        self.resonance_freq_pre_start_with_cell = self.resonance_freq_pre_start_with_cell -\
-                                                                  self.settings.frequency_offset
+
                 for iPLL in trange(0, len(self.data_measured)):
                     if self.settings.correct_for_frequency_offset:
                             mass = calculate_mass(self.settings.spring_constant, (self.data_measured.iloc[iPLL, 6] -
