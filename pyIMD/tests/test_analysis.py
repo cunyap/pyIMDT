@@ -152,10 +152,11 @@ class TestAnalysis(TestCase):
 
         result = calculate_resonance_frequencies(frequency_array, phase_array, initial_param_guess, lower_param_bounds,
                                                  upper_param_bounds)
-        self.assertEqual(result[0], expected_result[0])
-        self.assertEqual(result[1][0], expected_result[1][0])
-        self.assertEqual(result[1][1], expected_result[1][1])
-        self.assertEqual(result[1][2], expected_result[1][2])
+
+        self.assertEqual(round(result[0], 8), round(expected_result[0], 8))
+        self.assertEqual(round(result[1][0], 8), round(expected_result[1][0], 8))
+        self.assertEqual(round(result[1][1], 8), round(expected_result[1][1], 8))
+        self.assertEqual(round(result[1][2], 8), round(expected_result[1][2], 8))
 
     def testFitFunction(self):
 
@@ -169,7 +170,7 @@ class TestAnalysis(TestCase):
         cantilever_length = 100
         ret = calculate_position_correction(cell_position, cantilever_length)
 
-        self.assertEqual(ret, expected_result)
+        self.assertEqual(round(ret, 8), round(expected_result, 8))
 
     def testCalculateMass(self):
         expected_result = 1.6659296417966238
@@ -178,7 +179,7 @@ class TestAnalysis(TestCase):
         res_freq_after_cell_load = 70
         ret = calculate_mass(spring_constant, res_freq_after_cell_load, res_freq_before_cell_load)
 
-        self.assertEqual(ret, expected_result)
+        self.assertEqual(round(ret, 8), round(expected_result, 8))
 
 
 if __name__ == "__main__":
