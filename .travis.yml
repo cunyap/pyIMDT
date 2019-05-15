@@ -13,4 +13,4 @@ install:
   - pip install .
 # run tests
 script:
-- python -m unittest
+  - python -m unittest
