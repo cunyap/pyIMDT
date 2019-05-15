@@ -74,6 +74,7 @@ class TestConfiguration(TestCase):
                            '_figure_name_pre_start_no_cell': 'FitNoCellData', '_text_data_delimiter': '\\t',
                            '_spring_constant': 8, '_figure_format': 'pdf', '_cell_position': 9.5, '_figure_height': 20}
 
+        print(os.path.abspath("../examples/data/show_case/20190110_ShowCase_PLL_B.txt"))
         file_path1 = os.path.abspath("../examples/data/show_case/20190110_ShowCase_PLL_B.txt")
         file_path2 = os.path.abspath("../examples/data/show_case/20190110_ShowCase_PLL_A.txt")
         file_path3 = os.path.abspath("../examples/data/show_case/20190110_ShowCase_PLL_LongTerm.txt")

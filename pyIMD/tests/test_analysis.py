@@ -153,6 +153,7 @@ class TestAnalysis(TestCase):
         result = calculate_resonance_frequencies(frequency_array, phase_array, initial_param_guess, lower_param_bounds,
                                                  upper_param_bounds)
 
+        print(result[0].as_integer_ratio(), expected_result[0].as_integer_ratio())
         self.assertEqual(round(result[0], 8), round(expected_result[0], 8))
         self.assertEqual(round(result[1][0], 8), round(expected_result[1][0], 8))
         self.assertEqual(round(result[1][1], 8), round(expected_result[1][1], 8))
