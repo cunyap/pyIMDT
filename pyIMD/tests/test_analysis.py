@@ -153,11 +153,10 @@ class TestAnalysis(TestCase):
         result = calculate_resonance_frequencies(frequency_array, phase_array, initial_param_guess, lower_param_bounds,
                                                  upper_param_bounds)
 
-        print(result[0].as_integer_ratio(), expected_result[0].as_integer_ratio())
-        self.assertEqual(round(result[0], 8), round(expected_result[0], 8))
-        self.assertEqual(round(result[1][0], 8), round(expected_result[1][0], 8))
-        self.assertEqual(round(result[1][1], 8), round(expected_result[1][1], 8))
-        self.assertEqual(round(result[1][2], 8), round(expected_result[1][2], 8))
+        self.assertEqual(round(result[0], 7), round(expected_result[0], 7))
+        self.assertEqual(round(result[1][0], 7), round(expected_result[1][0], 7))
+        self.assertEqual(round(result[1][1], 7), round(expected_result[1][1], 7))
+        self.assertEqual(round(result[1][2], 7), round(expected_result[1][2], 7))
 
     def testFitFunction(self):
 
@@ -171,7 +170,7 @@ class TestAnalysis(TestCase):
         cantilever_length = 100
         ret = calculate_position_correction(cell_position, cantilever_length)
 
-        self.assertEqual(round(ret, 8), round(expected_result, 8))
+        self.assertEqual(round(ret, 7), round(expected_result, 7))
 
     def testCalculateMass(self):
         expected_result = 1.6659296417966238
@@ -180,7 +179,7 @@ class TestAnalysis(TestCase):
         res_freq_after_cell_load = 70
         ret = calculate_mass(spring_constant, res_freq_after_cell_load, res_freq_before_cell_load)
 
-        self.assertEqual(round(ret, 8), round(expected_result, 8))
+        self.assertEqual(round(ret, 7), round(expected_result, 7))
 
 
 if __name__ == "__main__":
