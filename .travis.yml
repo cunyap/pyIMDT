@@ -1,26 +1,21 @@
 language: python
-allow_failures:
-    - os: windows
 matrix:
   include:
-    - name: "Python 3.7 on Windows"
-      os: windows
-      language: sh
-      python: "3.7"
-      before_install:
-        - choco install python3 --version 3.7
-        - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
+    - name: "Python 3.5 on Linux"
+      python: 3.5           
 before_install:
 - source ./setup_python.sh $MAC_PYTHON_VERSION 'osx'
 # install dependencies
 install:
   - python --version
-  - travis_retry pip install .
+  - pip install .
 # Set path
-before_script:
-  - cd ${TRAVIS_BUILD_DIR}/pyIMD/tests
-  - echo $TRAVIS_BUILD_DIR/tests
+before_script: cd ${TRAVIS_BUILD_DIR}/pyIMD/examples
 # run tests
 script:
-  - python --version
-- python debug.py
+  - |
+    if ["$TRAVIS_OS_NAME" = "windows"]; then
+      python3 -m unittest discover -s $TRAVIS_BUILD_DIR/pyIMD/tests -t $TRAVIS_BUILD_DIR/pyIMD/tests
+    else 
+      python -m unittest discover -s $TRAVIS_BUILD_DIR/pyIMD/tests -t $TRAVIS_BUILD_DIR/pyIMD/tests
+    fi 
