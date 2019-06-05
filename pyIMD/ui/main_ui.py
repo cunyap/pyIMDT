@@ -29,6 +29,7 @@ from pyIMD.ui.table_view_models import PandasDataFrameModel
 from concurrent.futures import ThreadPoolExecutor
 from pyIMD.ui.resource_path import resource_path
 from pyIMD.ui.help import QuickInstructions, ChangeLog, About
+from pyIMD.ui.tools import ConcatenateFiles
 from pyIMD.__init__ import __version__, __operating_system__
 pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
@@ -166,6 +167,11 @@ class IMDWindow(QtWidgets.QMainWindow):
         self.actionSettings.setStatusTip('Configure pyIMD calculation settings')
         self.actionSettings.triggered.connect(self.show_settings_dialog)
 
+        tools_menu = self.menuBar.addMenu('Tools')
+        action_concat = tools_menu.addAction("Concatenate files")
+        self.concatenation = ConcatenateFiles()
+        action_concat.triggered.connect(self.on_concatenation)
+
         self.about_window = About()
         self.actionAbout.setShortcut("Ctrl+A")
         self.actionAbout.triggered.connect(self.on_about)
@@ -210,13 +216,12 @@ class IMDWindow(QtWidgets.QMainWindow):
         except Exception as e:
             self.print_to_console('Could not load quick instruction window due to corrupt settings.ini file' + str(e))
 
-
     @staticmethod
     def on_read_documentation():
         """
         Opens the documentation in the default web browser.
         """
-        webbrowser.open('file://' + os.path.realpath('docs/_build/html/index.html'))
+        webbrowser.open('https://pyimd.readthedocs.io/en/latest/')
 
     def on_change_log(self):
         """
@@ -235,6 +240,14 @@ class IMDWindow(QtWidgets.QMainWindow):
         Displays the about window.
         """
         self.about_window.show()
+
+    def on_concatenation(self):
+        """
+        Opens concatenation dialog and starts file concatenation in new thread.
+        """
+        directory, time_interval, dialog_state = self.concatenation.get_user_input()
+        if dialog_state:
+            self.executor.submit(self.imd.concatenate_files, directory, time_interval=time_interval)
 
     def on_update_text(self, text):
         """

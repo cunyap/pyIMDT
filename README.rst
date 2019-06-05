@@ -19,6 +19,15 @@ Welcome to pyIMD!
 .. image:: https://readthedocs.org/projects/pyimd/badge/?version=latest
         :target: https://pyimd.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
+
+.. image:: https://badge.fury.io/py/pyIMD.svg
+        :target: https://pypi.org/project/pyIMD/
+
+.. image:: https://anaconda.org/cunya/pyimd/badges/installer/conda.svg
+        :target: https://anaconda.org/cunya/pyimd
+
+.. image:: https://travis-ci.com/cunyap/pyIMDT.svg?branch=master
+    :target: https://travis-ci.com/cunyap/pyIMDT
         
 .. figure:: /pyIMD/examples/figures/pyIMD_ShowCaseFigure_web.png
     :width: 400 px
@@ -60,6 +69,13 @@ Otherwise, to install this module from source, type on your terminal::
     >>> git clone https://git.bsse.ethz.ch/cunya/pyIMD
     >>> cd pyIMD
     >>> pip install .
+
+Example data
+-----
+Example data files can be found in this repo. We provide example data of the various devices used (Cytomass and Nanonis) in various formats.
+
+[Go to example data](https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/examples/data)
+[Go to example scripts](https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/examples/data)
 
 Usage
 -----

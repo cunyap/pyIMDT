@@ -14,7 +14,7 @@ from pandas import concat, DataFrame
 from pyIMD.configuration.config import Settings
 from pyIMD.ui.settings import SettingsDialog
 from pyIMD.io.read_from_disk import read_from_text, read_from_file
-from pyIMD.io.write_to_disk import write_to_disk_as
+from pyIMD.io.write_to_disk import write_to_disk_as, write_concat_data
 from pyIMD.analysis.calculations import calculate_mass
 from pyIMD.analysis.calculations import calculate_resonance_frequencies, calculate_position_correction
 from pyIMD.configuration.defaults import *
@@ -402,6 +402,30 @@ class InertialMassDetermination(QObject):
         else:
             self.data_measured.iloc[:, 5] = self.data_measured.iloc[:, 5] / self.settings.conversion_factor_deg_to_rad
             self.data_measured.iloc[:, 6] = self.data_measured.iloc[:, 6] / self.settings.conversion_factor_hz_to_khz
+
+    def concatenate_files(self, directory, time_interval, **kwargs):
+        """
+        Method to write concatenate data from single dat files (i.e data logger files from Nanonis software).
+
+        Args:
+            directory (`str`):                Directory containing files to concatenate.
+            time_interval (`int`):            Measurement time interval in milliseconds.
+
+        Keyword Args:
+            delimiter (`str`):                Delimiter to be used in the data file to separate columns.(i.e. \t, \s)
+                                              If empty it uses default given by settings.
+        Returns:
+              file (`void`):                  Writes concatenated data to single .csv file.
+        """
+        if 'delimiter' in kwargs:
+            delimiter = kwargs.get('delimiter')
+        else:
+            delimiter = self.settings.text_data_delimiter
+        try:
+            self.logger.info("Start concatenating files: ")
+            write_concat_data(directory, delimiter=delimiter, time_interval=time_interval)
+        except Exception as e:
+            self.logger.info("Error during concatenating files: " + str(e))
 
     @staticmethod
     def get_logger_object(name):
