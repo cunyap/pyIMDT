@@ -12,9 +12,10 @@ python3 -m PyInstaller --noconsole --onefile --icon=/home/travis/build/cunyap/py
 
 echo "# create the .exe file"
 # see http://stackoverflow.com/a/367826/1320237
-echo $(ls /home/travis/build/cunyap/pyIMDT/dist/)
+echo $(ls -la /home/travis/build/cunyap/pyIMDT/dist/)
 PYIMD_EXE="`pwd`/dist/pyIMD.exe"
 rm -f "$PYIMD_EXE"
-hdiutil create -srcfolder dist/pyIMD_unix_x64.exe "$PYIMD_EXE"
+#hdiutil create -srcfolder dist/pyIMD_unix_x64.exe "$PYIMD_EXE"
+#mkdir dist/pyIMD_unix_x64.exe "$PYIMD_EXE"
 
 echo "The installer can be found in \"$PYIMD_EXE\"."
