@@ -4,9 +4,11 @@
 #
 set -e
 
+python3 -m pip install $USER PyInstaller
+
 echo "# build the program"
 # see https://pythonhosted.org/PyInstaller/usage.html
-python3 -m pyinstaller --noconsole --onefile --icon=/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo_icon.ico /home/travis/build/cunyap/pyIMDT/pyIMD/build/pyIMD_unix.spec
+python3 -m PyInstaller --noconsole --onefile --icon=/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo_icon.ico /home/travis/build/cunyap/pyIMDT/pyIMD/build/pyIMD_unix.spec
 
 echo "# create the .exe file"
 # see http://stackoverflow.com/a/367826/1320237
