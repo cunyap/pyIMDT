@@ -10,6 +10,7 @@ python3 -m pyinstaller --noconsole --onefile --icon=/home/travis/build/cunyap/py
 
 echo "# create the .exe file"
 # see http://stackoverflow.com/a/367826/1320237
+echo $(ls /dist)
 PYIMD_EXE="`pwd`/dist/KnitEditor.exe"
 rm -f "$PYIMD_EXE"
 hdiutil create -srcfolder dist/pyIMD_unix_x64.exe "$PYIMD_EXE"
