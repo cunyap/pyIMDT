@@ -4,7 +4,7 @@
 #
 set -e
 
-python3 -m pip install $USER PyInstaller
+python3 -m pip install $USER PyInstaller=3.3.1
 cd /home/travis/build/cunyap/pyIMDT/
 pip install .
 
