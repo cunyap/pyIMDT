@@ -5,6 +5,8 @@
 set -e
 
 python3 -m pip install $USER PyInstaller
+cd /home/travis/build/cunyap/pyIMDT/
+pip install .
 
 echo "# build the program"
 # see https://pythonhosted.org/PyInstaller/usage.html
