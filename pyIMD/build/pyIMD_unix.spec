@@ -10,7 +10,7 @@ sys.setrecursionlimit(3000)
 block_cipher = None
 
 a = Analysis(['/home/travis/build/cunyap/pyIMDT/pyIMD/main.py'],
-             pathex=['/home/travis/virtualenv/python3.5.6/lib/python3.5/site-packages/PyInstaller/'],
+#             pathex=['/home/travis/virtualenv/python3.5.6/lib/python3.5/site-packages/PyInstaller/'],
              binaries=[],
              datas=[],
              hiddenimports=["tkinter", "tkinter.filedialog", "pandas._libs.tslibs.np_datetime","pandas._libs.tslibs.nattype","pandas._libs.skiplist", 
