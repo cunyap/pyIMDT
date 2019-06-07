@@ -24,7 +24,6 @@ install:
   - if [ "$TRAVIS_OS_NAME" == "linux"   ] ; then bash $TRAVIS_BUILD_DIR/pyIMD/build/build.sh ; fi
 
 deploy:
-  # see https://docs.travis-ci.com/user/deployment/releases/
   - provider: releases
     api_key:
       secure: IaC7Ew/JXuY5vXNElMmpLmDFNwZYHZmTE8kjq6mTuxAv3JDy7gc0C4gskZXeB6dnwmWoXKIm4VHTikuQbQGbAhmEmMU1apiFHvfORF6DEzcKe0UiKPTl5wm8uCyTuCFoRBa0If4SBp4yhKq4W6eddNZ5rAeGQMVZgWeSTtRtqZBZR48tI3gMlDaqSu86tjJg8fKWah3fpyZBy1iC9AOjLOfiHxr9KdQE7EE8Rb+r8EfwLrbwPkdSXqiL32gmE9xfJ3JG2m9jFHjQnusf5gwwg2PS4/PSaaBolag0mAtTB6NfAKm4TjKagbn9TTzUCXho1j52vSIKfZlSaGyq66gZGRbIHb02rHK6Tip2NbwgKpUYxCK6rYQfz8SlumGvdRxblh1NrEIJzO8/KiBBWfnv4ufpnf9NO6S+y5moY3x+I3MMSUFUC8xq74Pft1GlO8iGDa1ZwLXv8hrB369CIO+oMZQa+zIGc5NCuVRwO2ybq5HpRID0HXjJCbNI/DImtKt8di1N1RpB3pMxYBvr8eEx1Wyx6d33TH/EpatC8rp2mGXRew/miB93usIwBbi5dUtYxqtxkJiwV4RICHqFJf1Xyq69uzhbtT8pZN/9iXsbyufAr0ztJj0uY7KlsBUu8rfn0x6F0WGQX9RkxSUcoqBFEMlw1wunMyeZW+K63JWMZz8=
