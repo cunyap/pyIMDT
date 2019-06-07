@@ -2,12 +2,12 @@
 # Main script to bundle pyIMD on OSX.
 # Author Andreas P. Cuny, andreas.cuny@bsse.ethz.ch
 # Use the following command to build the executable with pyinstaller and adjust the file paths first according to your installation.
-# PyInstaller --noconsole --onefile /home/travis/build/cunyap/pyIMDT/pyIMD/build/pyIMD_osx.spec
+# PyInstaller --noconsole --onefile /Users/travis/build/cunyap/pyIMDT/pyIMD/build/pyIMD_osx.spec
 
 block_cipher = None
 
-a = Analysis(['/home/travis/build/cunyap/pyIMDT/pyIMD/main.py'],
-            pathex=['/home/travis/virtualenv/python3.5.6/lib/python3.5/site-packages/PyQt5', '/home/travis/virtualenv/python3.5.6/lib/python3.5/site-packages'],
+a = Analysis(['/Users/travis/build/cunyap/pyIMDT/pyIMD/main.py'],
+            pathex=['/Users/travis/virtualenv/python3.5.6/lib/python3.5/site-packages/PyQt5', '/Users/travis/virtualenv/python3.5.6/lib/python3.5/site-packages'],
             binaries=[],
              datas=[],
              hiddenimports=["PyQt5", "numpy", "PyQt5.QtWidgets", "PyQt5.sip", "platinfo", "tkinter", "tkinter.filedialog", "pandas._libs.tslibs.np_datetime","pandas._libs.tslibs.nattype","pandas._libs.skiplist",
@@ -21,16 +21,16 @@ a = Analysis(['/home/travis/build/cunyap/pyIMDT/pyIMD/main.py'],
              win_private_assemblies=False,
              cipher=block_cipher)
 
-hookspath=['/home/travis/build/cunyap/pyIMDT/pyIMD/ui/hooks/']
+hookspath=['/Users/travis/build/cunyap/pyIMDT/pyIMD/ui/hooks/']
 
-a.datas += [('ui/icons/pyIMD_logo_icon.ico','/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo_icon.ico','DATA'),
-            ('ui/icons/pyIMD_logo.png','/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo.png','DATA'),
-            ('ui/icons/pyIMD_logo_vect.svg','/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo_vect.svg','DATA'),
-            ('ui/main_window.ui','/home/travis/build/cunyap/pyIMDT/pyIMD/ui/main_window.ui','DATA'),
-            ('ui/setting_dialog.ui','/home/travis/build/cunyap/pyIMDT/pyIMD/ui/setting_dialog.ui','DATA'),
-            ('imd.py','/home/travis/build/cunyap/pyIMDT/pyIMD/imd.py','DATA'),
-            ('change_log.txt','/home/travis/build/cunyap/pyIMDT/pyIMD/change_log.txt','DATA'),
-            ('palettable/colorbrewer/data/colorbrewer_all_schemes.json', '/home/travis/virtualenv/python3.5.6/lib/python3.5/site-packages/palettable/colorbrewer/data/colorbrewer_all_schemes.json', 'DATA')]
+a.datas += [('ui/icons/pyIMD_logo_icon.ico','/Users/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo_icon.ico','DATA'),
+            ('ui/icons/pyIMD_logo.png','/Users/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo.png','DATA'),
+            ('ui/icons/pyIMD_logo_vect.svg','/Users/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo_vect.svg','DATA'),
+            ('ui/main_window.ui','/Users/travis/build/cunyap/pyIMDT/pyIMD/ui/main_window.ui','DATA'),
+            ('ui/setting_dialog.ui','/Users/travis/build/cunyap/pyIMDT/pyIMD/ui/setting_dialog.ui','DATA'),
+            ('imd.py','/Users/travis/build/cunyap/pyIMDT/pyIMD/imd.py','DATA'),
+            ('change_log.txt','/Users/travis/build/cunyap/pyIMDT/pyIMD/change_log.txt','DATA'),
+            ('palettable/colorbrewer/data/colorbrewer_all_schemes.json', '/Users/travis/virtualenv/python3.5.6/lib/python3.5/site-packages/palettable/colorbrewer/data/colorbrewer_all_schemes.json', 'DATA')]
 
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
@@ -44,11 +44,11 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           console=True,
-          icon='/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo_icon.ico')
+          icon='/Users/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo_icon.ico')
 
 app = BUNDLE(exe,
          name='pyIMD.app',
-         icon='/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo-01.png',
+         icon='/Users/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo-01.png',
          bundle_identifier=None,
          info_plist={'NSHighResolutionCapable': 'True'},
          )
