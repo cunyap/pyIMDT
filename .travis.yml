@@ -29,6 +29,8 @@ deploy:
     api_key:
       secure: fe154cb044733960f0f540ff596ad038ab2612f9
     file: /home/travis/build/cunyap/pyIMDT/dist/pyIMD
-    skip_cleanup: true
-    draft: true
+    on:
+      draft: true
+      repo: cunyap/pyIMDT
+      file: /home/travis/build/cunyap/pyIMDT/dist/pyIMD
     
