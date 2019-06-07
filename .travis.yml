@@ -42,5 +42,5 @@ deploy:
   skip_cleanup: true
   on:
     draft: true
-    condition: $UNIX_PYTHON_VERSION = 3.5 | $MAC_PYTHON_VERSION = 3.5 
+    condition: $UNIX_PYTHON_VERSION == 3.5 | $MAC_PYTHON_VERSION == 3.5 
     repo: cunyap/pyIMDT
