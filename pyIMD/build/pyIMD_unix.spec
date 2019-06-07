@@ -48,5 +48,5 @@ exe = EXE(pyz,
           debug=True,
           strip=False,
           upx=False,
-          console=False,
+          console=True,
 icon='/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo_icon.ico')
