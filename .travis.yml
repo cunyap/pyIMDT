@@ -27,8 +27,9 @@ deploy:
   # see https://docs.travis-ci.com/user/deployment/releases/
   - provider: releases
     api_key:
-      secure: fe154cb044733960f0f540ff596ad038ab2612f9
+      secure: e0MXN21luRhrvstfQ144EHjZXXemZq8+g1/38vKSnlI/jCkIQ0lC7fopeWw9MlCap+BXFA+/FdeNh/uuTohHK3t8Mrx2UC/elJ21DvyzRlApBOHk7uTou/NBFed0xZqNQmZkcdDtlVeeNCEcw74vEVoMucgWEuX/wm+/KB8fIB36JaYP9BXmdbyQylSPnXZxFG2Mlts8mFFXFRO9EEMi3TYWERtFgq89NEDVSAiw5g0AT11wS05sarzPshrRxNBoFcM6N4SWsoGkMEZylNDB9P+DuXTukFpxoUjAmLWEICD5ZPZnz1KVpzLx89mZaWv9tCHyWQShK5CUk5VwZ+bG1Ky2FkCMeyAWSxny20XxafIe4HZDiTiES7B06lljIllu3PXS0+jJGNraSaVlrNZI7LKjgJqOx3NLk9VgPA72VXLgkoS0YUqQNMTRwkphczul0+iupX0GOmo1Z8Jk5th//nttA0XqTbjVYK+aEpRCURcgqQ9vC2XL5shFmFYHMTfF8iz3Rw3l2PG2mx1RYmxZgT+27laxA0xUXI3PrLQqOXDrENQ7C4yyYGMnXNFB3TYmugoTux68ZMBAdEkG90Q3SQdjgdEelUzng1PZFE2FNtmbszITsrQitV6T692fsjnJzH+cSd2HaAjYf6ebRvyX/2MWguX4pYovc0ci9Vy7dM8=
     file: /home/travis/build/cunyap/pyIMDT/dist/pyIMD
+    skip_cleanup: true
     on:
       draft: true
       repo: cunyap/pyIMDT
