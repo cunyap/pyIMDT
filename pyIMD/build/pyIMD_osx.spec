@@ -25,7 +25,7 @@ hookspath=['/home/travis/build/cunyap/pyIMDT/pyIMD/ui/hooks/']
 
 a.datas += [('ui/icons/pyIMD_logo_icon.ico','/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo_icon.ico','DATA'),
             ('ui/icons/pyIMD_logo.png','/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo.png','DATA'),
-            ('ui/icons/pyIMD_logo.svg','/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo.svg','DATA'),
+            ('ui/icons/pyIMD_logo_vect.svg','/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo_vect.svg','DATA'),
             ('ui/main_window.ui','/home/travis/build/cunyap/pyIMDT/pyIMD/ui/main_window.ui','DATA'),
             ('ui/setting_dialog.ui','/home/travis/build/cunyap/pyIMDT/pyIMD/ui/setting_dialog.ui','DATA'),
             ('imd.py','/home/travis/build/cunyap/pyIMDT/pyIMD/imd.py','DATA'),
