@@ -10,7 +10,9 @@ pip install .
 
 echo "# build the program"
 # see https://pythonhosted.org/PyInstaller/usage.html
-if [ "$1" == "linux"]
+echo $1 == "linux"
+echo $1
+if [ $1 == "linux"]
 then
 python3 -m PyInstaller --noconsole --onefile --icon=/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo_icon.ico /home/travis/build/cunyap/pyIMDT/pyIMD/build/pyIMD_unix.spec
 else
