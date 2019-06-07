@@ -5,18 +5,18 @@
 set -e
 
 python3 -m pip install $USER PyInstaller==3.3.1
-cd /home/travis/build/cunyap/pyIMDT/
-pip install .
 
 echo "# build the program"
-# see https://pythonhosted.org/PyInstaller/usage.html
-echo $1 == "linux"
-echo $1
+echo "For the operating system" $1
 if [ $1 == "linux" ];
 then
+cd /home/travis/build/cunyap/pyIMDT/
+pip install .
 python3 -m PyInstaller --noconsole --onefile --icon=/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo_icon.ico /home/travis/build/cunyap/pyIMDT/pyIMD/build/pyIMD_unix.spec
 else
-python3 -m PyInstaller --noconsole --onefile /home/travis/build/cunyap/pyIMDT/pyIMD/build/pyIMD_osx.spec
+cd /Users/travis/build/cunyap/pyIMDT/
+pip install .
+python3 -m PyInstaller --noconsole --onefile /Users/travis/build/cunyap/pyIMDT/pyIMD/build/pyIMD_osx.spec
 fi;
 
 echo "# create the .exe file"
