@@ -290,8 +290,8 @@ class InertialMassDetermination(QObject):
 
                 calculated_cell_mass = concat([(self.data_measured.iloc[0:int(((len(self.data_measured)) / 3)-1), 256] -
                                                 self.data_measured.iloc[0, 256]) / 3600,
-                                               DataFrame(self.calculated_cell_mass, columns=['Mass [ng]'])], axis=1)
-                calculated_cell_mass['Mean mass [ng]'] = calculated_cell_mass['Mass [ng]'].rolling(
+                                               DataFrame(self.calculated_cell_mass, columns=['Mass (ng)'])], axis=1)
+                calculated_cell_mass['Mean mass (ng)'] = calculated_cell_mass['Mass (ng)'].rolling(
                     window=self.settings.rolling_window_size).mean()
 
                 self.calculated_cell_mass = calculated_cell_mass
@@ -336,8 +336,8 @@ class InertialMassDetermination(QObject):
                     self.calculated_cell_mass.append(mass * self.position_correction_factor)
 
                 calculated_cell_mass = concat([(self.data_measured.iloc[:, 0] - self.data_measured.iloc[1, 0]) / 3600,
-                                               DataFrame(self.calculated_cell_mass, columns=['Mass [ng]'])], axis=1)
-                calculated_cell_mass['Mean mass [ng]'] = calculated_cell_mass['Mass [ng]'].rolling(
+                                               DataFrame(self.calculated_cell_mass, columns=['Mass (ng)'])], axis=1)
+                calculated_cell_mass['Mean mass (ng)'] = calculated_cell_mass['Mass (ng)'].rolling(
                     window=self.settings.rolling_window_size).mean()
                 self.calculated_cell_mass = calculated_cell_mass
 

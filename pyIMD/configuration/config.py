@@ -615,7 +615,6 @@ class Settings(object):
                         setattr(self, key, value['File'])
                 except Exception as e:
                     print('Project settings error:', e)
-            print(self)
 
             return "Project {} successfully opened".format(pathlib.Path(file_path).name)
         except Exception as e:

@@ -1,0 +1,36 @@
+{% set version = "0.0.7" %}
+
+package:
+  name: pyIMD
+  version: {{ version }}
+
+source:
+  url: https://files.pythonhosted.org/packages/97/e0/73338b85bc5cd1f868c6510676d144ae1132e54393903cf43ca61ae03c8c/pyIMD-{{ version }}-py3-none-any.whl
+  sha256: 3109fb050328683e8f24da68138a59bbf811edd417697f36a2eb1d33ceeca7f6
+
+build:
+  noarch: python
+  number: 0
+  script: python install .
+
+requirements:
+  host:
+    - python
+    - pip
+  run:
+    - python
+
+test:
+  imports:
+    - imagesize
+
+about:
+  home: https://gitlab.com/csb.ethz/pyIMD/tree/master
+  license: GPLv3
+  summary: 'pyIMD: Software to calculate the inertial mass from micro resonator data.'
+  description: |
+    This packaces calculates the intertial mass from micro resonator data and can be used from the command line
+    interface (CLI) as well as through a graphical user interface (GUI).
+  dev_url: https://gitlab.com/csb.ethz/pyIMD/tree/master
+  doc_url: https://pyimd.readthedocs.io/en/latest/
+  doc_source_url: https://gitlab.com/csb.ethz/pyIMD/blob/master/pyIMD/docs/index.rst

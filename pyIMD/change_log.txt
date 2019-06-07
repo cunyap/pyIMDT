@@ -1,3 +1,6 @@
+- 0.0.8
+            - New feature: Support of new data format (*.dat from Nanonis Controller)
+            - New feature: New tool to concatenate single *.dat files into a single .csv file.
 - 0.0.7
             - New feature: Added settings dialog functionality for pyIMD console use to facilitate update of parameters.
             - Fixed Bug: Settings to project file synchronisation.

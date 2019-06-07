@@ -245,9 +245,12 @@ class IMDWindow(QtWidgets.QMainWindow):
         """
         Opens concatenation dialog and starts file concatenation in new thread.
         """
-        directory, time_interval, dialog_state = self.concatenation.get_user_input()
-        if dialog_state:
-            self.executor.submit(self.imd.concatenate_files, directory, time_interval=time_interval)
+        try:
+            directory, time_interval, dialog_state = self.concatenation.get_user_input()
+            if dialog_state:
+                self.executor.submit(self.imd.concatenate_files, directory, time_interval=time_interval)
+        except Exception as e:
+            self.print_to_console("Concatenation aborted by user: ")
 
     def on_update_text(self, text):
         """
@@ -372,8 +375,8 @@ class IMDWindow(QtWidgets.QMainWindow):
                                      self.imd.resonance_freq_pre_start_no_cell, self.imd.fit_param_pre_start_no_cell[0],
                                      self.imd.fit_param_pre_start_no_cell[1], self.imd.fit_param_pre_start_no_cell[2])
                 self.graphicsView.plot(self.imd.data_pre_start_no_cell.iloc[:, 0], y_fit, pen=pg.mkPen('r', width=1.5))
-                self.graphicsView.setLabel('bottom', 'Frequency [kHz]')
-                self.graphicsView.setLabel('left', 'Phase [rad]')
+                self.graphicsView.setLabel('bottom', 'Frequency (kHz)')
+                self.graphicsView.setLabel('left', 'Phase (rad)')
                 self.graphicsView.showGrid(x=True, y=True)
                 # Notify user about selection
                 self.print_to_console("Displaying: " + item.text())
@@ -390,8 +393,8 @@ class IMDWindow(QtWidgets.QMainWindow):
                                      self.imd.resonance_freq_pre_start_with_cell, self.imd.fit_param_pre_start_with_cell[0],
                                      self.imd.fit_param_pre_start_with_cell[1], self.imd.fit_param_pre_start_with_cell[2])
                 self.graphicsView.plot(self.imd.data_pre_start_with_cell.iloc[:, 0], y_fit, pen=pg.mkPen('r', width=1.5))
-                self.graphicsView.setLabel('bottom', 'Frequency [kHz]')
-                self.graphicsView.setLabel('left', 'Phase [rad]')
+                self.graphicsView.setLabel('bottom', 'Frequency (kHz)')
+                self.graphicsView.setLabel('left', 'Phase (rad)')
                 self.graphicsView.showGrid(x=True, y=True)
                 # Notify user about selection
                 self.print_to_console("Displaying: " + item.text())
@@ -420,8 +423,8 @@ class IMDWindow(QtWidgets.QMainWindow):
                                        name="Raw phase w/ cell")
                 self.graphicsView.plot(self.imd.data_pre_start_with_cell.iloc[:, 0], y_fit_with,
                                        pen=pg.mkPen('c', width=1.5), name="Phase fit w/o cell attached")
-                self.graphicsView.setLabel('bottom', 'Frequency [kHz]')
-                self.graphicsView.setLabel('left', 'Phase [rad]')
+                self.graphicsView.setLabel('bottom', 'Frequency (kHz)')
+                self.graphicsView.setLabel('left', 'Phase (rad)')
                 self.graphicsView.showGrid(x=True, y=True)
                 # Notify user about selection
                 self.print_to_console("Displaying: " + item.text())
@@ -438,8 +441,8 @@ class IMDWindow(QtWidgets.QMainWindow):
                 self.graphicsView.plot(self.imd.calculated_cell_mass.iloc[:, 0],
                                        self.imd.calculated_cell_mass.iloc[:, 2], pen=pg.mkPen('r', width=1.5),
                                        name="Mean measured cell mass")
-                self.graphicsView.setLabel('bottom', 'Time [h]')
-                self.graphicsView.setLabel('left', 'Mass [ng]')
+                self.graphicsView.setLabel('bottom', 'Time (h)')
+                self.graphicsView.setLabel('left', 'Mass (ng)')
                 self.graphicsView.showGrid(x=True, y=True)
                 # Notify user about selection
                 self.print_to_console("Displaying: " + item.text())

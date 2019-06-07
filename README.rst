@@ -74,8 +74,8 @@ Example data
 -----
 Example data files can be found in this repo. We provide example data of the various devices used (Cytomass and Nanonis) in various formats.
 
-[Go to example data](https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/examples/data)
-[Go to example scripts](https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/examples/data)
+* [Go to example data](https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/examples/data)
+* [Go to example scripts](https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/examples/data)
 
 Usage
 -----

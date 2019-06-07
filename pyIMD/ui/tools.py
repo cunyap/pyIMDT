@@ -35,10 +35,10 @@ class ConcatenateFiles(QDialog):
         grid.setContentsMargins(5, 5, 5, 5)
 
         self.intro_label = QLabel('Concatenate measurement data saved in multiple files into a single one.')
-        self.time_label = QLabel('Enter the acquisition time interval (in milliseconds):')
+        self.time_label = QLabel('Enter the acquisition time interval (in seconds):')
         self.time_interval_edit = QLineEdit(self)
         self.time_interval_edit.textChanged.connect(self.on_time_interval_changed)
-        validator = QtGui.QIntValidator()
+        validator = QtGui.QDoubleValidator()
         self.time_interval_edit.setValidator(validator)
 
         self.directory_label = QLabel('Select directory containing all files to be concatenated:')

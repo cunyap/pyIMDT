@@ -112,6 +112,5 @@ def read_from_file(file, delimiter):
         df.iloc[:, 0] = data.iloc[:, 0]
         df.iloc[:, 6] = data.iloc[:, 1]
         data = df
-        print(df)
 
     return data

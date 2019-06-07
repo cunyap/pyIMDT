@@ -37,8 +37,8 @@ def plot_fitting(x, y, resonance_frequency, parameter):
 
     y_fit = fit_function(x, resonance_frequency, parameter[0], parameter[1], parameter[2])
     y_fit.name = 'Phase fit'
-    x.name = 'Frequency [kHz]'
-    y.name = 'Phase [rad]'
+    x.name = 'Frequency (kHz)'
+    y.name = 'Phase (rad)'
     data = concat([x, y, y_fit], axis=1)
     col_names = list(data)
 
@@ -78,23 +78,23 @@ def plot_response_shift(x, y, resonance_frequency_without, parameter_without, xx
     y_fit_with = fit_function(xx, resonance_frequency_with, parameter[0], parameter[1], parameter[2])
     y_fit_without.name = 'Phase fit w/o cell att.'
     y_fit_with.name = 'Phase fit w cell att.'
-    x.name = 'Frequency without [kHz]'
+    x.name = 'Frequency without (kHz)'
     y.name = 'Raw phase w/o cell att.'
-    xx.name = 'Frequency with [kHz]'
+    xx.name = 'Frequency with (kHz)'
     yy.name = 'Raw phase w cell att.'
     data = concat([x, y, y_fit_without, xx, yy, y_fit_with], axis=1)
-    df = melt(data, id_vars=['Frequency with [kHz]'], value_vars=['Phase fit w cell att.',
+    df = melt(data, id_vars=['Frequency with (kHz)'], value_vars=['Phase fit w cell att.',
                                                                   'Phase fit w/o cell att.'])
-    df.loc[df['variable'] == 'Phase fit w/o cell att.', 'Frequency with [kHz]'] = x.values
-    df2 = melt(data, id_vars=['Frequency with [kHz]'], value_vars=['Raw phase w cell att.',
+    df.loc[df['variable'] == 'Phase fit w/o cell att.', 'Frequency with (kHz)'] = x.values
+    df2 = melt(data, id_vars=['Frequency with (kHz)'], value_vars=['Raw phase w cell att.',
                                                                    'Raw phase w/o cell att.'])
-    df2.loc[df2['variable'] == 'Raw phase w/o cell att.', 'Frequency with [kHz]'] = x.values
+    df2.loc[df2['variable'] == 'Raw phase w/o cell att.', 'Frequency with (kHz)'] = x.values
     # Plot data
     p = ggplot(data=df) + \
-        geom_point(aes(x="Frequency with [kHz]", y='value', fill='variable'), data=df2, alpha=0.6) + \
-        geom_line(aes(x="Frequency with [kHz]", y='value', color='variable')) + \
-        xlab('Frequency [kHz]') + \
-        ylab('Phase [rad]') + \
+        geom_point(aes(x="Frequency with (kHz)", y='value', fill='variable'), data=df2, alpha=0.6) + \
+        geom_line(aes(x="Frequency with (kHz)", y='value', color='variable')) + \
+        xlab('Frequency (kHz)') + \
+        ylab('Phase (rad)') + \
         labs(fill='Raw data', color='Function fits') + \
         theme_seaborn(style='ticks', context='talk', font_scale=0.75) + \
         theme(figure_size=(15, 7), strip_background=element_rect(fill='white'), axis_line_x=element_line(color='black'),
@@ -117,7 +117,7 @@ def plot_mass(calculated_cell_mass, plot_every_nth_point):
     """
 
     col_names = list(calculated_cell_mass)
-    col_names[0] = 'Time [h]'
+    col_names[0] = 'Time (h)'
     calculated_cell_mass.columns = col_names
     calculated_cell_mass = calculated_cell_mass.iloc[::plot_every_nth_point, :]
 
