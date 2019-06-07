@@ -29,8 +29,8 @@ a.datas += [('ui/icons/pyIMD_logo_icon.ico','/home/travis/build/cunyap/pyIMDT/py
             ('ui/main_window.ui','/home/travis/build/cunyap/pyIMDT/pyIMD/ui/main_window.ui','DATA'),
             ('ui/setting_dialog.ui','/home/travis/build/cunyap/pyIMDT/pyIMD/ui/setting_dialog.ui','DATA'),
             ('imd.py','/home/travis/build/cunyap/pyIMDT/pyIMD/imd.py','DATA'),
-            ('change_log.txt','/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/change_log.txt','DATA'),
-		    ('palettable/colorbrewer/data/colorbrewer_all_schemes.json', '/home/travis/virtualenv/python3.5.6/lib/python3.5/site-packages/palettable/colorbrewer/data/colorbrewer_all_schemes.json', 'DATA')]
+            ('change_log.txt','/home/travis/build/cunyap/pyIMDT/pyIMD/change_log.txt','DATA'),
+            ('palettable/colorbrewer/data/colorbrewer_all_schemes.json', '/home/travis/virtualenv/python3.5.6/lib/python3.5/site-packages/palettable/colorbrewer/data/colorbrewer_all_schemes.json', 'DATA')]
 
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
