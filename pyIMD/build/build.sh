@@ -24,6 +24,7 @@ mv /home/travis/build/cunyap/pyIMDT/dist/pyIMD /home/travis/build/cunyap/pyIMDT/
 echo $(ls /home/travis/build/cunyap/pyIMDT/dist/)
 else
 cd /Users/travis/build/cunyap/pyIMDT/
+pip install PyQt5==5.10.1
 pip install .
 python3 -m PyInstaller --noconsole --onefile /Users/travis/build/cunyap/pyIMDT/pyIMD/build/pyIMD_osx.spec
 
