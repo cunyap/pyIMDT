@@ -16,6 +16,7 @@ python3 -m PyInstaller --noconsole --onefile --icon=/home/travis/build/cunyap/py
 PYIMD_APP="`pwd`/dist/pyIMD"
 echo "The app can be found in \"$PYIMD_APP\"."
 mv /home/travis/build/cunyap/pyIMDT/dist/pyIMD /home/travis/build/cunyap/pyIMDT/dist/pyIMD_x64_unix
+echo $(ls /home/travis/build/cunyap/pyIMDT/dist/)
 else
 cd /Users/travis/build/cunyap/pyIMDT/
 pip install .
@@ -27,7 +28,7 @@ PYIMD_DMG="`pwd`/dist/pyIMD.dmg"
 rm -f "$PYIMD_DMG"
 hdiutil create -srcfolder dist/pyIMD.app "$PYIMD_DMG"
 mv /Users/travis/build/cunyap/pyIMDT/dist/pyIMD.dmg /Users/travis/build/cunyap/pyIMDT/dist/pyIMD_x64_osx.dmg
-
+echo $(ls /Users/travis/build/cunyap/pyIMDT/dist/)
 echo "The installer can be found in \"$PYIMD_DMG\"."
 fi;
 
