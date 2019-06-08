@@ -4,26 +4,12 @@ matrix:
   - name: "Python 3.5 on Linux"
     python: 3.5      
     env: UNIX_PYTHON_VERSION=3.5
-  - name: "Python 3.6 on Linux"
-    python: 3.6  
-    env: UNIX_PYTHON_VERSION=3.6
-  - name: "Python 3.7 on Xenial Linux"
-    python: 3.7           
-    dist: xenial          # required for Python >= 3.7
-    sudo: true
-    env: UNIX_PYTHON_VERSION=3.7
+	env: DEPLOY_FILE="/home/travis/build/cunyap/pyIMDT/dist/pyIMD"
   - name: "Python 3.5 on macOS"
     os: osx
     language: generic       # 'language: python' is an error on Travis CI macOS
     env: MAC_PYTHON_VERSION=3.5
-  - name: "Python 3.6 on macOS"
-    os: osx
-    language: generic       # 'language: python' is an error on Travis CI macOS
-    env: MAC_PYTHON_VERSION=3.6
-  - name: "Python 3.7 on macOS"
-    os: osx
-    language: generic       # 'language: python' is an error on Travis CI macOS
-    env: MAC_PYTHON_VERSION=3.7 
+	env: DEPLOY_FILE="/home/travis/build/cunyap/pyIMDT/dist/pyIMD.app"
 before_install:
 - source ./setup_python.sh $MAC_PYTHON_VERSION 'osx'
 install:
@@ -39,8 +25,9 @@ deploy:
   api_key:
     secure: FzGUd9Zpilm+qu4hLerGHfu8+RYhAFdqgF8+AZlmrBjaBUXBA/H+WMMh4mnzP1F3Os2ONRpRNJ3hhTzK6Wb8YbtkvVmkbdnkLomJf+m9wY3tI9tLsMotfS08QgtgS5Y6g9Kk5bDL3jYQIcX8JnAP+zVHGxpXIhidQ8Pshbf55M+Rns3ceg7iyjl0dBVYjobZS5UBkJvQ+q2rwxhY8KZ3qvYkMfAcq6DgLR04Db3gVWizdJfWyuhaLzEq3xgrv4It6KOoezmBxGFow04z9n4U17EBYBTKW7kTq+JNIlCSEQuPejADxbLmfmaDQvC1t2VWd5dFI7NMH82oALDUUivMGr493Qt7ZvmGby+c0Gmqiiux6wHQNaXVZnYtRKnn41TX2JRuLa8H3c517N/YZHMUGfH8Ps6utHmuRpg5C9mAX9J03i911P0FJ3BkCpjiI4VNwi11sQ1kPPxqRQm1wbA7C+9OP+WqMnkZJqhszfZ16TlAqPdtPEbq1ALDtfXTru/56O3atDVPq5Llvhad1MXneCzrB4aqpTjsnEobX4ldyxyNef5gPimuQSBiI0IiUiQHqBjmR4FMyTDEKnrD92F/AfZBisYHNhxlRZQX4EWppxQ+kTATTCkx268WE4GmdfrUVzIVcGtr3IjJEJcBC3yIHyzAW8cae1VGcU5vjJVRBa0=
   file: "/home/travis/build/cunyap/pyIMDT/dist/pyIMD"
+  file: $DEPLOY_FILE
   skip_cleanup: true
   on:
     draft: true
-    condition: $UNIX_PYTHON_VERSION == 3.5 | $MAC_PYTHON_VERSION == 3.5 
-    repo: cunyap/pyIMDT
+    condition: ($UNIX_PYTHON_VERSION == 3.5) OR ($MAC_PYTHON_VERSION == 3.5)
+repo: cunyap/pyIMDT
