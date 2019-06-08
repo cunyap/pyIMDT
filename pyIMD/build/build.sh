@@ -13,18 +13,20 @@ then
 cd /home/travis/build/cunyap/pyIMDT/
 pip install .
 python3 -m PyInstaller --noconsole --onefile --icon=/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo_icon.ico /home/travis/build/cunyap/pyIMDT/pyIMD/build/pyIMD_unix.spec
+PYIMD_APP="`pwd`/dist/pyIMD"
+echo "The app can be found in \"$PYIMD_APP\"."
 else
 cd /Users/travis/build/cunyap/pyIMDT/
 pip install .
 python3 -m PyInstaller --noconsole --onefile /Users/travis/build/cunyap/pyIMDT/pyIMD/build/pyIMD_osx.spec
+
+echo "# create the .dmg file"
+# see http://stackoverflow.com/a/367826/1320237
+PYIMD_DMG="`pwd`/dist/pyIMD.dmg"
+rm -f "$PYIMD_DMG"
+hdiutil create -srcfolder dist/pyIMD.app "$PYIMD_DMG"
+
+echo "The installer can be found in \"$PYIMD_DMG\"."
 fi;
 
-echo "# create the .exe file"
-# see http://stackoverflow.com/a/367826/1320237
-echo $(ls -la /home/travis/build/cunyap/pyIMDT/dist/)
-PYIMD_EXE="`pwd`/dist/pyIMD.exe"
-rm -f "$PYIMD_EXE"
-#hdiutil create -srcfolder dist/pyIMD_unix_x64.exe "$PYIMD_EXE"
-#mkdir dist/pyIMD_unix_x64.exe "$PYIMD_EXE"
-
-echo "The installer can be found in \"$PYIMD_EXE\"."
+echo "# Done with compiling"
