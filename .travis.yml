@@ -5,13 +5,13 @@ matrix:
     python: 3.5      
     env: 
       - PYTHON_VERSION=3.5
-      - DEPLOY_FILE="/home/travis/build/cunyap/pyIMDT/dist/pyIMD"
+      - DEPLOY_FILE="/home/travis/build/cunyap/pyIMDT/dist/pyIMD_x64_unix"
   - name: "Python 3.5 on macOS"
     os: osx
     language: generic       # 'language: python' is an error on Travis CI macOS
     env: 
       - PYTHON_VERSION=3.5
-      - DEPLOY_FILE="/home/travis/build/cunyap/pyIMDT/dist/pyIMD.app"
+      - DEPLOY_FILE="/Users/travis/build/cunyap/pyIMDT/dist/pyIMD_x64_osx.dmg"
 before_install:
 - source ./setup_python.sh $PYTHON_VERSION 'osx'
 install:
