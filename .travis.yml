@@ -8,6 +8,7 @@ matrix:
       - DEPLOY_FILE="/home/travis/build/cunyap/pyIMDT/dist/pyIMD_x64_unix"
   - name: "Python 3.5 on macOS"
     os: osx
+    osx_image: xcode8
     language: generic       # 'language: python' is an error on Travis CI macOS
     env: 
       - PYTHON_VERSION=3.5
