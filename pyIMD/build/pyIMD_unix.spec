@@ -9,6 +9,9 @@ import sys
 sys.setrecursionlimit(3000)
 block_cipher = None
 
+additionalLibs = [] 
+additionalLibs.append( ("libGL.so.1", "/usr/lib64/libGL.so.1", 'BINARY') )
+
 a = Analysis(['/home/travis/build/cunyap/pyIMDT/pyIMD/main.py'],
 #             pathex=['/home/travis/virtualenv/python3.5.6/lib/python3.5/site-packages/PyInstaller/'],
              binaries=[],
@@ -41,7 +44,7 @@ pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
-          a.binaries,
+          a.binaries + additionalLibs,
           a.zipfiles,
           a.datas,
           name='pyIMD',
