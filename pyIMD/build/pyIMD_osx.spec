@@ -4,6 +4,11 @@
 # Use the following command to build the executable with pyinstaller and adjust the file paths first according to your installation.
 # PyInstaller --noconsole --onefile /Users/travis/build/cunyap/pyIMDT/pyIMD/build/pyIMD_osx.spec
 
+# work-around for https://github.com/pyinstaller/pyinstaller/issues/4064
+import distutils
+if distutils.distutils_path.endswith('__init__.py'):
+    distutils.distutils_path = os.path.dirname(distutils.distutils_path)
+
 block_cipher = None
 
 a = Analysis(['/Users/travis/build/cunyap/pyIMDT/pyIMD/main.py'],
