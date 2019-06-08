@@ -4,7 +4,7 @@
 #
 set -e
 
-python3 -m pip install $USER PyInstaller==3.3.1
+python3 -m pip install $USER PyInstaller
 
 echo "# build the program"
 echo "For the operating system" $1
@@ -12,6 +12,8 @@ if [ $1 == "linux" ];
 then
 cd /home/travis/build/cunyap/pyIMDT/
 sudo apt-get install libgl1-mesa-glx
+sudo /usr/lib64/
+sudo cp -R /usr/lib/x86_64-linux-gnu/mesa/* /usr/lib64/
 echo $(ls /usr/lib/)
 echo $(ls /usr/lib64/*)
 echo $(ls /usr/lib64/libGL*)
