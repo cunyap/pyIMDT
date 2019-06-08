@@ -11,6 +11,7 @@ echo "For the operating system" $1
 if [ $1 == "linux" ];
 then
 cd /home/travis/build/cunyap/pyIMDT/
+sudo apt-get install libgl1-mesa-glx
 pip install .
 python3 -m PyInstaller --noconsole --onefile --icon=/home/travis/build/cunyap/pyIMDT/pyIMD/ui/icons/pyIMD_logo_icon.ico /home/travis/build/cunyap/pyIMDT/pyIMD/build/pyIMD_unix.spec
 PYIMD_APP="`pwd`/dist/pyIMD"
