@@ -2,6 +2,7 @@ language: python
 matrix:
   include:
   - name: "Python 3.5 on Linux"
+    dist: xenial
     python: 3.5      
     env: 
       - PYTHON_VERSION=3.5
