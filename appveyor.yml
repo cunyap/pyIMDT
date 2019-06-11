@@ -39,7 +39,6 @@ install:
 
 # testing
 # run tests
-  - pip install unittest
   - python -m unittest
   - python -m unittest discover -s C:\\projects\\pyimdt\\pyIMD\\tests -t C:\\projects\\pyimdt\\pyIMD\\tests
   
