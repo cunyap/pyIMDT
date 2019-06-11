@@ -44,10 +44,11 @@ install:
 # testing
 # run tests
   - python -m unittest discover -s pyIMD\\tests -t pyIMD\\tests
+  - python -m unittest
 
 # upload artifacts
 artifacts:
-  - path: 'dist\pyIMD*exe'
+  - path: 'pyimdt\\dist\\pyIMD*exe'
     name: portable
 
 # push artifacts to github
@@ -57,9 +58,9 @@ deploy:
   auth_token:
     secure: eqinvomItGqw80qUWYaayQYKxNfHlgX/eetx6trpD+Nm2O8S0jT80C2TPdrFaTh/
   artifact: portable
-  draft: false
+  draft: true
   prerelease: false
   force_update: true
   on:
     branch: master                 # release from master branch only
-    appveyor_repo_tag: true        # deploy on tag push only
+    appveyor_repo_tag: false        # deploy on tag push only
