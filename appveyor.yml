@@ -39,7 +39,7 @@ install:
 
 # installer
 # generate portable
-  - pyinstaller pyIMD\\builds\\pyIMD_x64_win.spec
+  - pyinstaller --onefile pyIMD\\build\\pyIMD_x64_win.spec
 
 # testing
 # run tests
