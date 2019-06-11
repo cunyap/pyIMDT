@@ -51,13 +51,13 @@ artifacts:
 
 # push artifacts to github
 deploy:
-  description: 'AppveyorCI build'
+  description: 'pyIMD compiled portable.'
   provider: GitHub
   auth_token:
     secure: eqinvomItGqw80qUWYaayQYKxNfHlgX/eetx6trpD+Nm2O8S0jT80C2TPdrFaTh/
   artifact: portable
-  draft: true
-  prerelease: false
+  draft: false
+  prerelease: true
   force_update: true
   on:
     branch: master                 # release from master branch only
