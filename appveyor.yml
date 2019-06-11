@@ -4,11 +4,13 @@
 build: off
 
 environment:
+  APPVEYOR_RDP_PASSWORD: /t6ROjCWGMKps4yDNDWcLA==
   matrix:
     - platform: x64
       PYTHON: "C:\\Python35-x64"
 
 init:
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 # check python version
   - python -V
 # check 32 or 64 bit
@@ -32,16 +34,16 @@ install:
 # install usual requirements
   - pip install "setuptools>=30.0.0"  # minimal version of setuptools required to build package without error
   - pip install .
-  - pip install PyInstaller==3.3.1
+  - pip install PyInstaller
   - pip install appdirs tornado packaging
 
 # installer
 # generate portable
-#  - PyInstaller \\pyIMD\ci\\pyIMD_x64_win.spec
+  - pyinstaller builds\\pyIMD_x64_win.spec
 
 # testing
 # run tests
-  - python -m unittest discover -s \\pyIMD\\tests -t \\pyIMD\\tests
+  - python -m unittest discover -s pyIMD\\tests -t pyIMD\\tests
 
 # upload artifacts
 artifacts:
