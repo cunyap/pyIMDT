@@ -37,7 +37,7 @@ matrix:
 before_install:
 - source ./setup_python.sh $PYTHON_VERSION 'osx'
 install:
-- if [ $PYTHON_VERSION = 3.5 ]; then bash $TRAVIS_BUILD_DIR/pyIMD/build/build.sh $TRAVIS_OS_NAME; fi
+- bash $TRAVIS_BUILD_DIR/pyIMD/build/build.sh $TRAVIS_OS_NAME $PYTHON_VERSION
 before_script: cd ${TRAVIS_BUILD_DIR}/pyIMD/examples
 script:
 - "if [\"$TRAVIS_OS_NAME\" = \"windows\"]; then\n  python3 -m unittest discover -s
