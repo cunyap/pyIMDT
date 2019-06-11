@@ -1,0 +1,63 @@
+# validation page for appveyor config: https://ci.appveyor.com/tools/validate-yaml
+
+# Not building Visual Studio project
+build: off
+
+environment:
+  matrix:
+    - platform: x64
+      PYTHON: "C:\\Python35-x64"
+
+init:
+# check python version
+  - python -V
+# check 32 or 64 bit
+  - python -c "import struct;print(8 * struct.calcsize('P'))"
+
+install:
+  # If there is a newer build queued for the same PR, cancel this one.
+  # The AppVeyor 'rollout builds' option is supposed to serve the same
+  # purpose but it is problematic because it tends to cancel builds pushed
+  # directly to master instead of just PR builds (or the converse).
+  # credits: JuliaLang developers.
+  - ps: if ($env:APPVEYOR_PULL_REQUEST_NUMBER -and $env:APPVEYOR_BUILD_NUMBER -ne ((Invoke-RestMethod `
+        https://ci.appveyor.com/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=50).builds | `
+        Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
+          throw "There are newer queued builds for this pull request, failing early." }
+  # Prepend Python to the PATH of this build
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+# check python and pip versions
+  - python -V
+  - pip -V
+# install usual requirements
+  - pip install "setuptools>=30.0.0"  # minimal version of setuptools required to build package without error
+  - pip install .
+  - pip install PyInstaller==3.3.1
+  - pip install appdirs tornado packaging
+
+# installer
+# generate portable
+#  - PyInstaller \\pyIMD\ci\\pyIMD_x64_win.spec
+
+# testing
+# run tests
+  - python -m unittest discover -s \\pyIMD\\tests -t \\pyIMD\\tests
+
+# upload artifacts
+artifacts:
+  - path: 'dist\pyIMD*exe'
+    name: portable
+
+# push artifacts to github
+deploy:
+  description: 'AppveyorCI build'
+  provider: GitHub
+  auth_token:
+    secure: eqinvomItGqw80qUWYaayQYKxNfHlgX/eetx6trpD+Nm2O8S0jT80C2TPdrFaTh/
+  artifact: portable
+  draft: false
+  prerelease: false
+  force_update: true
+  on:
+    branch: master                 # release from master branch only
+    appveyor_repo_tag: true        # deploy on tag push only
