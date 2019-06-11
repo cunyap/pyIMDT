@@ -7,6 +7,16 @@ matrix:
     env: 
       - PYTHON_VERSION=3.5
       - DEPLOY_FILE="/home/travis/build/cunyap/pyIMDT/dist/pyIMD_x64_unix"
+  - name: "Python 3.6 on Linux"
+    python: 3.6  
+    env: 
+      - PYTHON_VERSION=3.6
+  - name: "Python 3.7 on Xenial Linux"
+    python: 3.7           
+    dist: xenial          # required for Python >= 3.7
+    sudo: true
+    env: 
+      - PYTHON_VERSION=3.7
   - name: "Python 3.5 on macOS"
     os: osx
     osx_image: xcode8
@@ -14,6 +24,16 @@ matrix:
     env: 
       - PYTHON_VERSION=3.5
       - DEPLOY_FILE="/Users/travis/build/cunyap/pyIMDT/dist/pyIMD_x64_osx.dmg"
+  - name: "Python 3.6 on macOS"
+    os: osx
+    language: generic       
+    env: 
+      - PYTHON_VERSION=3.6
+  - name: "Python 3.7 on macOS"
+    os: osx
+    language: generic       
+    env: 
+      - PYTHON_VERSION=3.7 
 before_install:
 - source ./setup_python.sh $PYTHON_VERSION 'osx'
 install:
