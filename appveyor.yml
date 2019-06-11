@@ -4,7 +4,6 @@
 build: off
 
 environment:
-  APPVEYOR_RDP_PASSWORD: /t6ROjCWGMKps4yDNDWcLA==
   matrix:
     - platform: x64
       PYTHON: "C:\\Python35-x64"
@@ -39,7 +38,6 @@ install:
 
 # testing
 # run tests
-  - python -m unittest
   - python -m unittest discover -s C:\\projects\\pyimdt\\pyIMD\\tests -t C:\\projects\\pyimdt\\pyIMD\\tests
   
 # installer
