@@ -17,6 +17,7 @@ echo $(ls /usr/lib64/libGL*)
 pip install .
 
 if [ $2 == 3.5 ];
+then
 echo "# build the program"
 echo "For the operating system" $1
 
@@ -32,6 +33,7 @@ pip install PyQt5==5.10.1
 pip install .
 
 if [ $2 == 3.5 ];
+then
 echo "# build the program"
 echo "For the operating system" $1
 
