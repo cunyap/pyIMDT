@@ -51,6 +51,6 @@ deploy:
   file: $DEPLOY_FILE
   skip_cleanup: true
   on:
-    draft: true
+    tags: true
     condition: $PYTHON_VERSION = 3.5
     repo: cunyap/pyIMDT
