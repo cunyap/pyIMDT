@@ -46,7 +46,7 @@ install:
 
 # upload artifacts
 artifacts:
-  - path: C:\projects\pyimdt\dist\pyIMD.exe
+  - path: 'dist\pyIMD*exe'
     name: portable
 
 # push artifacts to github
