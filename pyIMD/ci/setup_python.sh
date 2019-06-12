@@ -1,11 +1,11 @@
 #!/bin/bash
 
-if [ -z $1 ]; then
+if [[ -z $1 ]]; then
     echo "Please specify Python version as command line argument!"
     exit 1
 fi
 
-if [ $2 -ne 'osx' ]; then
+if [[ $2 -ne 'osx' ]]; then
     exit 1
 fi
 

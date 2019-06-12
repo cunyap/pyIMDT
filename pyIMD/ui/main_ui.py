@@ -84,6 +84,7 @@ class IMDWindow(QtWidgets.QMainWindow):
         # Init QSettings for cross-platform temp settings file in ini format
         self.settings = QSettings(QSettings.IniFormat, QSettings.SystemScope, 'CSB', 'pyIMD')
 
+        self.menuBar.setNativeMenuBar(False)
         self.settings_dialog = None
         self.about_window = None
         self.file_list = []

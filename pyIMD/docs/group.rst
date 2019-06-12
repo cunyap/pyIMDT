@@ -1,7 +1,7 @@
 Use and Examples
 ================
 
-The two examples show the basic usage of **pyIMD** to calculate the mass
+The examples show the basic usage of **pyIMD** to calculate the mass
 
 .. toctree::
    example_script
@@ -20,4 +20,10 @@ The two examples show the basic usage of **pyIMD** to calculate the mass
 
 .. toctree::
    tutorial
+
+.. toctree::
+   example_nanonis_longterm
+.. only:: html
+
+   :download:`Download pyIMD nanonis longterm example script<../examples/example_nanonis_longterm.py>`.
 

@@ -19,7 +19,7 @@ quite large. **Fig. 1** visualizes the data input which can be found as example 
 .. figure:: ../examples/figures/pyIMD_ShowCase_InputData_web.png
     :alt: dataInput
 
-    **Figure 1**: Data format for pyIMD
+    **Figure 1**: Data format for pyIMD. pyIMD supports data from picobalance device controllers. (Cytomass and Nanonis)
 
 The example pyIMD script section demonstrates how a pyIMD project is created on the console:
 
@@ -45,6 +45,9 @@ A new pyIMD project is created by selecting the three data files required for th
 calculation from a directory (3). Next, it needs to be declared which measurement each file contains
 and what the measurement mode is (5). Using the menu (1), opens the settings dialog and lets you determine all
 project related parameters such as the names of the output figures. After all settings are set, the mass calculation is started with (6).
+
+The tools menu in **Fig. 2 (7)** allows for data concatenation from multiple files into a single one, in case the data was acquired with the Nanonis data logger.
+The resulting file can then be loaded as mentioned above along with the before and after cell attachment file.
 
 .. code-block:: python
 

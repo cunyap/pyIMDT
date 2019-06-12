@@ -1,13 +1,43 @@
 language: python
 matrix:
   include:
-  - name: Python 3.5 on Linux
+  - name: "Python 3.5 on Linux"
+    dist: xenial
     python: 3.5
+    env:
+      - PYTHON_VERSION=3.5
+      - DEPLOY_FILE="/home/travis/build/cunyap/pyIMD/dist/pyIMD_x64_unix"
+  - name: "Python 3.6 on Linux"
+    python: 3.6
+    env:
+      - PYTHON_VERSION=3.6
+  - name: "Python 3.7 on Xenial Linux"
+    python: 3.7
+    dist: xenial          # required for Python >= 3.7
+    sudo: true
+    env:
+      - PYTHON_VERSION=3.7
+  - name: "Python 3.5 on macOS"
+    os: osx
+    osx_image: xcode8
+    language: generic       # 'language: python' is an error on Travis CI macOS
+    env:
+      - PYTHON_VERSION=3.5
+      - DEPLOY_FILE="/Users/travis/build/cunyap/pyIMD/dist/pyIMD_x64_osx.dmg"
+  - name: "Python 3.6 on macOS"
+    os: osx
+    language: generic
+    env:
+      - PYTHON_VERSION=3.6
+  - name: "Python 3.7 on macOS"
+    os: osx
+    language: generic
+    env:
+      - PYTHON_VERSION=3.7
 before_install:
-- source ./setup_python.sh $MAC_PYTHON_VERSION 'osx'
+- source ./$TRAVIS_BUILD_DIR/pyIMD/ci/setup_python.sh $PYTHON_VERSION 'osx'
 install:
-- if [ "$TRAVIS_OS_NAME" == "linux"   ] ; then bash $TRAVIS_BUILD_DIR/pyIMD/build/build.sh
-  ; fi
+- bash $TRAVIS_BUILD_DIR/pyIMD/ci/build.sh $TRAVIS_OS_NAME $PYTHON_VERSION
 before_script: cd ${TRAVIS_BUILD_DIR}/pyIMD/examples
 script:
 - "if [\"$TRAVIS_OS_NAME\" = \"windows\"]; then\n  python3 -m unittest discover -s
@@ -18,8 +48,9 @@ deploy:
   provider: releases
   api_key:
     secure: FzGUd9Zpilm+qu4hLerGHfu8+RYhAFdqgF8+AZlmrBjaBUXBA/H+WMMh4mnzP1F3Os2ONRpRNJ3hhTzK6Wb8YbtkvVmkbdnkLomJf+m9wY3tI9tLsMotfS08QgtgS5Y6g9Kk5bDL3jYQIcX8JnAP+zVHGxpXIhidQ8Pshbf55M+Rns3ceg7iyjl0dBVYjobZS5UBkJvQ+q2rwxhY8KZ3qvYkMfAcq6DgLR04Db3gVWizdJfWyuhaLzEq3xgrv4It6KOoezmBxGFow04z9n4U17EBYBTKW7kTq+JNIlCSEQuPejADxbLmfmaDQvC1t2VWd5dFI7NMH82oALDUUivMGr493Qt7ZvmGby+c0Gmqiiux6wHQNaXVZnYtRKnn41TX2JRuLa8H3c517N/YZHMUGfH8Ps6utHmuRpg5C9mAX9J03i911P0FJ3BkCpjiI4VNwi11sQ1kPPxqRQm1wbA7C+9OP+WqMnkZJqhszfZ16TlAqPdtPEbq1ALDtfXTru/56O3atDVPq5Llvhad1MXneCzrB4aqpTjsnEobX4ldyxyNef5gPimuQSBiI0IiUiQHqBjmR4FMyTDEKnrD92F/AfZBisYHNhxlRZQX4EWppxQ+kTATTCkx268WE4GmdfrUVzIVcGtr3IjJEJcBC3yIHyzAW8cae1VGcU5vjJVRBa0=
-  file: "/home/travis/build/cunyap/pyIMDT/dist/pyIMD"
+  file: $DEPLOY_FILE
   skip_cleanup: true
   on:
-    draft: true
-    repo: cunyap/pyIMDT
+    tags: true
+    condition: $PYTHON_VERSION = 3.5
+    repo: cunyap/pyIMD
