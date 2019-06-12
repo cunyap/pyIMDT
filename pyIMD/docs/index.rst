@@ -25,8 +25,17 @@ Welcome to pyIMD's documentation!
         :target: https://pyimd.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
+.. image:: https://badge.fury.io/py/pyIMD.svg
+        :target: https://pypi.org/project/pyIMD/
+
+.. image:: https://anaconda.org/cunya/pyimd/badges/installer/conda.svg
+        :target: https://anaconda.org/cunya/pyimd
+
+.. image:: https://travis-ci.com/cunyap/pyIMDT.svg?branch=master
+    :target: https://travis-ci.com/cunyap/pyIMDT
+
 .. figure:: ../examples/figures/pyIMD_ShowCaseFigure_web.png
-    :alt: result
+    :alt: pyIMD demonstration
     
     
     Evolution of mass over time and the corresponding microscopy images are shown for a time span of 20min.

@@ -33,11 +33,7 @@ pre-compiled executable matching your operating system:
 
 .. only:: html
 
-    :download:`Download portable for WINDOWS x64 systems <..//builds/pyIMD_win_x64.zip>`.
-
-    :download:`Download portable for OSX x64 systems <..//builds/pyIMD_osx_x64.zip>`.
-
-    :download:`Download portable for UNIX x64 systems <..//builds/pyIMD_unix_x64.zip>`.
+    * `Download the latest in one portable for WINDOWS, UNIX, OSX x64 systems <https://gitlab.com/csb.ethz/pyIMD/-/tags>`_
 
 pyIMD can then be used trough its graphical user interface (GUI) directly.
 

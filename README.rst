@@ -60,9 +60,7 @@ Installation
 If you download the portable for your operating system there is no need for any installation and you can use **pyIMD**
 directly trough the user interface.
 
-* `Download portable for WINDOWS x64 systems <https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/builds/pyIMD_win_x64.zip>`_
-* `Download portable for OSX x64 systems <https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/builds/pyIMD_osx_x64.zip>`_
-* `Download portable for UNIX x64 systems <https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/builds/pyIMD_unix_x64.zip>`_
+* `Download the latest in one portable for WINDOWS, UNIX, OSX x64 systems <https://gitlab.com/csb.ethz/pyIMD/-/tags>`_
 
 Otherwise, to install this module from source, type on your terminal::
 
@@ -74,8 +72,10 @@ Example data
 -----
 Example data files can be found in this repo. We provide example data of the various devices used (Cytomass and Nanonis) in various formats.
 
-* [Go to example data](https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/examples/data)
-* [Go to example scripts](https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/examples/data)
+* Go to Example_data_.
+.. _Example_data: https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/examples/data/
+* Go to Example_scripts_.
+.. _Example_scripts: https://gitlab.com/csb.ethz/pyIMD/tree/master/pyIMD/examples/
 
 Usage
 -----

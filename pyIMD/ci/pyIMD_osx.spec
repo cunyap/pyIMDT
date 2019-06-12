@@ -12,7 +12,7 @@ if distutils.distutils_path.endswith('__init__.py'):
 block_cipher = None
 
 a = Analysis(['/Users/travis/build/cunyap/pyIMD/pyIMD/main.py'],
-            pathex=[' /Users/travis/build/cunyap/pyIMD/.env/lib/python3.5/site-packages/PyQt5', ' /Users/travis/build/cunyap/pyIMD/.env/lib/python3.5/site-packages'],
+            pathex=[' /Users/travis/build/cunyap/pyIMD/pyIMD/ci/.env/lib/python3.5/site-packages/PyQt5', ' /Users/travis/build/cunyap/pyIMD/pyIMD/ci/.env/lib/python3.5/site-packages'],
             binaries=[],
              datas=[],
              hiddenimports=["PyQt5", "numpy", "PyQt5.QtWidgets", "PyQt5.sip", "platinfo", "tkinter", "tkinter.filedialog", "pandas._libs.tslibs.np_datetime","pandas._libs.tslibs.nattype","pandas._libs.skiplist",
@@ -35,7 +35,7 @@ a.datas += [('ui/icons/pyIMD_logo_icon.ico','/Users/travis/build/cunyap/pyIMD/py
             ('ui/setting_dialog.ui','/Users/travis/build/cunyap/pyIMD/pyIMD/ui/setting_dialog.ui','DATA'),
             ('imd.py','/Users/travis/build/cunyap/pyIMD/pyIMD/imd.py','DATA'),
             ('change_log.txt','/Users/travis/build/cunyap/pyIMD/pyIMD/change_log.txt','DATA'),
-	    ('palettable/colorbrewer/data/colorbrewer_all_schemes.json', '/Users/travis/build/cunyap/pyIMD/.env/lib/python3.5/site-packages/palettable/colorbrewer/data/colorbrewer_all_schemes.json', 'DATA')]
+	        ('palettable/colorbrewer/data/colorbrewer_all_schemes.json', '/Users/travis/build/cunyap/pyIMD/pyIMD/ci/.env/lib/python3.5/site-packages/palettable/colorbrewer/data/colorbrewer_all_schemes.json', 'DATA')]
 
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
